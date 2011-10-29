@@ -2,7 +2,10 @@ package traffic;
 
 
 public class RoadNetworkImpl implements RoadNetwork {
+	private final Segment segment;
+
 	public RoadNetworkImpl(final Segment segment) {
+		this.segment = segment;
 	}
 
 	@Override
@@ -12,6 +15,6 @@ public class RoadNetworkImpl implements RoadNetwork {
 
 	@Override
 	public Segment shortestRoute(final Junction origin, final Junction destination) {
-		return null;
+		return segment;
 	}
 }
