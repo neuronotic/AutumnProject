@@ -26,4 +26,9 @@ public class RoadUserImpl implements RoadUser {
 	public String toString() {
 		return String.format("road user located at %s", location);
 	}
+
+	@Override
+	public void step() {
+
+	}
 }

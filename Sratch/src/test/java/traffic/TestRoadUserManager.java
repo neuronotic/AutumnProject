@@ -18,12 +18,27 @@ public class TestRoadUserManager {
 
 	private final RoadUser roadUser = context.mock(RoadUser.class);
 
+	RoadUserManagerImpl roadUserManagerImpl = new RoadUserManagerImpl(roadUserFactory);
+
 	@Test
 	public void roadUserCanBeCreated() throws Exception {
 		context.checking(new Expectations() {{
 			oneOf(roadUserFactory).createRoadUser(itinerary); will(returnValue(roadUser));
 		}});
 
-		assertThat(new RoadUserManagerImpl(roadUserFactory).roadUser(itinerary), notNullValue(RoadUser.class));
+		assertThat(roadUserManagerImpl.roadUser(itinerary), notNullValue(RoadUser.class));
+	}
+
+	@Test
+	public void createdRoadUserisSteppedByManager() throws Exception {
+		context.checking(new Expectations() {{
+			oneOf(roadUserFactory).createRoadUser(itinerary); will(returnValue(roadUser));
+		}});
+		roadUserManagerImpl.roadUser(itinerary);
+
+		context.checking(new Expectations() {{
+			oneOf(roadUser).step();
+		}});
+		roadUserManagerImpl.step();
 	}
 }

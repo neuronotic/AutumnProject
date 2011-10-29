@@ -6,4 +6,6 @@ public interface RoadUser {
 	Junction location();
 
 	void startTrip();
+
+	void step();
 }

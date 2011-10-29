@@ -4,6 +4,7 @@ import traffic.endtoend.RoadUser;
 
 public class RoadUserManagerImpl implements RoadUserManager {
 	private final RoadUserFactory roadUserFactory;
+	private RoadUser roadUser;
 
 	public RoadUserManagerImpl(final RoadUserFactory roadUserFactory) {
 		this.roadUserFactory = roadUserFactory;
@@ -11,11 +12,12 @@ public class RoadUserManagerImpl implements RoadUserManager {
 
 	@Override
 	public RoadUser roadUser(final Itinerary itinerary) {
-		return roadUserFactory.createRoadUser(itinerary);
+		roadUser = roadUserFactory.createRoadUser(itinerary);
+		return roadUser;
 	}
 
 	@Override
 	public void step() {
-		// TODO Auto-generated method stub
+		roadUser.step();
 	}
 }
