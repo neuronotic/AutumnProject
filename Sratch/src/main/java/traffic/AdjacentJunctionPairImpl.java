@@ -13,7 +13,7 @@ public class AdjacentJunctionPairImpl implements AdjacentJunctionPair {
 
 	@Override
 	public Segment connectedByCellChain(final CellChain segmentOfLength) {
-		return null;
+		return new SegmentImpl(inJunction, outJunction);
 	}
 
 	@Override

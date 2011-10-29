@@ -61,4 +61,19 @@ public class RoadNetworkMatchers {
 			}
 		};
 	}
+
+	public static Matcher<Segment> isSegmentBetween(
+			final Junction expectedInJunction, final Junction expectedOutJunction) {
+		return new TypeSafeMatcher<Segment>() {
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("segment between ").appendValue(expectedInJunction).appendText(" and ").appendValue(expectedOutJunction);
+			}
+
+			@Override
+			protected boolean matchesSafely(final Segment item) {
+				return item.inJunction().equals(expectedInJunction) && item.outJunction().equals(expectedOutJunction);
+			}
+		};
+	}
 }
