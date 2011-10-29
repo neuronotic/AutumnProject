@@ -11,4 +11,9 @@ public class ItineraryImpl implements Itinerary {
 	public Segment route() {
 		return route;
 	}
+
+	@Override
+	public Junction origin() {
+		return route.inJunction();
+	}
 }

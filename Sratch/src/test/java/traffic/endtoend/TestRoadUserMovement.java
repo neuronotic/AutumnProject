@@ -5,6 +5,7 @@ import static traffic.JourneyPlanner.*;
 import static traffic.RoadNetworkFactory.*;
 import static traffic.RoadNetworkMatchers.*;
 import static traffic.RoadUserFactory.*;
+import static traffic.RoadUserMatchers.*;
 
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class TestRoadUserMovement {
 		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
 		final RoadUser roadUser = roadUser(itinerary);
 
-		roadNetwork.addRoadUser(roadUser);
+		roadUser.startTrip();
 
 		roadNetwork.step();
 		roadNetwork.step();

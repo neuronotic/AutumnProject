@@ -4,6 +4,7 @@ import traffic.endtoend.RoadUser;
 
 public class RoadUserImpl implements RoadUser {
 	private final Itinerary itinerary;
+	private Junction location;
 
 	public RoadUserImpl(final Itinerary itinerary) {
 		this.itinerary = itinerary;
@@ -11,6 +12,13 @@ public class RoadUserImpl implements RoadUser {
 
 	@Override
 	public Junction location() {
-		return null;
+		return location;
+	}
+
+	@Override
+	public void startTrip() {
+		final Junction origin = itinerary.origin();
+		origin.enter(this);
+		location = origin;
 	}
 }

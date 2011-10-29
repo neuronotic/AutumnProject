@@ -1,5 +1,10 @@
 package traffic;
 
-public class JunctionImpl implements Junction {
+import traffic.endtoend.RoadUser;
 
+public class JunctionImpl implements Junction {
+	@Override
+	public void enter(final RoadUser roadUser) {
+
+	}
 }
