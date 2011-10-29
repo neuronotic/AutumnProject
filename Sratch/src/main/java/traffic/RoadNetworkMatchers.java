@@ -1,4 +1,4 @@
-package snippet;
+package traffic;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

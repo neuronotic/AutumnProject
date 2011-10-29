@@ -1,4 +1,4 @@
-package snippet;
+package traffic;
 
 public class AdjacentJunctionPairImpl implements AdjacentJunctionPair {
 	private final Junction inJunction;

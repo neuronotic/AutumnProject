@@ -2,11 +2,11 @@ package traffic;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static snippet.RoadUserFactory.*;
+import static traffic.RoadUserFactory.*;
 
 import org.junit.Test;
 
-import snippet.Itinerary;
+import traffic.Itinerary;
 
 public class TestRoadUserFactory {
 	private final Itinerary itinerary = null;

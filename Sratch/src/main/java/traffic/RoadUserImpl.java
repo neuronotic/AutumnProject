@@ -1,4 +1,4 @@
-package snippet;
+package traffic;
 
 import traffic.endtoend.RoadUser;
 

@@ -1,8 +1,8 @@
-package snippet;
+package traffic;
 
 
 public class JourneyPlanner {
 	public static Itinerary planItineraryForTrip(final Trip trip, final RoadNetwork roadNetwork) {
-		return null;
+		return new ItineraryImpl(roadNetwork.shortestRoute(trip.origin(), trip.destination()));
 	}
 }

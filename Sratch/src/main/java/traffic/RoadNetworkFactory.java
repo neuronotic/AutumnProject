@@ -1,4 +1,4 @@
-package snippet;
+package traffic;
 
 public class RoadNetworkFactory {
 	public static Junction junction() {

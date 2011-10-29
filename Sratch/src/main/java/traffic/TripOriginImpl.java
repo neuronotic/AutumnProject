@@ -1,4 +1,4 @@
-package snippet;
+package traffic;
 
 public class TripOriginImpl implements TripOrigin {
 	private final Junction originJunction;

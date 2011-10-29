@@ -1,4 +1,4 @@
-package snippet;
+package traffic;
 
 import traffic.endtoend.RoadUser;
 
@@ -14,5 +14,10 @@ public class RoadNetworkImpl implements RoadNetwork {
 	@Override
 	public void step() {
 
+	}
+
+	@Override
+	public Segment shortestRoute(final Junction origin, final Junction destination) {
+		return null;
 	}
 }

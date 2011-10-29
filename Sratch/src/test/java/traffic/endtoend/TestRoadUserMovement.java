@@ -1,18 +1,18 @@
 package traffic.endtoend;
 
 import static org.hamcrest.MatcherAssert.*;
-import static snippet.JourneyPlanner.*;
-import static snippet.RoadNetworkFactory.*;
-import static snippet.RoadNetworkMatchers.*;
-import static snippet.RoadUserFactory.*;
+import static traffic.JourneyPlanner.*;
+import static traffic.RoadNetworkFactory.*;
+import static traffic.RoadNetworkMatchers.*;
+import static traffic.RoadUserFactory.*;
 
 import org.junit.Test;
 
-import snippet.Itinerary;
-import snippet.Junction;
-import snippet.RoadNetwork;
-import snippet.Segment;
-import snippet.Trip;
+import traffic.Itinerary;
+import traffic.Junction;
+import traffic.RoadNetwork;
+import traffic.Segment;
+import traffic.Trip;
 
 public class TestRoadUserMovement {
 	@Test

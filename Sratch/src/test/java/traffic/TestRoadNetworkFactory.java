@@ -1,14 +1,14 @@
 package traffic;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import static snippet.RoadNetworkFactory.*;
-import static snippet.RoadNetworkMatchers.*;
+import static traffic.RoadNetworkFactory.*;
+import static traffic.RoadNetworkMatchers.*;
 
 import org.junit.Rule;
 import org.junit.Test;
 
-import snippet.Junction;
-import snippet.Segment;
+import traffic.Junction;
+import traffic.Segment;
 
 
 public class TestRoadNetworkFactory {

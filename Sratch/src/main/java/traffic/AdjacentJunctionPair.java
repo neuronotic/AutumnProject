@@ -1,4 +1,4 @@
-package snippet;
+package traffic;
 
 public interface AdjacentJunctionPair {
 	Segment connectedByCellChain(CellChain segmentOfLength);
