@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.*;
 import static traffic.JourneyPlanner.*;
 import static traffic.RoadNetworkFactory.*;
 import static traffic.RoadNetworkMatchers.*;
-import static traffic.RoadUserFactory.*;
 import static traffic.RoadUserMatchers.*;
 
 import org.junit.Test;
@@ -12,6 +11,8 @@ import org.junit.Test;
 import traffic.Itinerary;
 import traffic.Junction;
 import traffic.RoadNetwork;
+import traffic.RoadUserManagerFactory;
+import traffic.RoadUserManager;
 import traffic.Segment;
 import traffic.Trip;
 
@@ -26,16 +27,18 @@ public class TestRoadUserMovement {
 		final Trip trip = tripFrom(junction0).to(junction1);
 
 		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
-		final RoadUser roadUser = roadUser(itinerary);
+
+		final RoadUserManager roadUserManager = RoadUserManagerFactory.roadUserManager();
+		final RoadUser roadUser = roadUserManager.roadUser(itinerary);
 
 		roadUser.startTrip();
 
-		roadNetwork.step();
-		roadNetwork.step();
-		roadNetwork.step();
-		roadNetwork.step();
-		roadNetwork.step();
-		roadNetwork.step();
+		roadUserManager.step();
+		roadUserManager.step();
+		roadUserManager.step();
+		roadUserManager.step();
+		roadUserManager.step();
+		roadUserManager.step();
 
 		assertThat(roadUser, isLocatedAt(junction1));
 		assertThat(roadUser, hasJourneyTime(6));

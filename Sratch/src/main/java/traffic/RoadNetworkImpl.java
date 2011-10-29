@@ -9,11 +9,6 @@ public class RoadNetworkImpl implements RoadNetwork {
 	}
 
 	@Override
-	public void step() {
-
-	}
-
-	@Override
 	public Segment shortestRoute(final Junction origin, final Junction destination) {
 		return segment;
 	}
