@@ -23,6 +23,13 @@ public class TestRoadNetworkFactory {
 	}
 
 	@Test
+	public void cellChainHasSpecifiedNumberOfCellsCreated() {
+		assertThat(cellChainOfLength(3), isCellChainWithCellCount(3));
+		assertThat(cellChainOfLength(3), contains(isA(Cell.class), isA(Cell.class), isA(Cell.class)));
+	}
+
+
+	@Test
 	public void roadNeworkCanBeCreated() {
 		assertThat(roadNetwork(segment), notNullValue());
 	}

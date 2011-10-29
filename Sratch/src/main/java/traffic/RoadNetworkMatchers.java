@@ -90,4 +90,18 @@ public class RoadNetworkMatchers {
 			}
 		};
 	}
+
+	public static Matcher<CellChain> isCellChainWithCellCount(final int expectedCount) {
+		return new TypeSafeMatcher<CellChain>(CellChain.class) {
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("cell chain of length ").appendValue(expectedCount);
+			}
+
+			@Override
+			protected boolean matchesSafely(final CellChain item) {
+				return item.cellCount() == expectedCount;
+			}
+		};
+	}
 }
