@@ -104,4 +104,19 @@ public class RoadNetworkMatchers {
 			}
 		};
 	}
+
+	public static Matcher<Segment> segmentHasCellChain(
+			final CellChain expectedCellChain) {
+		return new TypeSafeMatcher<Segment>() {
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("Segment Cell Chain ").appendValue(expectedCellChain);
+			}
+
+			@Override
+			protected boolean matchesSafely(final Segment item) {
+				return item.cellChain().equals(expectedCellChain);
+			}
+		};
+	}
 }

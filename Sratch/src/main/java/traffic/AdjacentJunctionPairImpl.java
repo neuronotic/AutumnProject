@@ -5,15 +5,15 @@ public class AdjacentJunctionPairImpl implements AdjacentJunctionPair {
 	private final Junction outJunction;
 
 	public AdjacentJunctionPairImpl(
-			final Junction junction0,
-			final Junction junction1) {
-				inJunction = junction0;
-				outJunction = junction1;
+			final Junction inJunction,
+			final Junction outJunction) {
+				this.inJunction = inJunction;
+				this.outJunction = outJunction;
 	}
 
 	@Override
-	public Segment connectedByCellChain(final CellChain segmentOfLength) {
-		return new SegmentImpl(inJunction, outJunction);
+	public Segment connectedByCellChain(final CellChain cellChain) {
+		return new SegmentImpl(inJunction, cellChain, outJunction);
 	}
 
 	@Override

@@ -28,7 +28,6 @@ public class TestRoadNetworkFactory {
 		assertThat(cellChainOfLength(3), contains(isA(Cell.class), isA(Cell.class), isA(Cell.class)));
 	}
 
-
 	@Test
 	public void roadNeworkCanBeCreated() {
 		assertThat(roadNetwork(segment), notNullValue());

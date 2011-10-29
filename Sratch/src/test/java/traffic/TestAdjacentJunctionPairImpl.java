@@ -1,6 +1,7 @@
 package traffic;
 
 import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 import static traffic.RoadNetworkMatchers.*;
 
 import org.junit.Rule;
@@ -16,8 +17,8 @@ public class TestAdjacentJunctionPairImpl {
 	private final Junction outJunction = context.mock(Junction.class, "outJunction");
 
 	@Test
-	public void testName() throws Exception {
+	public void adjacentJunctionPairWithCellChainCreatesSegment() throws Exception {
 		assertThat(new AdjacentJunctionPairImpl(inJunction, outJunction).connectedByCellChain(cellChain),
-				isSegmentBetween(inJunction, outJunction));
+				allOf(isSegmentBetween(inJunction, outJunction), segmentHasCellChain(cellChain)));
 	}
 }

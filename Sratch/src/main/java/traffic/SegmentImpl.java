@@ -3,9 +3,11 @@ package traffic;
 public class SegmentImpl implements Segment {
 	private final Junction inJunction;
 	private final Junction outJunction;
+	private final CellChain cellChain;
 
-	public SegmentImpl(final Junction inJunction, final Junction outJunction) {
+	public SegmentImpl(final Junction inJunction, final CellChain cellChain, final Junction outJunction) {
 		this.inJunction = inJunction;
+		this.cellChain = cellChain;
 		this.outJunction = outJunction;
 	}
 
@@ -21,8 +23,7 @@ public class SegmentImpl implements Segment {
 
 	@Override
 	public CellChain cellChain() {
-		return null;
-
+		return cellChain;
 	}
 
 	@Override
