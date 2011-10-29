@@ -8,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import snippet.Junction;
+import snippet.Segment;
 
 
 public class TestRoadNetworkFactory {
@@ -17,9 +18,16 @@ public class TestRoadNetworkFactory {
 	private final Junction inJunction = context.mock(Junction.class, "inJunction");
 	private final Junction outJunction = context.mock(Junction.class, "outJunction");
 
+	private final Segment segment = context.mock(Segment.class);
+
 	@Test
 	public void junctionCanBeCreated() {
 		assertThat(junction(), notNullValue());;
+	}
+
+	@Test
+	public void roadNeworkCanBeCreated() {
+		assertThat(roadNetwork(segment), notNullValue());
 	}
 
 	@Test

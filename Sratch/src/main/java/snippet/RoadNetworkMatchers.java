@@ -7,7 +7,11 @@ import org.hamcrest.TypeSafeMatcher;
 import traffic.endtoend.RoadUser;
 
 public class RoadNetworkMatchers {
-	public static Matcher<RoadUser> locatedAt(final Junction junction) {
+	public static Matcher<RoadUser> isLocatedAt(final Junction junction) {
+		return null;
+	}
+
+	public static Matcher<RoadUser> hasJourneyTime(final int expectedJourneyTime) {
 		return null;
 	}
 

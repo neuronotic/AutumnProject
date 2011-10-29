@@ -13,7 +13,7 @@ import snippet.RoadNetwork;
 import snippet.Segment;
 import snippet.Trip;
 
-public class JourneyTimeTests {
+public class TestRoadUserMovement {
 	@Test
 	public void tripAcrossSegmentOfLength5Takes6Timesteps() {
 		final Junction junction0 = junction();
@@ -35,7 +35,8 @@ public class JourneyTimeTests {
 		roadNetwork.step();
 		roadNetwork.step();
 
-		assertThat(roadUser, locatedAt(junction1));
+		assertThat(roadUser, isLocatedAt(junction1));
+		assertThat(roadUser, hasJourneyTime(6));
 	}
 }
 

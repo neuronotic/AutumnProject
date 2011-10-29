@@ -14,7 +14,7 @@ public class RoadNetworkFactory {
 	}
 
 	public static RoadNetwork roadNetwork(final Segment segment) {
-		return null;
+		return new RoadNetworkImpl(segment);
 	}
 
 	public static AdjacentJunctionPair adjacent(final Junction inJunction, final Junction outJunction) {
