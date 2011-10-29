@@ -7,9 +7,6 @@ import static traffic.RoadNetworkMatchers.*;
 import org.junit.Rule;
 import org.junit.Test;
 
-import traffic.Junction;
-import traffic.Segment;
-
 
 public class TestRoadNetworkFactory {
 	@Rule
@@ -22,7 +19,7 @@ public class TestRoadNetworkFactory {
 
 	@Test
 	public void junctionCanBeCreated() {
-		assertThat(junction(), notNullValue());;
+		assertThat(junction("myName"), isJunctionCalled("myName"));
 	}
 
 	@Test

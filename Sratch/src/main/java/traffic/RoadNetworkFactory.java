@@ -1,8 +1,8 @@
 package traffic;
 
 public class RoadNetworkFactory {
-	public static Junction junction() {
-		return new JunctionImpl();
+	public static Junction junction(final String name) {
+		return new JunctionImpl(name);
 	}
 
 	public static CellChain cellChainOfLength(final int i) {

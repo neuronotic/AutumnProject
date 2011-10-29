@@ -76,4 +76,18 @@ public class RoadNetworkMatchers {
 			}
 		};
 	}
+
+	public static Matcher<Junction> isJunctionCalled(final String name) {
+		return new TypeSafeMatcher<Junction>(Junction.class) {
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("junction with name ").appendValue(name);
+			}
+
+			@Override
+			protected boolean matchesSafely(final Junction item) {
+				return item.name().equals(name);
+			}
+		};
+	}
 }

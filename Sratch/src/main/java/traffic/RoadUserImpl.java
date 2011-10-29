@@ -21,4 +21,9 @@ public class RoadUserImpl implements RoadUser {
 		origin.enter(this);
 		location = origin;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("road user located at %s", location);
+	}
 }

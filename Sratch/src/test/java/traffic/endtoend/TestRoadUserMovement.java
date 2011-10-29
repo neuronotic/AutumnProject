@@ -18,8 +18,8 @@ import traffic.Trip;
 public class TestRoadUserMovement {
 	@Test
 	public void tripAcrossSegmentOfLength5Takes6Timesteps() {
-		final Junction junction0 = junction();
-		final Junction junction1 = junction();
+		final Junction junction0 = junction("junction0");
+		final Junction junction1 = junction("junction1");
 		final Segment segment = adjacent(junction0, junction1).connectedByCellChain(cellChainOfLength(5));
 		final RoadNetwork roadNetwork = roadNetwork(segment);
 
