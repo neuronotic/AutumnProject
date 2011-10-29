@@ -3,8 +3,9 @@ package traffic.endtoend;
 import static org.hamcrest.MatcherAssert.*;
 import static snippet.RoadNetworkFactory.*;
 import static snippet.RoadNetworkMatchers.*;
+import static traffic.endtoend.JourneyPlanner.*;
+import static traffic.endtoend.RoadUserFactory.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import snippet.Junction;
@@ -14,7 +15,6 @@ import snippet.Trip;
 
 public class JourneyTimeTests {
 	@Test
-	@Ignore
 	public void tripAcrossSegmentOfLength5Takes6Timesteps() {
 		final Junction junction0 = junction();
 		final Junction junction1 = junction();
@@ -23,7 +23,10 @@ public class JourneyTimeTests {
 
 		final Trip trip = tripFrom(junction0).to(junction1);
 
-		roadNetwork.startTrip(trip);
+		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
+		final RoadUser roadUser = roadUser(itinerary);
+
+		roadNetwork.addRoadUser(roadUser);
 
 		roadNetwork.step();
 		roadNetwork.step();
@@ -32,7 +35,7 @@ public class JourneyTimeTests {
 		roadNetwork.step();
 		roadNetwork.step();
 
-		assertThat(trip, hasJourneyTimeEqualTo(6));
+		assertThat(roadUser, locatedAt(junction1));
 	}
 }
 

@@ -9,8 +9,8 @@ public class RoadNetworkFactory {
 		return null;
 	}
 
-	public static TripOrigin tripFrom(final Junction junction0) {
-		return null;
+	public static TripOrigin tripFrom(final Junction junction) {
+		return new TripOriginImpl(junction);
 	}
 
 	public static RoadNetwork roadNetwork(final Segment segment) {

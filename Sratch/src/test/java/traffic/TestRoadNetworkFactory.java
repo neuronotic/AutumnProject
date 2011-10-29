@@ -23,6 +23,11 @@ public class TestRoadNetworkFactory {
 	}
 
 	@Test
+	public void tripFromCreateTripOriginAtJunction() {
+		assertThat(tripFrom(inJunction), isTripOriginAt(inJunction));
+	}
+
+	@Test
 	public void junctionConnectedToReturnsJunctionPair() {
 		assertThat(adjacent(inJunction, outJunction), isAdjacentPairOfJunctions(inJunction, outJunction));
 	}

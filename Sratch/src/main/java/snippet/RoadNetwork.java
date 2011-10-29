@@ -1,9 +1,9 @@
 package snippet;
 
-public interface RoadNetwork {
+import traffic.endtoend.RoadUser;
 
-	void startTrip(Trip trip);
+public interface RoadNetwork {
+	void addRoadUser(RoadUser roadUser);
 
 	void step();
-
 }
