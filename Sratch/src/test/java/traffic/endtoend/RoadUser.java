@@ -1,5 +1,7 @@
 package traffic.endtoend;
 
-public interface RoadUser {
+import snippet.Junction;
 
+public interface RoadUser {
+	Junction location();
 }

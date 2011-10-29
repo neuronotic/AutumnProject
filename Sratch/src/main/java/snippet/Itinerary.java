@@ -1,4 +1,4 @@
-package traffic.endtoend;
+package snippet;
 
 public interface Itinerary {
 

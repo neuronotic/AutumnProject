@@ -1,13 +1,14 @@
 package traffic.endtoend;
 
 import static org.hamcrest.MatcherAssert.*;
+import static snippet.JourneyPlanner.*;
 import static snippet.RoadNetworkFactory.*;
 import static snippet.RoadNetworkMatchers.*;
-import static traffic.endtoend.JourneyPlanner.*;
-import static traffic.endtoend.RoadUserFactory.*;
+import static snippet.RoadUserFactory.*;
 
 import org.junit.Test;
 
+import snippet.Itinerary;
 import snippet.Junction;
 import snippet.RoadNetwork;
 import snippet.Segment;

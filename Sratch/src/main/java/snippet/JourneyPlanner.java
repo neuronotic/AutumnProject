@@ -1,7 +1,5 @@
-package traffic.endtoend;
+package snippet;
 
-import snippet.RoadNetwork;
-import snippet.Trip;
 
 public class JourneyPlanner {
 	public static Itinerary planItineraryForTrip(final Trip trip, final RoadNetwork roadNetwork) {
