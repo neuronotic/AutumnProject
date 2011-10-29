@@ -9,7 +9,7 @@ public class TripOriginImpl implements TripOrigin {
 
 	@Override
 	public Trip to(final Junction destinationJunction) {
-		return null;
+		return new TripImpl(originJunction, destinationJunction);
 	}
 
 	@Override

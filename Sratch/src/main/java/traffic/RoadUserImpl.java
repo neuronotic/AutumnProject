@@ -3,8 +3,10 @@ package traffic;
 import traffic.endtoend.RoadUser;
 
 public class RoadUserImpl implements RoadUser {
-	public RoadUserImpl(final Itinerary itinerary) {
+	private final Itinerary itinerary;
 
+	public RoadUserImpl(final Itinerary itinerary) {
+		this.itinerary = itinerary;
 	}
 
 	@Override

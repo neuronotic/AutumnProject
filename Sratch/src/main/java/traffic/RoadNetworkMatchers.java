@@ -59,4 +59,20 @@ public class RoadNetworkMatchers {
 			}
 		};
 	}
+
+	public static Matcher<Trip> isTripBetween(
+			final Junction expectedOrigin,
+			final Junction expectedDestination) {
+		return new TypeSafeMatcher<Trip>(Trip.class) {
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("trip between ").appendValue(expectedOrigin).appendText(" and ").appendValue(expectedDestination);
+			}
+
+			@Override
+			protected boolean matchesSafely(final Trip item) {
+				return item.origin().equals(expectedOrigin) && item.destination().equals(expectedDestination);
+			}
+		};
+	}
 }
