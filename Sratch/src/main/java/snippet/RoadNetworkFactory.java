@@ -1,0 +1,23 @@
+package snippet;
+
+public class RoadNetworkFactory {
+	public static Junction junction() {
+		return new JunctionImpl();
+	}
+
+	public static CellChain cellChainOfLength(final int i) {
+		return null;
+	}
+
+	public static TripOrigin tripFrom(final Junction junction0) {
+		return null;
+	}
+
+	public static RoadNetwork roadNetwork(final Segment segment) {
+		return null;
+	}
+
+	public static AdjacentJunctionPair adjacent(final Junction inJunction, final Junction outJunction) {
+		return new AdjacentJunctionPairImpl(inJunction, outJunction);
+	}
+}
