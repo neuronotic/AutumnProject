@@ -20,13 +20,13 @@ public class TestRoadUserImpl {
 	private final Junction originJunction = context.mock(Junction.class);
 
 	@Test
-	public void testName() throws Exception {
+	public void firstStepLocatesUserAtOriginJunction() throws Exception {
 		context.checking(new Expectations() {{
 			oneOf(itinerary).origin(); will(returnValue(originJunction));
 			oneOf(originJunction).enter(roadUser);
 		}});
 
-		roadUser.startTrip();
+		roadUser.step();
 
 		assertThat(roadUser, isLocatedAt(originJunction));
 	}

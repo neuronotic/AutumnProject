@@ -11,8 +11,8 @@ import org.junit.Test;
 import traffic.Itinerary;
 import traffic.Junction;
 import traffic.RoadNetwork;
-import traffic.RoadUserManagerFactory;
 import traffic.RoadUserManager;
+import traffic.RoadUserManagerFactory;
 import traffic.Segment;
 import traffic.Trip;
 
@@ -30,8 +30,6 @@ public class TestRoadUserMovement {
 
 		final RoadUserManager roadUserManager = RoadUserManagerFactory.roadUserManager();
 		final RoadUser roadUser = roadUserManager.roadUser(itinerary);
-
-		roadUser.startTrip();
 
 		roadUserManager.step();
 		roadUserManager.step();

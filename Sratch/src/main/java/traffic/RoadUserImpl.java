@@ -16,19 +16,14 @@ public class RoadUserImpl implements RoadUser {
 	}
 
 	@Override
-	public void startTrip() {
-		final Junction origin = itinerary.origin();
-		origin.enter(this);
-		location = origin;
-	}
-
-	@Override
 	public String toString() {
 		return String.format("road user located at %s", location);
 	}
 
 	@Override
 	public void step() {
-
+		final Junction origin = itinerary.origin();
+		origin.enter(this);
+		location = origin;
 	}
 }
