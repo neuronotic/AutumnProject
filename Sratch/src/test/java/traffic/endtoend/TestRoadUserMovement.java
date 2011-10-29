@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.*;
 import static traffic.JourneyPlanner.*;
 import static traffic.RoadNetworkFactory.*;
 import static traffic.RoadNetworkMatchers.*;
+import static traffic.RoadUserManagerFactory.*;
 import static traffic.RoadUserMatchers.*;
 
 import org.junit.Test;
@@ -12,7 +13,6 @@ import traffic.Itinerary;
 import traffic.Junction;
 import traffic.RoadNetwork;
 import traffic.RoadUserManager;
-import traffic.RoadUserManagerFactory;
 import traffic.Segment;
 import traffic.Trip;
 
@@ -28,7 +28,7 @@ public class TestRoadUserMovement {
 
 		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
 
-		final RoadUserManager roadUserManager = RoadUserManagerFactory.roadUserManager();
+		final RoadUserManager roadUserManager = roadUserManager();
 		final RoadUser roadUser = roadUserManager.roadUser(itinerary);
 
 		roadUserManager.step();

@@ -1,5 +1,5 @@
 package traffic;
 
-public interface CellChain {
+public interface CellChain extends Iterable<Cell> {
 
 }

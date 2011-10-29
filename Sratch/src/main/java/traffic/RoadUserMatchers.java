@@ -7,7 +7,7 @@ import org.hamcrest.TypeSafeMatcher;
 import traffic.endtoend.RoadUser;
 
 public class RoadUserMatchers {
-	public static Matcher<RoadUser> isLocatedAt(final Junction expectedLocation) {
+	public static Matcher<RoadUser> isLocatedAt(final Cell expectedLocation) {
 		return new TypeSafeMatcher<RoadUser>(RoadUser.class) {
 			@Override
 			public void describeTo(final Description description) {

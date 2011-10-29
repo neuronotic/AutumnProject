@@ -1,9 +1,9 @@
 package traffic.endtoend;
 
-import traffic.Junction;
+import traffic.Cell;
 
 public interface RoadUser {
-	Junction location();
+	Cell location();
 
 	void step();
 }

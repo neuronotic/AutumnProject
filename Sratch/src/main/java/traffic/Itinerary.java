@@ -1,7 +1,9 @@
 package traffic;
 
-public interface Itinerary {
+import java.util.Iterator;
+
+public interface Itinerary extends Iterable<Cell> {
 	Segment route();
 
-	Junction origin();
+	Iterator<Cell> iterator();
 }

@@ -17,17 +17,17 @@ public class TestRoadUserImpl {
 
 	private final RoadUser roadUser = new RoadUserImpl(itinerary);
 
-	private final Junction originJunction = context.mock(Junction.class);
+	private final Cell originCell = context.mock(Cell.class);
 
 	@Test
 	public void firstStepLocatesUserAtOriginJunction() throws Exception {
 		context.checking(new Expectations() {{
-			oneOf(itinerary).origin(); will(returnValue(originJunction));
-			oneOf(originJunction).enter(roadUser);
+			oneOf(itinerary).iterator(); will(returnIterator(originCell));
+			oneOf(originCell).enter(roadUser);
 		}});
 
 		roadUser.step();
 
-		assertThat(roadUser, isLocatedAt(originJunction));
+		assertThat(roadUser, isLocatedAt(originCell));
 	}
 }

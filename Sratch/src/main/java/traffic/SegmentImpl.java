@@ -20,6 +20,12 @@ public class SegmentImpl implements Segment {
 	}
 
 	@Override
+	public CellChain cellChain() {
+		return null;
+
+	}
+
+	@Override
 	public String toString() {
 		return String.format("Segment from %s to %s", inJunction, outJunction);
 	}

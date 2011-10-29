@@ -2,8 +2,6 @@ package traffic;
 
 import traffic.endtoend.RoadUser;
 
-public interface Junction extends Cell {
+public interface Cell {
 	void enter(RoadUser roadUser);
-
-	String name();
 }
