@@ -1,20 +1,13 @@
 package traffic;
 
-import static java.util.Arrays.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static traffic.MyJMockActions.*;
+import static traffic.RoadNetworkMatchers.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hamcrest.Description;
 import org.jmock.Expectations;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
 import org.junit.Rule;
 import org.junit.Test;
-
-import com.google.common.collect.Iterators;
 
 public class TestItineraryImpl {
 	@Rule
@@ -42,14 +35,7 @@ public class TestItineraryImpl {
 				oneOf(segment1).cells(); will(returnList(junctionCell1, segmentCell2, junctionCell2));
 			}
 		});
-
 		assertThat(cellsIn(new ItineraryImpl(segment0, segment1)), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1, segmentCell2, junctionCell2));
-	}
-
-	private List<Cell> cellsIn(final ItineraryImpl itineraryImpl) {
-		final List<Cell> cells = new ArrayList<Cell>();
-		Iterators.addAll(cells, itineraryImpl.iterator());
-		return cells;
 	}
 
 	@Test
@@ -59,21 +45,6 @@ public class TestItineraryImpl {
 				oneOf(segment0).cells(); will(returnList(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
 			}
 		});
-
 		assertThat(cellsIn(new ItineraryImpl(segment0)), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
-	}
-
-	//type variable - generics
-	private <T> Action returnList(final T...ts) {
-		return new Action(){
-			@Override
-			public void describeTo(final Description description) {
-				description.appendText("return list of ").appendValue(ts);
-			}
-
-			@Override
-			public Object invoke(final Invocation arg0) throws Throwable {
-				return asList(ts);
-			}};
 	}
 }

@@ -1,8 +1,13 @@
 package traffic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+
+import com.google.common.collect.Iterators;
 
 
 public class RoadNetworkMatchers {
@@ -108,5 +113,11 @@ public class RoadNetworkMatchers {
 				return item.cellChain().equals(expectedCellChain);
 			}
 		};
+	}
+
+	public static List<Cell> cellsIn(final Itinerary itinerary) {
+		final List<Cell> cells = new ArrayList<Cell>();
+		Iterators.addAll(cells, itinerary.iterator());
+		return cells;
 	}
 }
