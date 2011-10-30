@@ -42,11 +42,17 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 public class TestVehicleMovement {
 
-	public static class TrafficModule extends AbstractModule {
+	public static class TrafficTestModule extends AbstractModule {
 		@Override
 		protected void configure() {
 			install(new GuiceBerryModule());
+			install(new TrafficModule());
+		}
+	};
 
+	public static class TrafficModule extends AbstractModule {
+		@Override
+		protected void configure() {
 			bind(VehicleFactory.class).to(VehicleFactoryImpl.class);
 			bind(VehicleManager.class).to(VehicleManagerImpl.class);
 			bind(CellChainBuilder.class).to(CellChainBuilderImpl.class);
@@ -70,7 +76,7 @@ public class TestVehicleMovement {
 	};
 
 	@Rule public GuiceBerryRule guiceBerry =
-		      new GuiceBerryRule(TrafficModule.class);
+		      new GuiceBerryRule(TrafficTestModule.class);
 
 	@Inject private VehicleFactory vehicleFactory;
 	@Inject private VehicleManager vehicleManager;
