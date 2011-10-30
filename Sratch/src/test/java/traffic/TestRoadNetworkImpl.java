@@ -16,6 +16,6 @@ public class TestRoadNetworkImpl {
 
 	@Test
 	public void shortestRouteInNetworkWithOneSegmentReturnsSegment() throws Exception {
-		assertThat(new RoadNetworkImpl(segment).shortestRoute(origin, destination), equalTo(segment));
+		assertThat(new RoadNetworkImpl(segment).route(origin, destination), contains(segment));
 	}
 }

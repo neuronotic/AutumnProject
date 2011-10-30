@@ -1,15 +1,23 @@
 package traffic;
 
+import static java.util.Arrays.*;
+
+import java.util.List;
+
 
 public class RoadNetworkImpl implements RoadNetwork {
-	private final Segment segment;
+	private final List<Segment> segments;
+
+	public RoadNetworkImpl(final List<Segment> segments) {
+		this.segments = segments;
+	}
 
 	public RoadNetworkImpl(final Segment...segments) {
-		segment = segments[0];
+		this(asList(segments));
 	}
 
 	@Override
-	public Segment shortestRoute(final Junction origin, final Junction destination) {
-		return segment;
+	public List<Segment> route(final Junction origin, final Junction destination) {
+		return segments;
 	}
 }

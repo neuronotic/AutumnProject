@@ -3,6 +3,7 @@ package traffic;
 import static org.hamcrest.MatcherAssert.*;
 import static traffic.ItineraryMatchers.*;
 import static traffic.JourneyPlanner.*;
+import static traffic.MyJMockActions.*;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -26,7 +27,7 @@ public class TestJourneyPlanner {
 			{
 				oneOf(trip).origin(); will(returnValue(origin));
 				oneOf(trip).destination(); will(returnValue(destination));
-				oneOf(roadNetwork).shortestRoute(origin, destination); will(returnValue(segment));
+				oneOf(roadNetwork).route(origin, destination); will(returnList(segment));
 			}
 		});
 

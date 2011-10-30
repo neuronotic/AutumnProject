@@ -33,7 +33,7 @@ public class TestVehicleMovement {
 
 		final RoadNetwork roadNetwork = roadNetwork(segment0, segment1);
 
-		final Trip trip = tripFrom(junction0).to(junction1);
+		final Trip trip = tripFrom(junction0).to(junction2);
 
 		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
 

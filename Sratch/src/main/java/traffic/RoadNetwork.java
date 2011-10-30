@@ -1,6 +1,8 @@
 package traffic;
 
+import java.util.List;
+
 
 public interface RoadNetwork {
-	Segment shortestRoute(Junction origin, Junction destination);
+	List<Segment> route(Junction origin, Junction destination);
 }
