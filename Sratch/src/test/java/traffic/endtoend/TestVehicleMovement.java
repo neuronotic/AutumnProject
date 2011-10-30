@@ -4,28 +4,29 @@ import static org.hamcrest.MatcherAssert.*;
 import static traffic.JourneyPlanner.*;
 import static traffic.RoadNetworkFactory.*;
 import static traffic.RoadNetworkMatchers.*;
-import static traffic.RoadUserManagerFactory.*;
-import static traffic.RoadUserMatchers.*;
+import static traffic.VehicleManagerFactory.*;
+import static traffic.VehicleMatchers.*;
 
 import org.junit.Test;
 
 import traffic.Itinerary;
 import traffic.Junction;
 import traffic.RoadNetwork;
-import traffic.RoadUser;
-import traffic.RoadUserFactory;
-import traffic.RoadUserFactoryImpl;
-import traffic.RoadUserManager;
 import traffic.Segment;
 import traffic.Trip;
+import traffic.Vehicle;
+import traffic.VehicleFactory;
+import traffic.VehicleFactoryImpl;
+import traffic.VehicleManager;
 
-public class TestRoadUserMovement {
-	private final RoadUserFactory roadUserFactory = new RoadUserFactoryImpl();
+public class TestVehicleMovement {
+	private final VehicleFactory vehicleFactory = new VehicleFactoryImpl();
 
 	@Test
 	public void tripAcrossSingleSegmentNetworkOfLength5Takes7Timesteps() {
 		final Junction junction0 = junction("junction0");
 		final Junction junction1 = junction("junction1");
+
 		final Segment segment = segment(junction0, cellChainOfLength(5), junction1);
 		final RoadNetwork roadNetwork = roadNetwork(segment);
 
@@ -33,14 +34,14 @@ public class TestRoadUserMovement {
 
 		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
 
-		final RoadUserManager roadUserManager = roadUserManager();
-		final RoadUser roadUser = roadUserFactory.createRoadUser(itinerary);
-		roadUserManager.addRoadUser(roadUser);
+		final VehicleManager vehicleManager = vehicleManager();
+		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
+		vehicleManager.addVehicle(vehicle);
 
-		roadUserManager.step(7);
+		vehicleManager.step(7);
 
-		assertThat(roadUser, isLocatedAt(junction1));
-		assertThat(roadUser, hasJourneyTime(7));
+		assertThat(vehicle, isLocatedAt(junction1));
+		assertThat(vehicle, hasJourneyTime(7));
 	}
 }
 

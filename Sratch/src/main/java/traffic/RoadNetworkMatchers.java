@@ -6,15 +6,15 @@ import org.hamcrest.TypeSafeMatcher;
 
 
 public class RoadNetworkMatchers {
-	public static Matcher<RoadUser> hasJourneyTime(final int expectedJourneyTime) {
-		return new TypeSafeMatcher<RoadUser>(RoadUser.class) {
+	public static Matcher<Vehicle> hasJourneyTime(final int expectedJourneyTime) {
+		return new TypeSafeMatcher<Vehicle>(Vehicle.class) {
 			@Override
 			public void describeTo(final Description description) {
 				description.appendText("Road User with journey time ").appendValue(expectedJourneyTime);
 			}
 
 			@Override
-			protected boolean matchesSafely(final RoadUser item) {
+			protected boolean matchesSafely(final Vehicle item) {
 				return item.journeyTime() == expectedJourneyTime;
 			}
 		};

@@ -5,12 +5,12 @@ import static traffic.RoadNetworkToStringStyle.*;
 import java.util.Iterator;
 
 
-public class RoadUserImpl implements RoadUser {
+public class VehicleImpl implements Vehicle {
 	private final Iterator<Cell> remainingItinerary;
 	private Cell location;
 	private final JourneyHistory history;
 
-	public RoadUserImpl(
+	public VehicleImpl(
 			final Iterator<Cell> remainingItinerary,
 			final JourneyHistory history) {
 		this.remainingItinerary = remainingItinerary;

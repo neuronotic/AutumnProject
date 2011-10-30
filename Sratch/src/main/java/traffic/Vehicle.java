@@ -1,7 +1,7 @@
 package traffic;
 
 
-public interface RoadUser {
+public interface Vehicle {
 	Cell location();
 
 	void step();

@@ -2,7 +2,7 @@ package traffic;
 
 
 public interface Junction extends Cell {
-	void enter(RoadUser roadUser);
+	void enter(Vehicle vehicle);
 
 	String name();
 }

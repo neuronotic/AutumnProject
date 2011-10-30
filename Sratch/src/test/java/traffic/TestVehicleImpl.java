@@ -2,7 +2,7 @@ package traffic;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import static traffic.RoadUserMatchers.*;
+import static traffic.VehicleMatchers.*;
 
 import java.util.Iterator;
 
@@ -11,7 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 
-public class TestRoadUserImpl {
+public class TestVehicleImpl {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -21,24 +21,24 @@ public class TestRoadUserImpl {
 
 	@Test
 	public void eachStepAdvancesUserToIterator() throws Exception {
-		final RoadUser roadUser = new RoadUserImpl(itinerary, history);
+		final Vehicle vehicle = new VehicleImpl(itinerary, history);
 
 		context.checking(new Expectations() {{
 			oneOf(itinerary).next(); will(returnValue(cell));
-			oneOf(cell).enter(roadUser);
+			oneOf(cell).enter(vehicle);
 			oneOf(history).stepped();
 		}});
-		roadUser.step();
-		assertThat(roadUser, isLocatedAt(cell));
+		vehicle.step();
+		assertThat(vehicle, isLocatedAt(cell));
 	}
 
 	@Test
 	public void journeyTimeIsReadFromHistory() throws Exception {
-		final RoadUser roadUser = new RoadUserImpl(itinerary, history);
+		final Vehicle vehicle = new VehicleImpl(itinerary, history);
 
 		context.checking(new Expectations() {{
 			oneOf(history).journeyTime(); will(returnValue(42));
 		}});
-		assertThat(roadUser.journeyTime(), equalTo(42));
+		assertThat(vehicle.journeyTime(), equalTo(42));
 	}
 }

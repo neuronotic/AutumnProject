@@ -8,7 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 
-public class TestRoadUserFactoryImpl {
+public class TestVehicleFactoryImpl {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -21,6 +21,6 @@ public class TestRoadUserFactoryImpl {
 				ignoring(itinerary);
 			}
 		});
-		assertThat(new RoadUserFactoryImpl().createRoadUser(itinerary), notNullValue(RoadUser.class));
+		assertThat(new VehicleFactoryImpl().createVehicle(itinerary), notNullValue(Vehicle.class));
 	}
 }

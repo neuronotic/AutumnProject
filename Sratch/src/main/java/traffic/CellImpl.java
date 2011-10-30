@@ -5,7 +5,7 @@ import static traffic.RoadNetworkToStringStyle.*;
 
 public class CellImpl implements Cell {
 	@Override
-	public void enter(final RoadUser roadUser) {
+	public void enter(final Vehicle vehicle) {
 
 	}
 
