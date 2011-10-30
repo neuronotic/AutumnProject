@@ -8,11 +8,11 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
-public class CellChainImpl implements CellChain {
+class CellChainImpl implements CellChain {
 	private final List<Cell> cells;
 
 	@Inject
-	public CellChainImpl(@Assisted final List<Cell> cells) {
+	CellChainImpl(@Assisted final List<Cell> cells) {
 		this.cells = cells;
 	}
 

@@ -1,7 +1,9 @@
 package traffic;
 
+import com.google.inject.Singleton;
 
-public class VehicleManagerImpl implements VehicleManager {
+@Singleton
+class VehicleManagerImpl implements VehicleManager {
 	private Vehicle vehicle;
 
 	@Override

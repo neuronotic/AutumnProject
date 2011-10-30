@@ -4,11 +4,11 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 
-public class JunctionImpl implements Junction {
+class JunctionImpl implements Junction {
 	private final String name;
 
 	@Inject
-	public JunctionImpl(@Assisted final String name) {
+	JunctionImpl(@Assisted final String name) {
 		this.name = name;
 	}
 

@@ -5,13 +5,13 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
-public class CellChainBuilderImpl implements CellChainBuilder {
+class CellChainBuilderImpl implements CellChainBuilder {
 	private final CellFactory cellFactory;
 	private final CellChainFactory cellChainFactory;
 
 	private int cellCount;
 
-	@Inject public CellChainBuilderImpl(
+	@Inject CellChainBuilderImpl(
 			final CellChainFactory cellChainFactory,
 			final CellFactory cellFactory) {
 		this.cellChainFactory = cellChainFactory;

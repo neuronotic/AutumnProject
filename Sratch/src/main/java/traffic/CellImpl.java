@@ -6,12 +6,12 @@ import static traffic.RoadNetworkToStringStyle.*;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
-public class CellImpl implements Cell {
+class CellImpl implements Cell {
 
 	private final Segment segment;
 	private final int index;
 
-	@Inject public CellImpl(
+	@Inject CellImpl(
 			@Assisted final Segment segment,
 			@Assisted final int index) {
 		this.segment = segment;

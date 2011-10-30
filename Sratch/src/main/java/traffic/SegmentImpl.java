@@ -8,13 +8,13 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
-public class SegmentImpl implements Segment {
+class SegmentImpl implements Segment {
 	private final String name;
 	private final Junction inJunction;
 	private final CellChain cellChain;
 	private final Junction outJunction;
 
-	@Inject public SegmentImpl(
+	@Inject SegmentImpl(
 			@Assisted final String name,
 			@Assisted("inJunction") final Junction inJunction,
 			@Assisted final CellChainBuilder cellChainBuilder,
