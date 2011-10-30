@@ -131,10 +131,36 @@ public class RoadNetworkMatchers {
 		};
 	}
 
+
+	public static Matcher<Cell> cellNamed(final String expectedName) {
+		return new TypeSafeMatcher<Cell>(Cell.class) {
+
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("Cell named ").appendValue(expectedName);
+			}
+
+			@Override
+			protected void describeMismatchSafely(final Cell item,
+					final Description mismatchDescription) {
+				if (item != null) {
+					mismatchDescription.appendText("Cell named ").appendValue(item.name());
+				} else {
+					super.describeMismatchSafely(item, mismatchDescription);
+				}
+			}
+
+			@Override
+			protected boolean matchesSafely(final Cell item) {
+				return item.name().equals(expectedName);
+			}
+
+		};
+	}
+
 	public static List<Cell> cellsIn(final Itinerary itinerary) {
 		final List<Cell> cells = new ArrayList<Cell>();
 		Iterators.addAll(cells, itinerary.iterator());
 		return cells;
 	}
-
 }
