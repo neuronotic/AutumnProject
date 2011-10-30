@@ -43,10 +43,13 @@ public class TestItineraryImpl {
 			}
 		});
 
-		final ItineraryImpl itineraryImpl = new ItineraryImpl(segment0, segment1);
+		assertThat(cellsIn(new ItineraryImpl(segment0, segment1)), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1, segmentCell2, junctionCell2));
+	}
+
+	private List<Cell> cellsIn(final ItineraryImpl itineraryImpl) {
 		final List<Cell> cells = new ArrayList<Cell>();
 		Iterators.addAll(cells, itineraryImpl.iterator());
-		assertThat(cells, contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1, segmentCell2, junctionCell2));
+		return cells;
 	}
 
 	@Test
@@ -57,7 +60,7 @@ public class TestItineraryImpl {
 			}
 		});
 
-		assertThat(new ItineraryImpl(segment0), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
+		assertThat(cellsIn(new ItineraryImpl(segment0)), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
 	}
 
 	//type variable - generics
