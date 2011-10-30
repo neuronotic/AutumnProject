@@ -1,5 +1,8 @@
 package traffic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SegmentImpl implements Segment {
 	private final Junction inJunction;
 	private final Junction outJunction;
@@ -29,5 +32,17 @@ public class SegmentImpl implements Segment {
 	@Override
 	public String toString() {
 		return String.format("Segment from %s to %s", inJunction, outJunction);
+	}
+
+	@Override
+	public List<Cell> cells() {
+		final ArrayList<Cell> result = new ArrayList<Cell>();
+
+		result.add(inJunction);
+		for (final Cell cell : cellChain) {
+			result.add(cell);
+		}
+		result.add(outJunction);
+		return result;
 	}
 }
