@@ -2,7 +2,7 @@ package traffic;
 
 
 public interface RoadUserManager {
-	RoadUser roadUser(Itinerary itinerary);
+	void addRoadUser(RoadUser roadUser);
 
 	void step();
 }

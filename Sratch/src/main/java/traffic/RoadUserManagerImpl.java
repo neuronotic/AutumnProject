@@ -2,17 +2,11 @@ package traffic;
 
 
 public class RoadUserManagerImpl implements RoadUserManager {
-	private final RoadUserFactory roadUserFactory;
 	private RoadUser roadUser;
 
-	public RoadUserManagerImpl(final RoadUserFactory roadUserFactory) {
-		this.roadUserFactory = roadUserFactory;
-	}
-
 	@Override
-	public RoadUser roadUser(final Itinerary itinerary) {
-		roadUser = roadUserFactory.createRoadUser(itinerary);
-		return roadUser;
+	public void addRoadUser(final RoadUser roadUser) {
+		this.roadUser = roadUser;
 	}
 
 	@Override

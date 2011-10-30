@@ -13,11 +13,15 @@ import traffic.Itinerary;
 import traffic.Junction;
 import traffic.RoadNetwork;
 import traffic.RoadUser;
+import traffic.RoadUserFactory;
+import traffic.RoadUserFactoryImpl;
 import traffic.RoadUserManager;
 import traffic.Segment;
 import traffic.Trip;
 
 public class TestRoadUserMovement {
+	private final RoadUserFactory roadUserFactory = new RoadUserFactoryImpl();
+
 	@Test
 	public void tripAcrossSingleSegmentNetworkOfLength5Takes7Timesteps() {
 		final Junction junction0 = junction("junction0");
@@ -30,7 +34,8 @@ public class TestRoadUserMovement {
 		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
 
 		final RoadUserManager roadUserManager = roadUserManager();
-		final RoadUser roadUser = roadUserManager.roadUser(itinerary);
+		final RoadUser roadUser = roadUserFactory.createRoadUser(itinerary);
+		roadUserManager.addRoadUser(roadUser);
 
 		roadUserManager.step();
 		roadUserManager.step();
