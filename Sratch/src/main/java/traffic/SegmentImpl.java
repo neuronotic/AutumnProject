@@ -11,10 +11,10 @@ public class SegmentImpl implements Segment {
 	private final CellChain cellChain;
 	private final Junction outJunction;
 
-	public SegmentImpl(final String name, final Junction inJunction, final CellChain cellChain, final Junction outJunction) {
+	public SegmentImpl(final String name, final Junction inJunction, final CellChainFactory cellChainFactory, final Junction outJunction) {
 		this.name = name;
 		this.inJunction = inJunction;
-		this.cellChain = cellChain;
+		cellChain = cellChainFactory.make();
 		this.outJunction = outJunction;
 	}
 

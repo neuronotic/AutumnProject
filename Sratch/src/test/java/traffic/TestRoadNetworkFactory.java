@@ -13,8 +13,6 @@ public class TestRoadNetworkFactory {
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
 	private final Junction inJunction = context.mock(Junction.class, "inJunction");
-	private final Junction outJunction = context.mock(Junction.class, "outJunction");
-	private final CellChain cellChain = context.mock(CellChain.class, "cellChain");
 
 	private final Segment segment = context.mock(Segment.class);
 
@@ -25,8 +23,8 @@ public class TestRoadNetworkFactory {
 
 	@Test
 	public void cellChainHasSpecifiedNumberOfCellsCreated() {
-		assertThat(cellChainOfLength(3), isCellChainWithCellCount(3));
-		assertThat(cellChainOfLength(3), contains(isA(Cell.class), isA(Cell.class), isA(Cell.class)));
+		assertThat(cellChainOfLength(3).make(), isCellChainWithCellCount(3));
+		assertThat(cellChainOfLength(3).make(), contains(isA(Cell.class), isA(Cell.class), isA(Cell.class)));
 	}
 
 	@Test
@@ -37,10 +35,5 @@ public class TestRoadNetworkFactory {
 	@Test
 	public void tripFromCreateTripOriginAtJunction() {
 		assertThat(tripFrom(inJunction), isTripOriginAt(inJunction));
-	}
-
-	@Test
-	public void segmentCanBeCreatedFromJunctionPairAndCellChain() {
-		assertThat(segment("mySegment", inJunction, cellChain, outJunction), isSegment("mySegment", inJunction, cellChain, outJunction));
 	}
 }
