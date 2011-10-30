@@ -3,14 +3,25 @@ package traffic;
 import static traffic.RoadNetworkToStringStyle.*;
 
 import java.util.Iterator;
+import java.util.logging.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 
-public class VehicleImpl implements Vehicle {
+class VehicleImpl implements Vehicle {
+	@Inject Logger logger = Logger.getAnonymousLogger();
+
 	private final Iterator<Cell> remainingItinerary;
 	private Cell location;
 	private final JourneyHistory history;
 
-	public VehicleImpl(
+	@Inject VehicleImpl(
+			@Assisted final Itinerary remainingItinerary,
+			final JourneyHistory history) {
+		this(remainingItinerary.iterator(), history);
+	}
+
+	VehicleImpl(
 			final Iterator<Cell> remainingItinerary,
 			final JourneyHistory history) {
 		this.remainingItinerary = remainingItinerary;
@@ -28,6 +39,8 @@ public class VehicleImpl implements Vehicle {
 		cell.enter(this);
 		location = cell;
 		history.stepped();
+
+		logger.info(String.format("Vehicle entered %s", location));
 	}
 
 	@Override
