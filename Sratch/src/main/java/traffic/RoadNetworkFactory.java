@@ -20,8 +20,8 @@ public class RoadNetworkFactory {
 		return new TripOriginImpl(junction);
 	}
 
-	public static RoadNetwork roadNetwork(final Segment segment) {
-		return new RoadNetworkImpl(segment);
+	public static RoadNetwork roadNetwork(final Segment...segments) {
+		return new RoadNetworkImpl(segments);
 	}
 
 	public static Segment segment(final Junction inJunction, final CellChain cellChain, final Junction outJunction) {
