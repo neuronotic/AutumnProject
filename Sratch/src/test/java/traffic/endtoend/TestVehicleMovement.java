@@ -10,35 +10,24 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import traffic.Cell;
-import traffic.CellChain;
 import traffic.CellChainBuilder;
-import traffic.CellChainBuilderImpl;
-import traffic.CellChainFactory;
-import traffic.CellChainImpl;
-import traffic.CellFactory;
-import traffic.CellImpl;
 import traffic.Itinerary;
 import traffic.Junction;
 import traffic.JunctionFactory;
-import traffic.JunctionImpl;
 import traffic.RoadNetwork;
 import traffic.Segment;
 import traffic.SegmentFactory;
-import traffic.SegmentImpl;
+import traffic.TrafficModule;
 import traffic.Trip;
 import traffic.Vehicle;
 import traffic.VehicleFactory;
-import traffic.VehicleFactoryImpl;
 import traffic.VehicleManager;
-import traffic.VehicleManagerImpl;
 
 import com.google.guiceberry.GuiceBerryModule;
 import com.google.guiceberry.junit4.GuiceBerryRule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 public class TestVehicleMovement {
 
@@ -47,31 +36,6 @@ public class TestVehicleMovement {
 		protected void configure() {
 			install(new GuiceBerryModule());
 			install(new TrafficModule());
-		}
-	};
-
-	public static class TrafficModule extends AbstractModule {
-		@Override
-		protected void configure() {
-			bind(VehicleFactory.class).to(VehicleFactoryImpl.class);
-			bind(VehicleManager.class).to(VehicleManagerImpl.class);
-			bind(CellChainBuilder.class).to(CellChainBuilderImpl.class);
-
-			install(new FactoryModuleBuilder()
-			    .implement(Junction.class, JunctionImpl.class)
-			    .build(JunctionFactory.class));
-
-			install(new FactoryModuleBuilder()
-			    .implement(Segment.class, SegmentImpl.class)
-			    .build(SegmentFactory.class));
-
-			install(new FactoryModuleBuilder()
-			    .implement(Cell.class, CellImpl.class)
-			    .build(CellFactory.class));
-
-			install(new FactoryModuleBuilder()
-			    .implement(CellChain.class, CellChainImpl.class)
-			    .build(CellChainFactory.class));
 		}
 	};
 
