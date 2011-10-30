@@ -5,13 +5,20 @@ import static traffic.RoadNetworkToStringStyle.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 public class SegmentImpl implements Segment {
 	private final String name;
 	private final Junction inJunction;
 	private final CellChain cellChain;
 	private final Junction outJunction;
 
-	public SegmentImpl(final String name, final Junction inJunction, final CellChainFactory cellChainFactory, final Junction outJunction) {
+	@Inject public SegmentImpl(
+			@Assisted final String name,
+			@Assisted("inJunction") final Junction inJunction,
+			@Assisted final CellChainFactory cellChainFactory,
+			@Assisted("outJunction") final Junction outJunction) {
 		this.name = name;
 		this.inJunction = inJunction;
 		cellChain = cellChainFactory.make(this);

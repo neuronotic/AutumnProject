@@ -24,8 +24,4 @@ public class RoadNetworkFactory {
 	public static RoadNetwork roadNetwork(final Segment...segments) {
 		return new RoadNetworkImpl(segments);
 	}
-
-	public static Segment segment(final String segmentName, final Junction inJunction, final CellChainFactory cellChainFactory, final Junction outJunction) {
-		return new SegmentImpl(segmentName, inJunction, cellChainFactory, outJunction);
-	}
 }

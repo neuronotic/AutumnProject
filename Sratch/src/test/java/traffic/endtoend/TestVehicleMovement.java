@@ -15,6 +15,8 @@ import traffic.JunctionFactory;
 import traffic.JunctionImpl;
 import traffic.RoadNetwork;
 import traffic.Segment;
+import traffic.SegmentFactory;
+import traffic.SegmentImpl;
 import traffic.Trip;
 import traffic.Vehicle;
 import traffic.VehicleFactory;
@@ -40,6 +42,10 @@ public class TestVehicleMovement {
 			install(new FactoryModuleBuilder()
 			    .implement(Junction.class, JunctionImpl.class)
 			    .build(JunctionFactory.class));
+
+			install(new FactoryModuleBuilder()
+			    .implement(Segment.class, SegmentImpl.class)
+			    .build(SegmentFactory.class));
 		}
 	};
 
@@ -49,6 +55,7 @@ public class TestVehicleMovement {
 	@Inject private VehicleFactory vehicleFactory;
 	@Inject private VehicleManager vehicleManager;
 	@Inject private JunctionFactory junctionFactory;
+	@Inject private SegmentFactory segmentFactory;
 
 	@Test
 	public void tripAcrossTwoSegmentNetworkWithLengths4And3Takes10Timesteps() throws Exception {
@@ -56,8 +63,8 @@ public class TestVehicleMovement {
 		final Junction junction1 = junctionFactory.createJunction("junction1");
 		final Junction junction2 = junctionFactory.createJunction("junction2");
 
-		final Segment segment0 = segment("segment0", junction0, cellChainOfLength(5), junction1);
-		final Segment segment1 = segment("segment1", junction1, cellChainOfLength(5), junction2);
+		final Segment segment0 = segmentFactory.segment("segment0", junction0, cellChainOfLength(5), junction1);
+		final Segment segment1 = segmentFactory.segment("segment1", junction1, cellChainOfLength(5), junction2);
 
 		final RoadNetwork roadNetwork = roadNetwork(segment0, segment1);
 
@@ -79,7 +86,7 @@ public class TestVehicleMovement {
 		final Junction junction0 = junctionFactory.createJunction("junction0");
 		final Junction junction1 = junctionFactory.createJunction("junction1");
 
-		final Segment segment = segment("segment0", junction0, cellChainOfLength(5), junction1);
+		final Segment segment = segmentFactory.segment("segment0", junction0, cellChainOfLength(5), junction1);
 		final RoadNetwork roadNetwork = roadNetwork(segment);
 
 		final Trip trip = tripFrom(junction0).to(junction1);
