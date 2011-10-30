@@ -10,7 +10,7 @@ public class VehicleMatchers {
 		return new TypeSafeMatcher<Vehicle>(Vehicle.class) {
 			@Override
 			public void describeTo(final Description description) {
-				description.appendText("road user is located at junction ").appendValue(expectedLocation);
+				description.appendValue(Vehicle.class.getSimpleName()).appendText(" is located at junction ").appendValue(expectedLocation);
 			}
 
 			@Override
