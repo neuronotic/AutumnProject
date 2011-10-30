@@ -19,7 +19,7 @@ public class TestItineraryImpl {
 	private final Junction outJunctionCell = context.mock(Junction.class, "outJunctionCell");
 
 	@Test
-	public void testName() throws Exception {
+	public void itineraryContainsCellsFromRouteJunctionsAndSegmentsInOrder() throws Exception {
 		context.checking(new Expectations() {
 			{
 				oneOf(segment).inJunction(); will(returnValue(inJunctionCell));

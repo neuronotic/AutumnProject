@@ -2,6 +2,7 @@ package traffic;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class ItineraryImpl implements Itinerary {
 	private final Segment route;
@@ -17,7 +18,7 @@ public class ItineraryImpl implements Itinerary {
 
 	@Override
 	public Iterator<Cell> iterator() {
-		final ArrayList<Cell> result = new ArrayList<Cell>();
+		final List<Cell> result = new ArrayList<Cell>();
 		result.add(route.inJunction());
 		for (final Cell cell : route.cellChain()) {
 			result.add(cell);
