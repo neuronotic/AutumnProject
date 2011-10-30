@@ -21,7 +21,7 @@ public class TestRoadUserMovement {
 	public void tripAcrossSingleSegmentNetworkOfLength5Takes7Timesteps() {
 		final Junction junction0 = junction("junction0");
 		final Junction junction1 = junction("junction1");
-		final Segment segment = adjacent(junction0, junction1).connectedByCellChain(cellChainOfLength(5));
+		final Segment segment = segment(junction0, cellChainOfLength(5), junction1);
 		final RoadNetwork roadNetwork = roadNetwork(segment);
 
 		final Trip trip = tripFrom(junction0).to(junction1);

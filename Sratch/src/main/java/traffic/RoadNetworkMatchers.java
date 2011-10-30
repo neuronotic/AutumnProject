@@ -21,27 +21,6 @@ public class RoadNetworkMatchers {
 		};
 	}
 
-	public static Matcher<AdjacentJunctionPair> isAdjacentPairOfJunctions(
-			final Junction expectedJunction0, final Junction expectedJunction1) {
-		return new TypeSafeMatcher<AdjacentJunctionPair>(
-				AdjacentJunctionPair.class) {
-			@Override
-			public void describeTo(final Description description) {
-				description
-					.appendText("adjacent pair of junctions (")
-					.appendValue(expectedJunction0)
-					.appendText(", ")
-					.appendValue(expectedJunction1)
-					.appendText(")");
-			}
-
-			@Override
-			protected boolean matchesSafely(final AdjacentJunctionPair item) {
-				return item.inJunction().equals(expectedJunction0) && item.outJunction().equals(expectedJunction1);
-			}
-		};
-	}
-
 	public static Matcher<TripOrigin> isTripOriginAt(final Junction expectedInJunction) {
 		return new TypeSafeMatcher<TripOrigin>(TripOrigin.class) {
 			@Override
@@ -72,12 +51,14 @@ public class RoadNetworkMatchers {
 		};
 	}
 
-	public static Matcher<Segment> isSegmentBetween(
-			final Junction expectedInJunction, final Junction expectedOutJunction) {
+	public static Matcher<Segment> isSegment(
+			final Junction expectedInJunction,
+			final CellChain cellChain,
+			final Junction expectedOutJunction) {
 		return new TypeSafeMatcher<Segment>() {
 			@Override
 			public void describeTo(final Description description) {
-				description.appendText("segment between ").appendValue(expectedInJunction).appendText(" and ").appendValue(expectedOutJunction);
+				description.appendText("segment between ").appendValue(expectedInJunction).appendText(" and ").appendValue(expectedOutJunction).appendText(" connected by cell chain ").appendValue(cellChain);
 			}
 
 			@Override

@@ -14,6 +14,7 @@ public class TestRoadNetworkFactory {
 
 	private final Junction inJunction = context.mock(Junction.class, "inJunction");
 	private final Junction outJunction = context.mock(Junction.class, "outJunction");
+	private final CellChain cellChain = context.mock(CellChain.class, "cellChain");
 
 	private final Segment segment = context.mock(Segment.class);
 
@@ -39,7 +40,7 @@ public class TestRoadNetworkFactory {
 	}
 
 	@Test
-	public void junctionConnectedToReturnsJunctionPair() {
-		assertThat(adjacent(inJunction, outJunction), isAdjacentPairOfJunctions(inJunction, outJunction));
+	public void segmentCanBeCreatedFromJunctionPairAndCellChain() {
+		assertThat(segment(inJunction, cellChain, outJunction), isSegment(inJunction, cellChain, outJunction));
 	}
 }
