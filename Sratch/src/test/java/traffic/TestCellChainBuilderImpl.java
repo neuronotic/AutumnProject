@@ -2,7 +2,6 @@ package traffic;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import static traffic.RoadNetworkMatchers.*;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -29,9 +28,6 @@ public class TestCellChainBuilderImpl {
 			}
 		});
 
-		final CellChain cellChain = new CellChainBuilderImpl(cellFactory).cellChainOfLength(3).make(segment);
-
-		assertThat(cellChain, isCellChainWithCellCount(3));
-		assertThat(cellChain, contains(isA(Cell.class), isA(Cell.class), isA(Cell.class)));
+		assertThat(new CellChainBuilderImpl(cellFactory).cellChainOfLength(3).make(segment), contains(cell0, cell1, cell2));
 	}
 }
