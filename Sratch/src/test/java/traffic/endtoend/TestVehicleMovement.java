@@ -31,6 +31,7 @@ import com.google.guiceberry.GuiceBerryModule;
 import com.google.guiceberry.junit4.GuiceBerryRule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 public class TestVehicleMovement {
@@ -60,7 +61,7 @@ public class TestVehicleMovement {
 	@Inject private VehicleManager vehicleManager;
 	@Inject private JunctionFactory junctionFactory;
 	@Inject private SegmentFactory segmentFactory;
-	@Inject private CellChainBuilder cellChainBuilder;
+	@Inject private Provider<CellChainBuilder> cellChainBuilderProvider;
 
 	@Test
 	@Ignore
@@ -69,8 +70,8 @@ public class TestVehicleMovement {
 		final Junction junction1 = junctionFactory.createJunction("junction1");
 		final Junction junction2 = junctionFactory.createJunction("junction2");
 
-		final Segment segment0 = segmentFactory.segment("segment0", junction0, cellChainBuilder.cellChainOfLength(5), junction1);
-		final Segment segment1 = segmentFactory.segment("segment1", junction1, cellChainBuilder.cellChainOfLength(5), junction2);
+		final Segment segment0 = segmentFactory.segment("segment0", junction0, cellChainBuilderProvider.get().cellChainOfLength(5), junction1);
+		final Segment segment1 = segmentFactory.segment("segment1", junction1, cellChainBuilderProvider.get().cellChainOfLength(5), junction2);
 
 		final RoadNetwork roadNetwork = roadNetwork(segment0, segment1);
 
@@ -92,7 +93,7 @@ public class TestVehicleMovement {
 		final Junction junction0 = junctionFactory.createJunction("junction0");
 		final Junction junction1 = junctionFactory.createJunction("junction1");
 
-		final Segment segment = segmentFactory.segment("segment0", junction0, cellChainBuilder.cellChainOfLength(5), junction1);
+		final Segment segment = segmentFactory.segment("segment0", junction0, cellChainBuilderProvider.get().cellChainOfLength(5), junction1);
 		final RoadNetwork roadNetwork = roadNetwork(segment);
 
 		final Trip trip = tripFrom(junction0).to(junction1);

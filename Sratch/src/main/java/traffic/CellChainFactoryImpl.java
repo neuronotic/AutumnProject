@@ -6,7 +6,7 @@ import java.util.List;
 final class CellChainFactoryImpl implements CellChainFactory {
 	private final int cellCount;
 
-	CellChainFactoryImpl(int cellCount) {
+	CellChainFactoryImpl(final int cellCount) {
 		this.cellCount = cellCount;
 	}
 
