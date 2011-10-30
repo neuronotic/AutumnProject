@@ -1,5 +1,8 @@
 package traffic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CellChainBuilderImpl implements CellChainBuilder {
 	private int cellCount;
 
@@ -10,6 +13,10 @@ public class CellChainBuilderImpl implements CellChainBuilder {
 
 	@Override
 	public CellChain make(final Segment segment) {
-		return new CellChainFactoryImpl(cellCount).make(segment);
+		final List<Cell> cells = new ArrayList<Cell>();
+		for (int i = 0; i < cellCount; i++) {
+			cells.add(new CellImpl(null, 0));
+		}
+		return new CellChainImpl(cells);
 	}
 }

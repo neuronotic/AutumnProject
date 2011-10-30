@@ -7,7 +7,7 @@ import static traffic.RoadNetworkMatchers.*;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class TestCellChainFactoryImpl {
+public class TestCellChainBuilderImpl {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -15,7 +15,7 @@ public class TestCellChainFactoryImpl {
 
 	@Test
 	public void cellChainHasSpecifiedNumberOfCellsCreated() {
-		final CellChain cellChain = new CellChainFactoryImpl(3).make(segment);
+		final CellChain cellChain = new CellChainBuilderImpl().cellChainOfLength(3).make(segment);
 
 		assertThat(cellChain, isCellChainWithCellCount(3));
 		assertThat(cellChain, contains(isA(Cell.class), isA(Cell.class), isA(Cell.class)));
