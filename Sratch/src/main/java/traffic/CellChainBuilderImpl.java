@@ -6,10 +6,15 @@ import java.util.List;
 import com.google.inject.Inject;
 
 public class CellChainBuilderImpl implements CellChainBuilder {
-	private int cellCount;
 	private final CellFactory cellFactory;
+	private final CellChainFactory cellChainFactory;
 
-	@Inject public CellChainBuilderImpl(final CellFactory cellFactory) {
+	private int cellCount;
+
+	@Inject public CellChainBuilderImpl(
+			final CellChainFactory cellChainFactory,
+			final CellFactory cellFactory) {
+		this.cellChainFactory = cellChainFactory;
 		this.cellFactory = cellFactory;
 	}
 
@@ -24,6 +29,6 @@ public class CellChainBuilderImpl implements CellChainBuilder {
 		for (int i = 0; i < cellCount; i++) {
 			cells.add(cellFactory.createCell(segment, i));
 		}
-		return new CellChainImpl(cells);
+		return cellChainFactory.createCellChain(cells);
 	}
 }

@@ -11,8 +11,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import traffic.Cell;
+import traffic.CellChain;
 import traffic.CellChainBuilder;
 import traffic.CellChainBuilderImpl;
+import traffic.CellChainFactory;
+import traffic.CellChainImpl;
 import traffic.CellFactory;
 import traffic.CellImpl;
 import traffic.Itinerary;
@@ -43,6 +46,7 @@ public class TestVehicleMovement {
 		@Override
 		protected void configure() {
 			install(new GuiceBerryModule());
+
 			bind(VehicleFactory.class).to(VehicleFactoryImpl.class);
 			bind(VehicleManager.class).to(VehicleManagerImpl.class);
 			bind(CellChainBuilder.class).to(CellChainBuilderImpl.class);
@@ -58,6 +62,10 @@ public class TestVehicleMovement {
 			install(new FactoryModuleBuilder()
 			    .implement(Cell.class, CellImpl.class)
 			    .build(CellFactory.class));
+
+			install(new FactoryModuleBuilder()
+			    .implement(CellChain.class, CellChainImpl.class)
+			    .build(CellChainFactory.class));
 		}
 	};
 
