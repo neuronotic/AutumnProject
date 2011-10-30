@@ -5,6 +5,13 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 
+/**
+ * build the project with "mvn clean package" in the directory containing pom.xml
+ *
+ * see http://maven.apache.org/plugins/maven-assembly-plugin/usage.html for details
+ *
+ * @author daz
+ */
 public class TrafficModule extends AbstractModule {
 	@Override
 	protected void configure() {
