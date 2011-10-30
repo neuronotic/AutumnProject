@@ -3,12 +3,17 @@ package traffic;
 import static org.apache.commons.lang3.builder.ToStringBuilder.*;
 import static traffic.RoadNetworkToStringStyle.*;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 public class CellImpl implements Cell {
 
 	private final Segment segment;
 	private final int index;
 
-	public CellImpl(final Segment segment, final int index) {
+	@Inject public CellImpl(
+			@Assisted final Segment segment,
+			@Assisted final int index) {
 		this.segment = segment;
 		this.index = index;
 	}

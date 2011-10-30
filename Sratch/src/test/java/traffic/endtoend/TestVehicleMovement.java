@@ -10,8 +10,11 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
+import traffic.Cell;
 import traffic.CellChainBuilder;
 import traffic.CellChainBuilderImpl;
+import traffic.CellFactory;
+import traffic.CellImpl;
 import traffic.Itinerary;
 import traffic.Junction;
 import traffic.JunctionFactory;
@@ -51,6 +54,10 @@ public class TestVehicleMovement {
 			install(new FactoryModuleBuilder()
 			    .implement(Segment.class, SegmentImpl.class)
 			    .build(SegmentFactory.class));
+
+			install(new FactoryModuleBuilder()
+			    .implement(Cell.class, CellImpl.class)
+			    .build(CellFactory.class));
 		}
 	};
 
