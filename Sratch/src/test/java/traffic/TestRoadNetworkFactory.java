@@ -22,14 +22,6 @@ public class TestRoadNetworkFactory {
 	}
 
 	@Test
-	public void cellChainHasSpecifiedNumberOfCellsCreated() {
-		final CellChainBuilderImpl cellChainBuilderImpl = new CellChainBuilderImpl();
-
-		assertThat(cellChainBuilderImpl.cellChainOfLength(3).make(segment), isCellChainWithCellCount(3));
-		assertThat(cellChainBuilderImpl.cellChainOfLength(3).make(segment), contains(isA(Cell.class), isA(Cell.class), isA(Cell.class)));
-	}
-
-	@Test
 	public void roadNeworkCanBeCreated() {
 		assertThat(roadNetwork(segment), notNullValue());
 	}
