@@ -8,7 +8,17 @@ import traffic.endtoend.RoadUser;
 
 public class RoadNetworkMatchers {
 	public static Matcher<RoadUser> hasJourneyTime(final int expectedJourneyTime) {
-		return null;
+		return new TypeSafeMatcher<RoadUser>(RoadUser.class) {
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("Road User with journey time ").appendValue(expectedJourneyTime);
+			}
+
+			@Override
+			protected boolean matchesSafely(final RoadUser item) {
+				return item.journeyTime() == expectedJourneyTime;
+			}
+		};
 	}
 
 	public static Matcher<AdjacentJunctionPair> isAdjacentPairOfJunctions(

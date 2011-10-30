@@ -18,7 +18,7 @@ import traffic.Trip;
 
 public class TestRoadUserMovement {
 	@Test
-	public void tripAcrossSegmentOfLength5Takes6Timesteps() {
+	public void tripAcrossSingleSegmentNetworkOfLength5Takes7Timesteps() {
 		final Junction junction0 = junction("junction0");
 		final Junction junction1 = junction("junction1");
 		final Segment segment = adjacent(junction0, junction1).connectedByCellChain(cellChainOfLength(5));
@@ -37,9 +37,10 @@ public class TestRoadUserMovement {
 		roadUserManager.step();
 		roadUserManager.step();
 		roadUserManager.step();
+		roadUserManager.step();
 
 		assertThat(roadUser, isLocatedAt(junction1));
-		assertThat(roadUser, hasJourneyTime(6));
+		assertThat(roadUser, hasJourneyTime(7));
 	}
 }
 
