@@ -13,4 +13,10 @@ public class RoadUserManagerImpl implements RoadUserManager {
 	public void step() {
 		roadUser.step();
 	}
+
+	public void step(final int steps) {
+		for (int j = 0; j < steps; j++) {
+			step();
+		}
+	}
 }

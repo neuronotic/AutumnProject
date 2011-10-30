@@ -37,13 +37,7 @@ public class TestRoadUserMovement {
 		final RoadUser roadUser = roadUserFactory.createRoadUser(itinerary);
 		roadUserManager.addRoadUser(roadUser);
 
-		roadUserManager.step();
-		roadUserManager.step();
-		roadUserManager.step();
-		roadUserManager.step();
-		roadUserManager.step();
-		roadUserManager.step();
-		roadUserManager.step();
+		roadUserManager.step(7);
 
 		assertThat(roadUser, isLocatedAt(junction1));
 		assertThat(roadUser, hasJourneyTime(7));

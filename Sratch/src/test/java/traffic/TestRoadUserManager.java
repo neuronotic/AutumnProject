@@ -21,4 +21,16 @@ public class TestRoadUserManager {
 		}});
 		roadUserManagerImpl.step();
 	}
+
+	@Test
+	public void managerCanBeSteppedMultipleTimes() throws Exception {
+		roadUserManagerImpl.addRoadUser(roadUser);
+
+		context.checking(new Expectations() {{
+			oneOf(roadUser).step();
+			oneOf(roadUser).step();
+			oneOf(roadUser).step();
+		}});
+		roadUserManagerImpl.step(3);
+	}
 }
