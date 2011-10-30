@@ -1,7 +1,15 @@
 package traffic;
 
 public class CellChainBuilderImpl implements CellChainBuilder {
-	public CellChainFactory cellChainOfLength(final int cellCount) {
-		return new CellChainFactoryImpl(cellCount);
+	private int cellCount;
+
+	public CellChainBuilder cellChainOfLength(final int cellCount) {
+		this.cellCount = cellCount;
+		return this;
+	}
+
+	@Override
+	public CellChain make(final Segment segment) {
+		return new CellChainFactoryImpl(cellCount).make(segment);
 	}
 }

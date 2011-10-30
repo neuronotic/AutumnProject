@@ -6,6 +6,6 @@ public interface SegmentFactory {
 	Segment segment(
 			String segmentName,
 			@Assisted("inJunction") Junction inJunction,
-			CellChainFactory cellChainFactory,
+			CellChainBuilder cellChainFactory,
 			@Assisted("outJunction") Junction outJunction);
 }

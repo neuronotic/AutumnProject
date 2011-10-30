@@ -18,19 +18,19 @@ public class TestSegmentImpl {
 	private final Cell segmentCell0 = context.mock(Cell.class, "segmentCell0");
 	private final Cell segmentCell1 = context.mock(Cell.class, "segmentCell1");
 
-	private final CellChainFactory cellChainFactory = context.mock(CellChainFactory.class);
+	private final CellChainBuilder cellChainBuilder = context.mock(CellChainBuilder.class);
 	private final CellChain cellChain = context.mock(CellChain.class);
 
 	@Test
 	public void segmentContainsCellsCorrespondingToInJunctionFollowedByCellsInCellChainFollowedByOutJunction() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(cellChainFactory).make(with(RoadNetworkMatchers.segmentNamed("mySegment"))); will(returnValue(cellChain));
+				oneOf(cellChainBuilder).make(with(RoadNetworkMatchers.segmentNamed("mySegment"))); will(returnValue(cellChain));
 				oneOf(cellChain).iterator(); will(returnIterator(segmentCell0, segmentCell1));
 			}
 		});
 
-		final Segment segment = new SegmentImpl("mySegment", inJunction, cellChainFactory, outJunction);
+		final Segment segment = new SegmentImpl("mySegment", inJunction, cellChainBuilder, outJunction);
 		assertThat(segment.cells(), contains(inJunction, segmentCell0, segmentCell1, outJunction));
 	}
 }

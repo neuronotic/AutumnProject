@@ -17,11 +17,11 @@ public class SegmentImpl implements Segment {
 	@Inject public SegmentImpl(
 			@Assisted final String name,
 			@Assisted("inJunction") final Junction inJunction,
-			@Assisted final CellChainFactory cellChainFactory,
+			@Assisted final CellChainBuilder cellChainBuilder,
 			@Assisted("outJunction") final Junction outJunction) {
 		this.name = name;
 		this.inJunction = inJunction;
-		cellChain = cellChainFactory.make(this);
+		cellChain = cellChainBuilder.make(this);
 		this.outJunction = outJunction;
 	}
 

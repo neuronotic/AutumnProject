@@ -1,5 +1,6 @@
 package traffic;
 
 public interface CellChainBuilder {
-	CellChainFactory cellChainOfLength(int cellCount);
+	CellChainBuilder cellChainOfLength(int cellCount);
+	CellChain make(Segment segment);
 }
