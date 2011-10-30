@@ -28,7 +28,7 @@ public class TestSegmentImpl {
 			}
 		});
 
-		final Segment segment = new SegmentImpl(inJunction, cellChain0, outJunction);
+		final Segment segment = new SegmentImpl("mySegment", inJunction, cellChain0, outJunction);
 		assertThat(segment.cells(), contains(inJunction, segmentCell0, segmentCell1, outJunction));
 	}
 }

@@ -10,4 +10,6 @@ public interface Segment {
 	CellChain cellChain();
 
 	List<Cell> cells();
+
+	String name();
 }

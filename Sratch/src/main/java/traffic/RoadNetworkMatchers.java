@@ -56,18 +56,19 @@ public class RoadNetworkMatchers {
 	}
 
 	public static Matcher<Segment> isSegment(
+			final String expectedName,
 			final Junction expectedInJunction,
 			final CellChain cellChain,
 			final Junction expectedOutJunction) {
 		return new TypeSafeMatcher<Segment>() {
 			@Override
 			public void describeTo(final Description description) {
-				description.appendText("segment between ").appendValue(expectedInJunction).appendText(" and ").appendValue(expectedOutJunction).appendText(" connected by cell chain ").appendValue(cellChain);
+				description.appendText("segment ").appendValue(expectedName).appendText(" between ").appendValue(expectedInJunction).appendText(" and ").appendValue(expectedOutJunction).appendText(" connected by cell chain ").appendValue(cellChain);
 			}
 
 			@Override
 			protected boolean matchesSafely(final Segment item) {
-				return item.inJunction().equals(expectedInJunction) && item.outJunction().equals(expectedOutJunction);
+				return item.inJunction().equals(expectedInJunction) && item.outJunction().equals(expectedOutJunction) && item.name().equals(expectedName);
 			}
 		};
 	}

@@ -28,8 +28,8 @@ public class TestVehicleMovement {
 		final Junction junction1 = junction("junction1");
 		final Junction junction2 = junction("junction2");
 
-		final Segment segment0 = segment(junction0, cellChainOfLength(5), junction1);
-		final Segment segment1 = segment(junction1, cellChainOfLength(5), junction2);
+		final Segment segment0 = segment("segment0", junction0, cellChainOfLength(5), junction1);
+		final Segment segment1 = segment("segment1", junction1, cellChainOfLength(5), junction2);
 
 		final RoadNetwork roadNetwork = roadNetwork(segment0, segment1);
 
@@ -52,7 +52,7 @@ public class TestVehicleMovement {
 		final Junction junction0 = junction("junction0");
 		final Junction junction1 = junction("junction1");
 
-		final Segment segment = segment(junction0, cellChainOfLength(5), junction1);
+		final Segment segment = segment("segment0", junction0, cellChainOfLength(5), junction1);
 		final RoadNetwork roadNetwork = roadNetwork(segment);
 
 		final Trip trip = tripFrom(junction0).to(junction1);

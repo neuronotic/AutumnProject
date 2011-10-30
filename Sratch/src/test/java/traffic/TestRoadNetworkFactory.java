@@ -41,6 +41,6 @@ public class TestRoadNetworkFactory {
 
 	@Test
 	public void segmentCanBeCreatedFromJunctionPairAndCellChain() {
-		assertThat(segment(inJunction, cellChain, outJunction), isSegment(inJunction, cellChain, outJunction));
+		assertThat(segment("mySegment", inJunction, cellChain, outJunction), isSegment("mySegment", inJunction, cellChain, outJunction));
 	}
 }
