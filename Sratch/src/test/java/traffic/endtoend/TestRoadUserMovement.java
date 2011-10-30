@@ -12,6 +12,7 @@ import org.junit.Test;
 import traffic.Itinerary;
 import traffic.Junction;
 import traffic.RoadNetwork;
+import traffic.RoadUser;
 import traffic.RoadUserManager;
 import traffic.Segment;
 import traffic.Trip;

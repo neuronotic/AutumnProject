@@ -4,7 +4,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import traffic.endtoend.RoadUser;
 
 public class RoadNetworkMatchers {
 	public static Matcher<RoadUser> hasJourneyTime(final int expectedJourneyTime) {

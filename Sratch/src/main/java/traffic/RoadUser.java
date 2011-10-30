@@ -1,6 +1,5 @@
-package traffic.endtoend;
+package traffic;
 
-import traffic.Cell;
 
 public interface RoadUser {
 	Cell location();

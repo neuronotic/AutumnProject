@@ -4,7 +4,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import traffic.endtoend.RoadUser;
 
 public class RoadUserMatchers {
 	public static Matcher<RoadUser> isLocatedAt(final Cell expectedLocation) {

@@ -1,6 +1,5 @@
 package traffic;
 
-import traffic.endtoend.RoadUser;
 
 public class JunctionImpl implements Junction {
 	private final String name;

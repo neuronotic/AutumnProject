@@ -1,6 +1,5 @@
 package traffic;
 
-import traffic.endtoend.RoadUser;
 
 public class RoadUserManagerImpl implements RoadUserManager {
 	private final RoadUserFactory roadUserFactory;

@@ -7,7 +7,6 @@ import org.jmock.Expectations;
 import org.junit.Rule;
 import org.junit.Test;
 
-import traffic.endtoend.RoadUser;
 
 public class TestRoadUserFactoryImpl {
 	@Rule

@@ -4,17 +4,14 @@ import static traffic.RoadNetworkToStringStyle.*;
 
 import java.util.Iterator;
 
-import traffic.endtoend.RoadUser;
 
 public class RoadUserImpl implements RoadUser {
-	private final Itinerary itinerary;
-	private final Iterator<Cell> remainingJourney;
+	private final Iterator<Cell> remainingItinerary;
 	private Cell location;
 	private int journeyTime = 0;
 
-	public RoadUserImpl(final Itinerary itinerary) {
-		this.itinerary = itinerary;
-		remainingJourney = itinerary.iterator();
+	public RoadUserImpl(final Iterator<Cell> remainingItinerary) {
+		this.remainingItinerary = remainingItinerary;
 	}
 
 	@Override
@@ -24,7 +21,7 @@ public class RoadUserImpl implements RoadUser {
 
 	@Override
 	public void step() {
-		final Cell cell = remainingJourney.next();
+		final Cell cell = remainingItinerary.next();
 		cell.enter(this);
 		location = cell;
 		journeyTime++;
