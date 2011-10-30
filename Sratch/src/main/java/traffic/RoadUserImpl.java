@@ -8,10 +8,13 @@ import java.util.Iterator;
 public class RoadUserImpl implements RoadUser {
 	private final Iterator<Cell> remainingItinerary;
 	private Cell location;
-	private int journeyTime = 0;
+	private final JourneyHistory history;
 
-	public RoadUserImpl(final Iterator<Cell> remainingItinerary) {
+	public RoadUserImpl(
+			final Iterator<Cell> remainingItinerary,
+			final JourneyHistory history) {
 		this.remainingItinerary = remainingItinerary;
+		this.history = history;
 	}
 
 	@Override
@@ -24,12 +27,12 @@ public class RoadUserImpl implements RoadUser {
 		final Cell cell = remainingItinerary.next();
 		cell.enter(this);
 		location = cell;
-		journeyTime++;
+		history.stepped();
 	}
 
 	@Override
 	public int journeyTime() {
-		return journeyTime;
+		return history.journeyTime();
 	}
 
 	@Override
