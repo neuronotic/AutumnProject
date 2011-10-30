@@ -25,15 +25,11 @@ public class ItineraryImpl implements Itinerary {
 	@Override
 	public Iterator<Cell> iterator() {
 		final List<Cell> result = new ArrayList<Cell>();
-		for (final Iterator<Segment> iterator = segments.iterator(); iterator.hasNext();) {
-			final Segment segment = iterator.next();
-			result.add(segment.inJunction());
-			for (final Cell cell : segment.cellChain()) {
-				result.add(cell);
+		for (final Segment segment : segments) {
+			if (!result.isEmpty()) {
+				result.remove(result.size() - 1);
 			}
-			if (!iterator.hasNext()) {
-				result.add(segment.outJunction());
-			}
+			result.addAll(segment.cells());
 		}
 		return result.iterator();
 	}

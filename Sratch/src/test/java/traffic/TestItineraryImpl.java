@@ -1,12 +1,16 @@
 package traffic;
 
+import static java.util.Arrays.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.Description;
 import org.jmock.Expectations;
+import org.jmock.api.Action;
+import org.jmock.api.Invocation;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -34,14 +38,8 @@ public class TestItineraryImpl {
 	public void itineraryContainsCellsFromRouteJunctionsAndSegmentsInOrderForMultipleSegments() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(segment0).inJunction(); will(returnValue(junctionCell0));
-				oneOf(segment0).cellChain(); will(returnValue(cellChain0));
-				oneOf(cellChain0).iterator(); will(returnIterator(segmentCell0, segmentCell1));
-
-				oneOf(segment1).inJunction(); will(returnValue(junctionCell1));
-				oneOf(segment1).cellChain(); will(returnValue(cellChain1));
-				oneOf(cellChain1).iterator(); will(returnIterator(segmentCell2));
-				oneOf(segment1).outJunction(); will(returnValue(junctionCell2));
+				oneOf(segment0).cells(); will(returnList(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
+				oneOf(segment1).cells(); will(returnList(junctionCell1, segmentCell2, junctionCell2));
 			}
 		});
 
@@ -55,13 +53,24 @@ public class TestItineraryImpl {
 	public void itineraryContainsCellsFromRouteJunctionsAndSegmentsInOrder() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(segment0).inJunction(); will(returnValue(junctionCell0));
-				oneOf(segment0).cellChain(); will(returnValue(cellChain0));
-				oneOf(cellChain0).iterator(); will(returnIterator(segmentCell1, segmentCell2));
-				oneOf(segment0).outJunction(); will(returnValue(junctionCell1));
+				oneOf(segment0).cells(); will(returnList(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
 			}
 		});
 
-		assertThat(new ItineraryImpl(segment0), contains(junctionCell0, segmentCell1, segmentCell2, junctionCell1));
+		assertThat(new ItineraryImpl(segment0), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
+	}
+
+	//type variable - generics
+	private <T> Action returnList(final T...ts) {
+		return new Action(){
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("return list of ").appendValue(ts);
+			}
+
+			@Override
+			public Object invoke(final Invocation arg0) throws Throwable {
+				return asList(ts);
+			}};
 	}
 }
