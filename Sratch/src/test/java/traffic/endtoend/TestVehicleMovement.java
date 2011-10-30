@@ -7,6 +7,7 @@ import static traffic.RoadNetworkMatchers.*;
 import static traffic.VehicleManagerFactory.*;
 import static traffic.VehicleMatchers.*;
 
+import org.junit.Rule;
 import org.junit.Test;
 
 import traffic.Itinerary;
@@ -19,11 +20,30 @@ import traffic.VehicleFactory;
 import traffic.VehicleFactoryImpl;
 import traffic.VehicleManager;
 
+import com.google.guiceberry.GuiceBerryModule;
+import com.google.guiceberry.junit4.GuiceBerryRule;
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+
 public class TestVehicleMovement {
-	private final VehicleFactory vehicleFactory = new VehicleFactoryImpl();
+
+	public static class TrafficModule extends AbstractModule {
+		@Override
+		protected void configure() {
+			install(new GuiceBerryModule());
+			bind(VehicleFactory.class).to(VehicleFactoryImpl.class);
+		}
+	};
+
+	@Rule public GuiceBerryRule guiceBerry =
+		      new GuiceBerryRule(TrafficModule.class);
+
+	@Inject private VehicleFactory vehicleFactory;
 
 	@Test
 	public void tripAcrossTwoSegmentNetworkWithLengths4And3Takes10Timesteps() throws Exception {
+
+
 		final Junction junction0 = junction("junction0");
 		final Junction junction1 = junction("junction1");
 		final Junction junction2 = junction("junction2");
