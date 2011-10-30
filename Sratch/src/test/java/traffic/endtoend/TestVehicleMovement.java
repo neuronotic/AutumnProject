@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.*;
 import static traffic.JourneyPlanner.*;
 import static traffic.RoadNetworkFactory.*;
 import static traffic.RoadNetworkMatchers.*;
-import static traffic.VehicleManagerFactory.*;
 import static traffic.VehicleMatchers.*;
 
 import org.junit.Rule;
@@ -12,6 +11,8 @@ import org.junit.Test;
 
 import traffic.Itinerary;
 import traffic.Junction;
+import traffic.JunctionFactory;
+import traffic.JunctionImpl;
 import traffic.RoadNetwork;
 import traffic.Segment;
 import traffic.Trip;
@@ -19,11 +20,13 @@ import traffic.Vehicle;
 import traffic.VehicleFactory;
 import traffic.VehicleFactoryImpl;
 import traffic.VehicleManager;
+import traffic.VehicleManagerImpl;
 
 import com.google.guiceberry.GuiceBerryModule;
 import com.google.guiceberry.junit4.GuiceBerryRule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 public class TestVehicleMovement {
 
@@ -32,6 +35,11 @@ public class TestVehicleMovement {
 		protected void configure() {
 			install(new GuiceBerryModule());
 			bind(VehicleFactory.class).to(VehicleFactoryImpl.class);
+			bind(VehicleManager.class).to(VehicleManagerImpl.class);
+
+			install(new FactoryModuleBuilder()
+			    .implement(Junction.class, JunctionImpl.class)
+			    .build(JunctionFactory.class));
 		}
 	};
 
@@ -39,14 +47,14 @@ public class TestVehicleMovement {
 		      new GuiceBerryRule(TrafficModule.class);
 
 	@Inject private VehicleFactory vehicleFactory;
+	@Inject private VehicleManager vehicleManager;
+	@Inject private JunctionFactory junctionFactory;
 
 	@Test
 	public void tripAcrossTwoSegmentNetworkWithLengths4And3Takes10Timesteps() throws Exception {
-
-
-		final Junction junction0 = junction("junction0");
-		final Junction junction1 = junction("junction1");
-		final Junction junction2 = junction("junction2");
+		final Junction junction0 = junctionFactory.createJunction("junction0");
+		final Junction junction1 = junctionFactory.createJunction("junction1");
+		final Junction junction2 = junctionFactory.createJunction("junction2");
 
 		final Segment segment0 = segment("segment0", junction0, cellChainOfLength(5), junction1);
 		final Segment segment1 = segment("segment1", junction1, cellChainOfLength(5), junction2);
@@ -57,7 +65,6 @@ public class TestVehicleMovement {
 
 		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
 
-		final VehicleManager vehicleManager = vehicleManager();
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
 
 		vehicleManager.addVehicle(vehicle);
@@ -69,8 +76,8 @@ public class TestVehicleMovement {
 
 	@Test
 	public void tripAcrossSingleSegmentNetworkOfLength5Takes7Timesteps() {
-		final Junction junction0 = junction("junction0");
-		final Junction junction1 = junction("junction1");
+		final Junction junction0 = junctionFactory.createJunction("junction0");
+		final Junction junction1 = junctionFactory.createJunction("junction1");
 
 		final Segment segment = segment("segment0", junction0, cellChainOfLength(5), junction1);
 		final RoadNetwork roadNetwork = roadNetwork(segment);
@@ -79,7 +86,6 @@ public class TestVehicleMovement {
 
 		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
 
-		final VehicleManager vehicleManager = vehicleManager();
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
 		vehicleManager.addVehicle(vehicle);
 

@@ -18,7 +18,7 @@ public class TestRoadNetworkFactory {
 
 	@Test
 	public void junctionCanBeCreated() {
-		assertThat(junction("myName"), isJunctionCalled("myName"));
+		assertThat(new JunctionImpl("myName"), isJunctionCalled("myName"));
 	}
 
 	@Test

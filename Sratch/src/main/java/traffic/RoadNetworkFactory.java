@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoadNetworkFactory {
-	public static Junction junction(final String name) {
-		return new JunctionImpl(name);
-	}
-
 	public static CellChainFactory cellChainOfLength(final int cellCount) {
 		return new CellChainFactory() {
 			@Override
