@@ -11,7 +11,7 @@ public class RoadNetworkFactory {
 	public static CellChainFactory cellChainOfLength(final int cellCount) {
 		return new CellChainFactory() {
 			@Override
-			public CellChain make() {
+			public CellChain make(final Segment segment) {
 				final List<Cell> cells = new ArrayList<Cell>();
 				for (int i = 0; i < cellCount; i++) {
 					cells.add(new CellImpl());

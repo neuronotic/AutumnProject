@@ -2,6 +2,6 @@ package traffic;
 
 public interface CellChainFactory {
 
-	CellChain make();
+	CellChain make(Segment segment);
 
 }

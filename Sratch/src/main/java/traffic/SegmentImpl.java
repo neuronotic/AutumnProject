@@ -14,7 +14,7 @@ public class SegmentImpl implements Segment {
 	public SegmentImpl(final String name, final Junction inJunction, final CellChainFactory cellChainFactory, final Junction outJunction) {
 		this.name = name;
 		this.inJunction = inJunction;
-		cellChain = cellChainFactory.make();
+		cellChain = cellChainFactory.make(this);
 		this.outJunction = outJunction;
 	}
 

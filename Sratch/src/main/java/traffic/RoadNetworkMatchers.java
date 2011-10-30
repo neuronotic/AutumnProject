@@ -116,9 +116,25 @@ public class RoadNetworkMatchers {
 		};
 	}
 
+	public static Matcher<Segment> segmentNamed(final String expectedName) {
+		return new TypeSafeMatcher<Segment>() {
+
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("segment with name ").appendValue(expectedName);
+			}
+
+			@Override
+			protected boolean matchesSafely(final Segment item) {
+				return item.name().equals(expectedName);
+			}
+		};
+	}
+
 	public static List<Cell> cellsIn(final Itinerary itinerary) {
 		final List<Cell> cells = new ArrayList<Cell>();
 		Iterators.addAll(cells, itinerary.iterator());
 		return cells;
 	}
+
 }

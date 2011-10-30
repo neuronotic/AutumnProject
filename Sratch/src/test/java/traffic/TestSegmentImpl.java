@@ -25,7 +25,7 @@ public class TestSegmentImpl {
 	public void segmentContainsCellsCorrespondingToInJunctionFollowedByCellsInCellChainFollowedByOutJunction() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(cellChainFactory).make(); will(returnValue(cellChain));
+				oneOf(cellChainFactory).make(with(RoadNetworkMatchers.segmentNamed("mySegment"))); will(returnValue(cellChain));
 				oneOf(cellChain).iterator(); will(returnIterator(segmentCell0, segmentCell1));
 			}
 		});

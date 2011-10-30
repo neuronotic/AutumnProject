@@ -23,8 +23,8 @@ public class TestRoadNetworkFactory {
 
 	@Test
 	public void cellChainHasSpecifiedNumberOfCellsCreated() {
-		assertThat(cellChainOfLength(3).make(), isCellChainWithCellCount(3));
-		assertThat(cellChainOfLength(3).make(), contains(isA(Cell.class), isA(Cell.class), isA(Cell.class)));
+		assertThat(cellChainOfLength(3).make(segment), isCellChainWithCellCount(3));
+		assertThat(cellChainOfLength(3).make(segment), contains(isA(Cell.class), isA(Cell.class), isA(Cell.class)));
 	}
 
 	@Test
