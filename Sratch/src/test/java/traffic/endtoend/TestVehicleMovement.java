@@ -48,6 +48,38 @@ public class TestVehicleMovement {
 	@Inject private Provider<CellChainBuilder> cellChainBuilderProvider;
 
 	@Test
+	public void tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime() throws Exception {
+
+		final Junction junction0 = junctionFactory.createJunction("junction0");
+		final Junction junction1 = junctionFactory.createJunction("junction1");
+		final Junction junction2 = junctionFactory.createJunction("junction2");
+		final Junction junction3 = junctionFactory.createJunction("junction3");
+
+		final Segment segment0 = segmentFactory.segment("segment0", junction0, cellChainBuilderProvider.get().cellChainOfLength(4), junction1);
+		final Segment segment1 = segmentFactory.segment("segment1", junction1, cellChainBuilderProvider.get().cellChainOfLength(3), junction2);
+		final Segment segment2 = segmentFactory.segment("segment2", junction1, cellChainBuilderProvider.get().cellChainOfLength(5), junction3);
+
+		final RoadNetwork roadNetwork = roadNetwork(segment0, segment1, segment2);
+
+		final Trip trip = tripFrom(junction0).to(junction2);
+
+		//potential eventual refactoring:
+		//final RouteFinder routeFinder = shortestRouteFinder(roadNetwork);
+		//itinerary = routeFinder.calculateItinerary(trip);
+
+		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
+
+		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
+
+		vehicleManager.addVehicle(vehicle);
+		vehicleManager.step(10);
+
+		assertThat(vehicle, isLocatedAt(junction2));
+		assertThat(vehicle, hasJourneyTime(10));
+
+	}
+
+	@Test
 	public void tripAcrossTwoSegmentNetworkWithLengths4And3Takes10Timesteps() throws Exception {
 		final Junction junction0 = junctionFactory.createJunction("junction0");
 		final Junction junction1 = junctionFactory.createJunction("junction1");
