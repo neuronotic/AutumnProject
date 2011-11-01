@@ -17,17 +17,31 @@ public class TestSimulationBuilderImpl {
 	private final Simulation simulation = context.mock(Simulation.class);
 
 	@Test
+	public void withVehicleAddsVehicleToVehicleManager() throws Exception {
+		final Vehicle vehicle = context.mock(Vehicle.class);
+
+		context.checking(new Expectations() {
+			{
+				oneOf(vehicleManager).addVehicle(vehicle);
+			}
+		});
+
+		new SimulationBuilderImpl(simulationFactory, vehicleManager)
+			.withRoadNetwork(roadNetwork)
+			.withVehicle(vehicle);
+	}
+
+	@Test
 	public void simulationFactoryCalledToBuildSimulation() throws Exception {
 
 		context.checking(new Expectations() {
 			{
-				oneOf(simulationFactory).createSimulation(roadNetwork, vehicleManager); will(returnValue(simulation));
+				oneOf(simulationFactory).createSimulation(roadNetwork); will(returnValue(simulation));
 			}
 		});
 
-		final Simulation simulation = new SimulationBuilderImpl(simulationFactory)
+		final Simulation simulation = new SimulationBuilderImpl(simulationFactory, null)
 			.withRoadNetwork(roadNetwork)
-			.withVehicleManager(vehicleManager)
 			.make();
 
 		assertThat(simulation, notNullValue());

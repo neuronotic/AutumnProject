@@ -73,11 +73,9 @@ public class TestVehicleMovement {
 
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
 
-		vehicleManager.addVehicle(vehicle);
-
 		final Simulation simulation = simulationBuilderProvider.get()
 				.withRoadNetwork(roadNetwork)
-				.withVehicleManager(vehicleManager)
+				.withVehicle(vehicle)
 				.make();
 
 		simulation.step(7);
@@ -106,11 +104,9 @@ public class TestVehicleMovement {
 
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
 
-		vehicleManager.addVehicle(vehicle);
-
 		final Simulation simulation = simulationBuilderProvider.get()
 				.withRoadNetwork(roadNetwork)
-				.withVehicleManager(vehicleManager)
+				.withVehicle(vehicle)
 				.make();
 
 		simulation.step(10);
@@ -134,12 +130,10 @@ public class TestVehicleMovement {
 		final Itinerary itinerary = routeFinder.calculateItinerary(trip);
 
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
-		vehicleManager.addVehicle(vehicle);
-
 
 		final Simulation simulation = simulationBuilderProvider.get()
 			.withRoadNetwork(roadNetwork)
-			.withVehicleManager(vehicleManager)
+			.withVehicle(vehicle)
 			.make();
 
 		simulation.step(7);
