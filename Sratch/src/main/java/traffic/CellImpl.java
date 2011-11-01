@@ -1,8 +1,5 @@
 package traffic;
 
-import static org.apache.commons.lang3.builder.ToStringBuilder.*;
-import static traffic.RoadNetworkToStringStyle.*;
-
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
@@ -25,7 +22,8 @@ class CellImpl implements Cell {
 
 	@Override
 	public String toString() {
-		return reflectionToString(this, roadNetworkToStringStyle());
+		//return reflectionToString(this, roadNetworkToStringStyle());
+		return name();
 	}
 
 	@Override

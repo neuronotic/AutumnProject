@@ -1,7 +1,5 @@
 package traffic;
 
-import static traffic.RoadNetworkToStringStyle.*;
-
 import java.util.Iterator;
 import java.util.logging.Logger;
 
@@ -9,6 +7,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 class VehicleImpl implements Vehicle {
+
 	@Inject Logger logger = Logger.getAnonymousLogger();
 
 	private final Iterator<Cell> remainingItinerary;
@@ -50,6 +49,7 @@ class VehicleImpl implements Vehicle {
 
 	@Override
 	public String toString() {
-		return roadNetworkReflectionToString(this);
+		return String.format("Vehicle located at %s", location());
+		//return roadNetworkReflectionToString(this);
 	}
 }
