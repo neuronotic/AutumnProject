@@ -17,6 +17,8 @@ import traffic.RouteFinder;
 import traffic.RouteFinderFactory;
 import traffic.Segment;
 import traffic.SegmentFactory;
+import traffic.Simulation;
+import traffic.SimulationBuilder;
 import traffic.TrafficModule;
 import traffic.Trip;
 import traffic.Vehicle;
@@ -48,10 +50,10 @@ public class TestVehicleMovement {
 	@Inject private SegmentFactory segmentFactory;
 	@Inject private Provider<CellChainBuilder> cellChainBuilderProvider;
 	@Inject private RouteFinderFactory routeFinderFactory;
+	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 
 	@Test
 	public void tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime() throws Exception {
-
 		final Junction junction0 = junctionFactory.createJunction("junction0");
 		final Junction junction1 = junctionFactory.createJunction("junction1");
 		final Junction junction2 = junctionFactory.createJunction("junction2");
@@ -72,7 +74,13 @@ public class TestVehicleMovement {
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
 
 		vehicleManager.addVehicle(vehicle);
-		vehicleManager.step(10);
+
+		final Simulation simulation = simulationBuilderProvider.get()
+				.withRoadNetwork(roadNetwork)
+				.withVehicleManager(vehicleManager)
+				.make();
+
+		simulation.step(7);
 
 		assertThat(vehicle, isLocatedAt(junction2));
 		assertThat(vehicle, hasJourneyTime(10));
@@ -99,7 +107,13 @@ public class TestVehicleMovement {
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
 
 		vehicleManager.addVehicle(vehicle);
-		vehicleManager.step(10);
+
+		final Simulation simulation = simulationBuilderProvider.get()
+				.withRoadNetwork(roadNetwork)
+				.withVehicleManager(vehicleManager)
+				.make();
+
+		simulation.step(10);
 
 		assertThat(vehicle, isLocatedAt(junction2));
 		assertThat(vehicle, hasJourneyTime(10));
@@ -122,10 +136,16 @@ public class TestVehicleMovement {
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
 		vehicleManager.addVehicle(vehicle);
 
-		vehicleManager.step(7);
+
+		final Simulation simulation = simulationBuilderProvider.get()
+			.withRoadNetwork(roadNetwork)
+			.withVehicleManager(vehicleManager)
+			.make();
+
+		simulation.step(7);
 
 		assertThat(vehicle, isLocatedAt(junction1));
 		assertThat(vehicle, hasJourneyTime(7));
 	}
-}
 
+}
