@@ -20,6 +20,7 @@ public class TrafficModule extends AbstractModule {
 		bind(VehicleManager.class).to(VehicleManagerImpl.class);
 		bind(CellChainBuilder.class).to(CellChainBuilderImpl.class);
 		bind(SimulationBuilder.class).to(SimulationBuilderImpl.class);
+		bind(VehicleBuilder.class).to(VehicleBuilderImpl.class);
 		bind(JourneyHistory.class).to(JourneyHistoryImpl.class);
 
 		install(new FactoryModuleBuilder()
@@ -49,6 +50,7 @@ public class TrafficModule extends AbstractModule {
 		install(new FactoryModuleBuilder()
 			.implement(Simulation.class, SimulationImpl.class)
 			.build(SimulationFactory.class));
+
 	}
 
 	public static void main(final String args[]) {

@@ -9,7 +9,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import traffic.CellChainBuilder;
-import traffic.Itinerary;
 import traffic.Junction;
 import traffic.JunctionFactory;
 import traffic.RoadNetwork;
@@ -22,8 +21,8 @@ import traffic.SimulationBuilder;
 import traffic.TrafficModule;
 import traffic.Trip;
 import traffic.Vehicle;
+import traffic.VehicleBuilder;
 import traffic.VehicleFactory;
-import traffic.VehicleManager;
 
 import com.google.guiceberry.GuiceBerryModule;
 import com.google.guiceberry.junit4.GuiceBerryRule;
@@ -45,12 +44,12 @@ public class TestVehicleMovement {
 		      new GuiceBerryRule(TrafficTestModule.class);
 
 	@Inject private VehicleFactory vehicleFactory;
-	@Inject private VehicleManager vehicleManager;
 	@Inject private JunctionFactory junctionFactory;
 	@Inject private SegmentFactory segmentFactory;
 	@Inject private Provider<CellChainBuilder> cellChainBuilderProvider;
 	@Inject private RouteFinderFactory routeFinderFactory;
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
+	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
 
 	@Test
 	public void tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime() throws Exception {
@@ -67,11 +66,7 @@ public class TestVehicleMovement {
 
 		final Trip trip = tripFrom(junction0).to(junction2);
 
-		final RouteFinder routeFinder = routeFinderFactory.createShortestPathRouteFinder(roadNetwork);
-
-		final Itinerary itinerary = routeFinder.calculateItinerary(trip);
-
-		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
+		final Vehicle vehicle = vehicle(roadNetwork, trip);
 
 		final Simulation simulation = simulationBuilderProvider.get()
 				.withRoadNetwork(roadNetwork)
@@ -98,11 +93,7 @@ public class TestVehicleMovement {
 
 		final Trip trip = tripFrom(junction0).to(junction2);
 
-		final RouteFinder routeFinder = routeFinderFactory.createShortestPathRouteFinder(roadNetwork);
-
-		final Itinerary itinerary = routeFinder.calculateItinerary(trip);
-
-		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
+		final Vehicle vehicle = vehicle(roadNetwork, trip);
 
 		final Simulation simulation = simulationBuilderProvider.get()
 				.withRoadNetwork(roadNetwork)
@@ -123,23 +114,28 @@ public class TestVehicleMovement {
 		final Segment segment = segmentFactory.segment("segment0", junction0, cellChainBuilderProvider.get().cellChainOfLength(5), junction1);
 		final RoadNetwork roadNetwork = roadNetwork(segment);
 
-		final Trip trip = tripFrom(junction0).to(junction1);
 
-		final RouteFinder routeFinder = routeFinderFactory.createShortestPathRouteFinder(roadNetwork);
-
-		final Itinerary itinerary = routeFinder.calculateItinerary(trip);
-
-		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
+		final Vehicle vehicle0 = vehicleBuilderProvider.get()
+				.withRoadNetwork(roadNetwork)
+				.withTrip(tripFrom(junction0).to(junction1))
+				.make();
 
 		final Simulation simulation = simulationBuilderProvider.get()
 			.withRoadNetwork(roadNetwork)
-			.withVehicle(vehicle)
+			.withVehicle(vehicle0)
 			.make();
 
 		simulation.step(7);
 
-		assertThat(vehicle, isLocatedAt(junction1));
-		assertThat(vehicle, hasJourneyTime(7));
+		assertThat(vehicle0, isLocatedAt(junction1));
+		assertThat(vehicle0, hasJourneyTime(7));
 	}
+
+	private Vehicle vehicle(final RoadNetwork roadNetwork, final Trip trip) {
+		final RouteFinder routeFinder = routeFinderFactory.createShortestPathRouteFinder(roadNetwork);
+		return vehicleFactory.createVehicle(routeFinder.calculateItinerary(trip));
+	}
+
+
 
 }

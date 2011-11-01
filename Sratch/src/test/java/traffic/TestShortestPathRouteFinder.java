@@ -29,3 +29,4 @@ public class TestShortestPathRouteFinder {
 		assertThat(routeFinder.calculateItinerary(trip), itineraryRouteIs(segment));
 	}
 }
+
