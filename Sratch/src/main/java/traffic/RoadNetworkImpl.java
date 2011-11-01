@@ -20,4 +20,9 @@ public class RoadNetworkImpl implements RoadNetwork {
 	public List<Segment> route(final Junction origin, final Junction destination) {
 		return segments;
 	}
+
+	@Override
+	public List<Segment> route(final Trip trip) {
+		return segments;
+	}
 }

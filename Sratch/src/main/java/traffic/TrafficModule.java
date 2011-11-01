@@ -40,6 +40,11 @@ public class TrafficModule extends AbstractModule {
 		install(new FactoryModuleBuilder()
 		    .implement(Vehicle.class, VehicleImpl.class)
 		    .build(VehicleFactory.class));
+
+		install(new FactoryModuleBuilder()
+			.implement(RouteFinder.class, ShortestPathRouteFinder.class)
+			.build(RouteFinderFactory.class));
+
 	}
 
 	public static void main(final String args[]) {

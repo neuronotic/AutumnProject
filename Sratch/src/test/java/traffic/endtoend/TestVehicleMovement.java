@@ -1,7 +1,6 @@
 package traffic.endtoend;
 
 import static org.hamcrest.MatcherAssert.*;
-import static traffic.JourneyPlanner.*;
 import static traffic.RoadNetworkFactory.*;
 import static traffic.RoadNetworkMatchers.*;
 import static traffic.VehicleMatchers.*;
@@ -14,6 +13,8 @@ import traffic.Itinerary;
 import traffic.Junction;
 import traffic.JunctionFactory;
 import traffic.RoadNetwork;
+import traffic.RouteFinder;
+import traffic.RouteFinderFactory;
 import traffic.Segment;
 import traffic.SegmentFactory;
 import traffic.TrafficModule;
@@ -46,6 +47,7 @@ public class TestVehicleMovement {
 	@Inject private JunctionFactory junctionFactory;
 	@Inject private SegmentFactory segmentFactory;
 	@Inject private Provider<CellChainBuilder> cellChainBuilderProvider;
+	@Inject private RouteFinderFactory routeFinderFactory;
 
 	@Test
 	public void tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime() throws Exception {
@@ -63,11 +65,9 @@ public class TestVehicleMovement {
 
 		final Trip trip = tripFrom(junction0).to(junction2);
 
-		//potential eventual refactoring:
-		//final RouteFinder routeFinder = shortestRouteFinder(roadNetwork);
-		//itinerary = routeFinder.calculateItinerary(trip);
+		final RouteFinder routeFinder = routeFinderFactory.createShortestPathRouteFinder(roadNetwork);
 
-		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
+		final Itinerary itinerary = routeFinder.calculateItinerary(trip);
 
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
 
@@ -92,7 +92,9 @@ public class TestVehicleMovement {
 
 		final Trip trip = tripFrom(junction0).to(junction2);
 
-		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
+		final RouteFinder routeFinder = routeFinderFactory.createShortestPathRouteFinder(roadNetwork);
+
+		final Itinerary itinerary = routeFinder.calculateItinerary(trip);
 
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
 
@@ -113,7 +115,9 @@ public class TestVehicleMovement {
 
 		final Trip trip = tripFrom(junction0).to(junction1);
 
-		final Itinerary itinerary = planItineraryForTrip(trip, roadNetwork);
+		final RouteFinder routeFinder = routeFinderFactory.createShortestPathRouteFinder(roadNetwork);
+
+		final Itinerary itinerary = routeFinder.calculateItinerary(trip);
 
 		final Vehicle vehicle = vehicleFactory.createVehicle(itinerary);
 		vehicleManager.addVehicle(vehicle);
