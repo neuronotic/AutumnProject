@@ -1,6 +1,8 @@
 package traffic;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.google.inject.Inject;
@@ -13,16 +15,21 @@ class VehicleImpl implements Vehicle {
 	private final Iterator<Cell> remainingItinerary;
 	private Cell location;
 	private final JourneyHistory history;
+	private final String name;
+
+	private final List<JourneyEndListener> journeyEndListeners = new ArrayList<JourneyEndListener>();
 
 	@Inject VehicleImpl(
+			@Assisted final String name,
 			@Assisted final Itinerary remainingItinerary,
 			final JourneyHistory history) {
-		this(remainingItinerary.iterator(), history);
+		this(name, remainingItinerary.iterator(), history);
 	}
 
-	VehicleImpl(
+	VehicleImpl(final String name,
 			final Iterator<Cell> remainingItinerary,
 			final JourneyHistory history) {
+		this.name = name;
 		this.remainingItinerary = remainingItinerary;
 		this.history = history;
 	}
@@ -38,7 +45,6 @@ class VehicleImpl implements Vehicle {
 		cell.enter(this);
 		location = cell;
 		history.stepped();
-
 		logger.info(String.format("Vehicle entered %s", location));
 	}
 
@@ -48,8 +54,24 @@ class VehicleImpl implements Vehicle {
 	}
 
 	@Override
+	public String name() {
+		return name;
+	}
+
+	@Override
+	public void addJourneyEndListener(final JourneyEndListener journeyEndListener) {
+		journeyEndListeners.add(journeyEndListener);
+	}
+
+	@Override
+	public void journeyEnded() {
+		for (final JourneyEndListener listener : journeyEndListeners) {
+			listener.notifyOfJourneyEnd(this);
+		}
+	}
+
+	@Override
 	public String toString() {
-		return String.format("Vehicle located at %s", location());
-		//return roadNetworkReflectionToString(this);
+		return String.format("Vehicle %s located at %s", name(), location());
 	}
 }

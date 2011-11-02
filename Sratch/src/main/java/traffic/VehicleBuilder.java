@@ -8,4 +8,6 @@ public interface VehicleBuilder {
 
 	Vehicle make();
 
+	VehicleBuilder withName(String vehicleName);
+
 }

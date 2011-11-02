@@ -21,6 +21,6 @@ public class TestVehicleFactoryImpl {
 				ignoring(itinerary);
 			}
 		});
-		assertThat(new VehicleImpl(itinerary, null), notNullValue(Vehicle.class));
+		assertThat(new VehicleImpl("myVehicle", itinerary, null), notNullValue(Vehicle.class));
 	}
 }

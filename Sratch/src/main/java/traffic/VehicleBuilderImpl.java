@@ -8,12 +8,18 @@ public class VehicleBuilderImpl implements VehicleBuilder {
 	private final RouteFinderFactory routeFinderFactory;
 	private RoadNetwork roadNetwork;
 	private Trip trip;
+	private String vehicleName = "default name";
 
 	@Inject public VehicleBuilderImpl(
 			final VehicleFactory vehicleFactory,
 			final RouteFinderFactory routeFinderFactory) {
 				this.vehicleFactory = vehicleFactory;
 				this.routeFinderFactory = routeFinderFactory;
+	}
+
+	@Override
+	public Vehicle make() {
+		return vehicleFactory.createVehicle(vehicleName, routeFinderFactory.createShortestPathRouteFinder(roadNetwork).calculateItinerary(trip));
 	}
 
 	@Override
@@ -29,7 +35,8 @@ public class VehicleBuilderImpl implements VehicleBuilder {
 	}
 
 	@Override
-	public Vehicle make() {
-		return vehicleFactory.createVehicle(routeFinderFactory.createShortestPathRouteFinder(roadNetwork).calculateItinerary(trip));
+	public VehicleBuilder withName(final String vehicleName) {
+		this.vehicleName = vehicleName;
+		return this;
 	}
 }

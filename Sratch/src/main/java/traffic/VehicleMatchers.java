@@ -24,12 +24,26 @@ public class VehicleMatchers {
 		return new TypeSafeMatcher<Vehicle>(Vehicle.class) {
 			@Override
 			public void describeTo(final Description description) {
-				description.appendText("Road User with journey time ").appendValue(expectedJourneyTime);
+				description.appendText("Vehicle with journey time ").appendValue(expectedJourneyTime);
 			}
 
 			@Override
 			protected boolean matchesSafely(final Vehicle item) {
 				return item.journeyTime() == expectedJourneyTime;
+			}
+		};
+	}
+
+	public static Matcher<Vehicle> vehicleIsNamed(final String expectedName) {
+		return new TypeSafeMatcher<Vehicle>(Vehicle.class) {
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("Vehicle with name ").appendValue(expectedName);
+			}
+
+			@Override
+			protected boolean matchesSafely(final Vehicle item) {
+				return item.name().equals(expectedName);
 			}
 		};
 	}

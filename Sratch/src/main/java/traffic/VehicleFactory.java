@@ -2,5 +2,5 @@ package traffic;
 
 
 public interface VehicleFactory {
-	Vehicle createVehicle(Itinerary itinerary);
+	Vehicle createVehicle(String vehicleName, Itinerary itinerary);
 }

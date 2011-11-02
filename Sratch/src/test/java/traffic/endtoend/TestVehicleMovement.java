@@ -1,7 +1,6 @@
 package traffic.endtoend;
 
 import static org.hamcrest.MatcherAssert.*;
-import static traffic.RoadNetworkMatchers.*;
 import static traffic.VehicleMatchers.*;
 
 import org.junit.Rule;
@@ -59,17 +58,35 @@ public class TestVehicleMovement {
 
 
 		final Vehicle vehicle0 = vehicleBuilderProvider.get()
+			.withName("vehicle0")
+			.withRoadNetwork(roadNetwork)
+			.withTrip(TripFactory.tripFrom(junction0).to(junction1))
+			.make();
+		final Vehicle vehicle1 = vehicleBuilderProvider.get()
+			.withName("vehicle1")
 			.withRoadNetwork(roadNetwork)
 			.withTrip(TripFactory.tripFrom(junction0).to(junction1))
 			.make();
 
+
 		//Shouldn't simulation .withRoadNetwork and .withVehicle be builders?
 		final Simulation simulation = simulationBuilderProvider.get()
 			.withRoadNetwork(roadNetwork)
-			.withVehicle(vehicle0)
 			.make();
 
-		simulation.step(7);
+		simulation.addVehicle(vehicle0);
+		simulation.step(1);
+		simulation.addVehicle(vehicle1);
+		simulation.step(6);
+
+		assertThat(vehicle0, isLocatedAt(junction1));
+		assertThat(vehicle0, hasJourneyTime(7));
+		assertThat(vehicle1, hasJourneyTime(6));
+
+		simulation.step(1);
+		assertThat(vehicle1, isLocatedAt(junction1));
+		assertThat(vehicle1, hasJourneyTime(7));
+
 	}
 
 	@Test
@@ -104,9 +121,9 @@ public class TestVehicleMovement {
 
 		final Simulation simulation = simulationBuilderProvider.get()
 			.withRoadNetwork(roadNetwork)
-			.withVehicle(vehicle0)
 			.make();
 
+		simulation.addVehicle(vehicle0);
 		simulation.step(10);
 
 		assertThat(vehicle0, isLocatedAt(junction2));
@@ -142,9 +159,9 @@ public class TestVehicleMovement {
 
 		final Simulation simulation = simulationBuilderProvider.get()
 			.withRoadNetwork(roadNetwork)
-			.withVehicle(vehicle0)
 			.make();
 
+		simulation.addVehicle(vehicle0);
 		simulation.step(10);
 
 		assertThat(vehicle0, isLocatedAt(junction2));
@@ -173,9 +190,9 @@ public class TestVehicleMovement {
 		//Shouldn't simulation .withRoadNetwork and .withVehicle be builders?
 		final Simulation simulation = simulationBuilderProvider.get()
 			.withRoadNetwork(roadNetwork)
-			.withVehicle(vehicle0)
 			.make();
 
+		simulation.addVehicle(vehicle0);
 		simulation.step(7);
 
 		assertThat(vehicle0, isLocatedAt(junction1));

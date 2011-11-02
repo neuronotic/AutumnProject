@@ -21,16 +21,18 @@ public class TestVehicleBuilderImpl {
 
 	@Test
 	public void makeCallsVehicleFactoryToCreateVehicleWithItineraryCreatedRouteFinder() throws Exception {
+		final String vehicleName = "myVehicle";
 
 		context.checking(new Expectations() {
 			{
 				oneOf(routeFinderFactory).createShortestPathRouteFinder(roadNetwork); will(returnValue(routeFinder));
 				oneOf(routeFinder).calculateItinerary(trip); will(returnValue(itinerary));
-				oneOf(vehicleFactory).createVehicle(itinerary); will(returnValue(vehicle));
+				oneOf(vehicleFactory).createVehicle(vehicleName, itinerary); will(returnValue(vehicle));
 			}
 		});
 
 		final Vehicle createdVehicle = new VehicleBuilderImpl(vehicleFactory, routeFinderFactory)
+			.withName(vehicleName)
 			.withRoadNetwork(roadNetwork)
 			.withTrip(trip)
 			.make();
