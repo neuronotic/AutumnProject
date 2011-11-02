@@ -79,7 +79,7 @@ public class TestVehicleMovement {
 			.withVehicle(vehicle0)
 			.make();
 
-		simulation.step(7);
+		simulation.step(10);
 
 		assertThat(vehicle0, isLocatedAt(junction2));
 		assertThat(vehicle0, hasJourneyTime(10));
