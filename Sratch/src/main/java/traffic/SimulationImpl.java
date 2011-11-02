@@ -21,4 +21,9 @@ public class SimulationImpl implements Simulation {
 		vehicleManager.step(timesteps);
 	}
 
+	@Override
+	public void addVehicle(final Vehicle vehicle) {
+		vehicleManager.addVehicle(vehicle);
+	}
+
 }

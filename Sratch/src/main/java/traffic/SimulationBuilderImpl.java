@@ -24,10 +24,4 @@ public class SimulationBuilderImpl implements SimulationBuilder {
 		return simulationFactory.createSimulation(roadNetwork);
 	}
 
-	@Override
-	public SimulationBuilder withVehicle(final Vehicle vehicle) {
-		vehicleManager.addVehicle(vehicle);
-		return this;
-	}
-
 }
