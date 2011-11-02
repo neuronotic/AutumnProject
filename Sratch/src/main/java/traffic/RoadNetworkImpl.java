@@ -5,9 +5,10 @@ import static java.util.Arrays.*;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.assistedinject.Assisted;
 
-
+@Singleton
 public class RoadNetworkImpl implements RoadNetwork {
 	private final List<Segment> segments;
 
@@ -20,12 +21,7 @@ public class RoadNetworkImpl implements RoadNetwork {
 	}
 
 	@Override
-	public List<Segment> route(final Junction origin, final Junction destination) {
-		return segments;
-	}
-
-	@Override
-	public List<Segment> route(final Trip trip) {
+	public List<Segment> segments() {
 		return segments;
 	}
 }

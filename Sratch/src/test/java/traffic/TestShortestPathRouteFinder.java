@@ -22,7 +22,7 @@ public class TestShortestPathRouteFinder {
 
 		context.checking(new Expectations() {
 			{
-				oneOf(roadNetwork).route(trip); will(returnList(segment));
+				oneOf(roadNetwork).segments(); will(returnList(segment));
 			}
 		});
 

@@ -16,8 +16,8 @@ public class TestRoadNetworkImpl {
 	private final Trip trip = context.mock(Trip.class);
 
 	@Test
-	public void shortestRouteInNetworkWithOneSegmentReturnsSegment() throws Exception {
-		assertThat(new RoadNetworkImpl(segment).route(trip), contains(segment));
+	public void segmentsReturnsListOfSegmentsOnNetwork() throws Exception {
+		assertThat(new RoadNetworkImpl(segment).segments(), contains(segment));
 		//assertThat(new RoadNetworkImpl(segment).route(origin, destination), contains(segment));
 	}
 }

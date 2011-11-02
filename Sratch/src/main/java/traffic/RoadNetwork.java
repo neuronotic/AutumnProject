@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public interface RoadNetwork {
-	List<Segment> route(Junction origin, Junction destination);
+	List<Segment> segments();
 
-	List<Segment> route(Trip trip);
+
 }
