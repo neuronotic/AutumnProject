@@ -2,6 +2,7 @@ package traffic;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static traffic.ItineraryMatchers.*;
 import static traffic.MyJMockActions.*;
 import static traffic.RoadNetworkMatchers.*;
 
@@ -16,9 +17,6 @@ public class TestItineraryImpl {
 	private final Segment segment0 = context.mock(Segment.class, "segment0");
 	private final Segment segment1 = context.mock(Segment.class, "segment1");
 
-	private final CellChain cellChain0 = context.mock(CellChain.class, "cellChain0");
-	private final CellChain cellChain1 = context.mock(CellChain.class, "cellChain1");
-
 	private final Junction junctionCell0 = context.mock(Junction.class, "junctionCell0");
 	private final Junction junctionCell1 = context.mock(Junction.class, "junctionCell1");
 	private final Junction junctionCell2 = context.mock(Junction.class, "junctionCell2");
@@ -26,6 +24,14 @@ public class TestItineraryImpl {
 	private final Cell segmentCell0 = context.mock(Cell.class, "segmentCell0");
 	private final Cell segmentCell1 = context.mock(Cell.class, "segmentCell1");
 	private final Cell segmentCell2 = context.mock(Cell.class, "segmentCell2");
+
+	@Test
+	public void routeReturnsListOfSegmentsItineraryWasCreatedWith() throws Exception {
+		final Itinerary itinerary = new ItineraryImpl(segment0, segment1);
+		assertThat(itinerary, itineraryRouteIs(segment0, segment1));
+		assertThat(itinerary.route(), contains(segment0, segment1));
+	}
+
 
 	@Test
 	public void itineraryContainsCellsFromRouteJunctionsAndSegmentsInOrderForMultipleSegments() throws Exception {

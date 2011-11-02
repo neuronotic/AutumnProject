@@ -18,8 +18,8 @@ public class ItineraryImpl implements Itinerary {
 	}
 
 	@Override
-	public Segment route() {
-		return segments.get(0);
+	public List<Segment> route() {
+		return segments;
 	}
 
 	@Override

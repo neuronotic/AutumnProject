@@ -1,9 +1,10 @@
 package traffic;
 
 import java.util.Iterator;
+import java.util.List;
 
 public interface Itinerary extends Iterable<Cell> {
-	Segment route();
+	List<Segment> route();
 
 	Iterator<Cell> iterator();
 }
