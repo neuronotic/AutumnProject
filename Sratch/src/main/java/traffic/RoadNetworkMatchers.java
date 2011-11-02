@@ -11,20 +11,6 @@ import com.google.common.collect.Iterators;
 
 
 public class RoadNetworkMatchers {
-	public static Matcher<Vehicle> hasJourneyTime(final int expectedJourneyTime) {
-		return new TypeSafeMatcher<Vehicle>(Vehicle.class) {
-			@Override
-			public void describeTo(final Description description) {
-				description.appendText("Road User with journey time ").appendValue(expectedJourneyTime);
-			}
-
-			@Override
-			protected boolean matchesSafely(final Vehicle item) {
-				return item.journeyTime() == expectedJourneyTime;
-			}
-		};
-	}
-
 	public static Matcher<TripOrigin> isTripOriginAt(final Junction expectedInJunction) {
 		return new TypeSafeMatcher<TripOrigin>(TripOrigin.class) {
 			@Override

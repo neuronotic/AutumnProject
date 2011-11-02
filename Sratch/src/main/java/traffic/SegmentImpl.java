@@ -44,7 +44,6 @@ class SegmentImpl implements Segment {
 	@Override
 	public List<Cell> cells() {
 		final ArrayList<Cell> result = new ArrayList<Cell>();
-
 		result.add(inJunction);
 		for (final Cell cell : cellChain) {
 			result.add(cell);

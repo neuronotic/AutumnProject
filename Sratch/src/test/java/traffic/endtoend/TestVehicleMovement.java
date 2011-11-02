@@ -45,6 +45,34 @@ public class TestVehicleMovement {
 	@Inject private Provider<RoadNetworkBuilder> roadNetworkBuilderProvider;
 
 	@Test
+	public void supportsMultipleVehiclesTakingSameTripOnNetwork1TimestepApart() throws Exception {
+		final Junction junction0 = junctionFactory.createJunction("junction0");
+		final Junction junction1 = junctionFactory.createJunction("junction1");
+
+		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
+			.withSegment(segment()
+				.withName("segment0")
+				.withInJunction(junction0)
+				.withOutJunction(junction1)
+				.withLength(5))
+			.make();
+
+
+		final Vehicle vehicle0 = vehicleBuilderProvider.get()
+			.withRoadNetwork(roadNetwork)
+			.withTrip(TripFactory.tripFrom(junction0).to(junction1))
+			.make();
+
+		//Shouldn't simulation .withRoadNetwork and .withVehicle be builders?
+		final Simulation simulation = simulationBuilderProvider.get()
+			.withRoadNetwork(roadNetwork)
+			.withVehicle(vehicle0)
+			.make();
+
+		simulation.step(7);
+	}
+
+	@Test
 	public void tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime() throws Exception {
 		final Junction junction0 = junctionFactory.createJunction("junction0");
 		final Junction junction1 = junctionFactory.createJunction("junction1");
