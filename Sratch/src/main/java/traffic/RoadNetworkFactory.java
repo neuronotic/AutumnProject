@@ -1,12 +1,11 @@
 package traffic;
 
+import java.util.List;
 
-public class RoadNetworkFactory {
-	public static TripOrigin tripFrom(final Junction junction) {
-		return new TripOriginImpl(junction);
-	}
 
-	public static RoadNetwork roadNetwork(final Segment...segments) {
-		return new RoadNetworkImpl(segments);
-	}
+public interface RoadNetworkFactory {
+
+	RoadNetwork createRoadNetwork(List<Segment> segments);
+
+
 }

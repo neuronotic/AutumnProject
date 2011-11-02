@@ -1,28 +1,23 @@
 package traffic.endtoend;
 
 import static org.hamcrest.MatcherAssert.*;
-import static traffic.RoadNetworkFactory.*;
 import static traffic.RoadNetworkMatchers.*;
 import static traffic.VehicleMatchers.*;
 
 import org.junit.Rule;
 import org.junit.Test;
 
-import traffic.CellChainBuilder;
 import traffic.Junction;
 import traffic.JunctionFactory;
 import traffic.RoadNetwork;
-import traffic.RouteFinder;
-import traffic.RouteFinderFactory;
-import traffic.Segment;
-import traffic.SegmentFactory;
+import traffic.RoadNetworkBuilder;
+import traffic.SegmentBuilder;
 import traffic.Simulation;
 import traffic.SimulationBuilder;
 import traffic.TrafficModule;
-import traffic.Trip;
+import traffic.TripFactory;
 import traffic.Vehicle;
 import traffic.VehicleBuilder;
-import traffic.VehicleFactory;
 
 import com.google.guiceberry.GuiceBerryModule;
 import com.google.guiceberry.junit4.GuiceBerryRule;
@@ -43,13 +38,11 @@ public class TestVehicleMovement {
 	@Rule public GuiceBerryRule guiceBerry =
 		      new GuiceBerryRule(TrafficTestModule.class);
 
-	@Inject private VehicleFactory vehicleFactory;
 	@Inject private JunctionFactory junctionFactory;
-	@Inject private SegmentFactory segmentFactory;
-	@Inject private Provider<CellChainBuilder> cellChainBuilderProvider;
-	@Inject private RouteFinderFactory routeFinderFactory;
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
+	@Inject private Provider<SegmentBuilder> segmentBuilderProvider;
+	@Inject private Provider<RoadNetworkBuilder> roadNetworkBuilderProvider;
 
 	@Test
 	public void tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime() throws Exception {
@@ -58,25 +51,38 @@ public class TestVehicleMovement {
 		final Junction junction2 = junctionFactory.createJunction("junction2");
 		final Junction junction3 = junctionFactory.createJunction("junction3");
 
-		final Segment segment0 = segmentFactory.segment("segment0", junction0, cellChainBuilderProvider.get().cellChainOfLength(4), junction1);
-		final Segment segment1 = segmentFactory.segment("segment1", junction1, cellChainBuilderProvider.get().cellChainOfLength(3), junction2);
-		final Segment segment2 = segmentFactory.segment("segment2", junction1, cellChainBuilderProvider.get().cellChainOfLength(5), junction3);
+		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
+				.withSegment(segment()
+					.withName("segment0")
+					.withInJunction(junction0)
+					.withOutJunction(junction1)
+					.withLength(4))
+				.withSegment(segment()
+					.withName("segment1")
+					.withInJunction(junction1)
+					.withOutJunction(junction2)
+					.withLength(3))
+				.withSegment(segment()
+					.withName("segment2")
+					.withInJunction(junction1)
+					.withOutJunction(junction3)
+					.withLength(3))
+				.make();
 
-		final RoadNetwork roadNetwork = roadNetwork(segment0, segment1, segment2);
-
-		final Trip trip = tripFrom(junction0).to(junction2);
-
-		final Vehicle vehicle = vehicle(roadNetwork, trip);
+		final Vehicle vehicle0 = vehicleBuilderProvider.get()
+				.withRoadNetwork(roadNetwork)
+				.withTrip(TripFactory.tripFrom(junction0).to(junction2))
+				.make();
 
 		final Simulation simulation = simulationBuilderProvider.get()
 				.withRoadNetwork(roadNetwork)
-				.withVehicle(vehicle)
+				.withVehicle(vehicle0)
 				.make();
 
 		simulation.step(7);
 
-		assertThat(vehicle, isLocatedAt(junction2));
-		assertThat(vehicle, hasJourneyTime(10));
+		assertThat(vehicle0, isLocatedAt(junction2));
+		assertThat(vehicle0, hasJourneyTime(10));
 
 	}
 
@@ -86,24 +92,35 @@ public class TestVehicleMovement {
 		final Junction junction1 = junctionFactory.createJunction("junction1");
 		final Junction junction2 = junctionFactory.createJunction("junction2");
 
-		final Segment segment0 = segmentFactory.segment("segment0", junction0, cellChainBuilderProvider.get().cellChainOfLength(4), junction1);
-		final Segment segment1 = segmentFactory.segment("segment1", junction1, cellChainBuilderProvider.get().cellChainOfLength(3), junction2);
+		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
+				.withSegment(segment()
+					.withName("segment0")
+					.withInJunction(junction0)
+					.withOutJunction(junction1)
+					.withLength(4))
+				.withSegment(segment()
+					.withName("segment1")
+					.withInJunction(junction1)
+					.withOutJunction(junction2)
+					.withLength(3))
+				.make();
 
-		final RoadNetwork roadNetwork = roadNetwork(segment0, segment1);
 
-		final Trip trip = tripFrom(junction0).to(junction2);
 
-		final Vehicle vehicle = vehicle(roadNetwork, trip);
+		final Vehicle vehicle0 = vehicleBuilderProvider.get()
+				.withRoadNetwork(roadNetwork)
+				.withTrip(TripFactory.tripFrom(junction0).to(junction2))
+				.make();
 
 		final Simulation simulation = simulationBuilderProvider.get()
 				.withRoadNetwork(roadNetwork)
-				.withVehicle(vehicle)
+				.withVehicle(vehicle0)
 				.make();
 
 		simulation.step(10);
 
-		assertThat(vehicle, isLocatedAt(junction2));
-		assertThat(vehicle, hasJourneyTime(10));
+		assertThat(vehicle0, isLocatedAt(junction2));
+		assertThat(vehicle0, hasJourneyTime(10));
 	}
 
 	@Test
@@ -111,15 +128,21 @@ public class TestVehicleMovement {
 		final Junction junction0 = junctionFactory.createJunction("junction0");
 		final Junction junction1 = junctionFactory.createJunction("junction1");
 
-		final Segment segment = segmentFactory.segment("segment0", junction0, cellChainBuilderProvider.get().cellChainOfLength(5), junction1);
-		final RoadNetwork roadNetwork = roadNetwork(segment);
+		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
+				.withSegment(segment()
+					.withName("segment0")
+					.withInJunction(junction0)
+					.withOutJunction(junction1)
+					.withLength(5))
+				.make();
 
 
 		final Vehicle vehicle0 = vehicleBuilderProvider.get()
 				.withRoadNetwork(roadNetwork)
-				.withTrip(tripFrom(junction0).to(junction1))
+				.withTrip(TripFactory.tripFrom(junction0).to(junction1))
 				.make();
 
+		//Shouldn't simulation .withRoadNetwork and .withVehicle be builders?
 		final Simulation simulation = simulationBuilderProvider.get()
 			.withRoadNetwork(roadNetwork)
 			.withVehicle(vehicle0)
@@ -131,9 +154,8 @@ public class TestVehicleMovement {
 		assertThat(vehicle0, hasJourneyTime(7));
 	}
 
-	private Vehicle vehicle(final RoadNetwork roadNetwork, final Trip trip) {
-		final RouteFinder routeFinder = routeFinderFactory.createShortestPathRouteFinder(roadNetwork);
-		return vehicleFactory.createVehicle(routeFinder.calculateItinerary(trip));
+	private SegmentBuilder segment() {
+		return segmentBuilderProvider.get();
 	}
 
 

@@ -3,9 +3,9 @@ package traffic;
 import com.google.inject.assistedinject.Assisted;
 
 public interface SegmentFactory {
-	Segment segment(
+	Segment createSegment(
 			String segmentName,
 			@Assisted("inJunction") Junction inJunction,
-			CellChainBuilder cellChainFactory,
+			CellChainBuilder cellChainBuilder,
 			@Assisted("outJunction") Junction outJunction);
 }

@@ -12,6 +12,7 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
  *
  * @author daz
  */
+
 public class TrafficModule extends AbstractModule {
 	@Override
 	protected void configure() {
@@ -20,8 +21,14 @@ public class TrafficModule extends AbstractModule {
 		bind(VehicleManager.class).to(VehicleManagerImpl.class);
 		bind(CellChainBuilder.class).to(CellChainBuilderImpl.class);
 		bind(SimulationBuilder.class).to(SimulationBuilderImpl.class);
+		bind(SegmentBuilder.class).to(SegmentBuilderImpl.class);
 		bind(VehicleBuilder.class).to(VehicleBuilderImpl.class);
 		bind(JourneyHistory.class).to(JourneyHistoryImpl.class);
+		bind(RoadNetworkBuilder.class).to(RoadNetworkBuilderImpl.class);
+
+		install(new FactoryModuleBuilder()
+		    .implement(RoadNetwork.class, RoadNetworkImpl.class)
+		    .build(RoadNetworkFactory.class));
 
 		install(new FactoryModuleBuilder()
 		    .implement(Junction.class, JunctionImpl.class)
@@ -50,7 +57,6 @@ public class TrafficModule extends AbstractModule {
 		install(new FactoryModuleBuilder()
 			.implement(Simulation.class, SimulationImpl.class)
 			.build(SimulationFactory.class));
-
 	}
 
 	public static void main(final String args[]) {
