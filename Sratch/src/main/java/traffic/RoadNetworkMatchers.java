@@ -158,9 +158,36 @@ public class RoadNetworkMatchers {
 		};
 	}
 
+	public static Matcher<Segment> segmentHasLength(final int expectedLength) {
+		return new TypeSafeMatcher<Segment>(Segment.class) {
+
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("Segment with length ").appendValue(expectedLength);
+			}
+
+			@Override
+			protected void describeMismatchSafely(final Segment item,
+					final Description mismatchDescription) {
+				if (item != null) {
+					mismatchDescription.appendText("Segment with length ").appendValue(item.length());
+				} else {
+					super.describeMismatchSafely(item, mismatchDescription);
+				}
+			}
+
+			@Override
+			protected boolean matchesSafely(final Segment item) {
+				return item.length() == expectedLength;
+			}
+
+		};
+	}
+
 	public static List<Cell> cellsIn(final Itinerary itinerary) {
 		final List<Cell> cells = new ArrayList<Cell>();
 		Iterators.addAll(cells, itinerary.iterator());
 		return cells;
 	}
+
 }

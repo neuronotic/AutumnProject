@@ -54,6 +54,11 @@ class SegmentImpl implements Segment {
 	}
 
 	@Override
+	public int length() {
+		return cellChain.cellCount();
+	}
+
+	@Override
 	public String name() {
 		return name;
 	}

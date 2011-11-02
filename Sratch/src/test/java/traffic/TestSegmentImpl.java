@@ -27,10 +27,12 @@ public class TestSegmentImpl {
 			{
 				oneOf(cellChainBuilder).make(with(RoadNetworkMatchers.segmentNamed("mySegment"))); will(returnValue(cellChain));
 				oneOf(cellChain).iterator(); will(returnIterator(segmentCell0, segmentCell1));
+				oneOf(cellChain).cellCount(); will(returnValue(2));
 			}
 		});
 
 		final Segment segment = new SegmentImpl("mySegment", inJunction, cellChainBuilder, outJunction);
 		assertThat(segment.cells(), contains(inJunction, segmentCell0, segmentCell1, outJunction));
+		assertThat(segment, RoadNetworkMatchers.segmentHasLength(2));
 	}
 }

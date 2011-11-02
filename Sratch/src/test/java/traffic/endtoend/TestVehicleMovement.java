@@ -52,32 +52,32 @@ public class TestVehicleMovement {
 		final Junction junction3 = junctionFactory.createJunction("junction3");
 
 		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
-				.withSegment(segment()
-					.withName("segment0")
-					.withInJunction(junction0)
-					.withOutJunction(junction1)
-					.withLength(4))
-				.withSegment(segment()
-					.withName("segment1")
-					.withInJunction(junction1)
-					.withOutJunction(junction2)
-					.withLength(3))
-				.withSegment(segment()
-					.withName("segment2")
-					.withInJunction(junction1)
-					.withOutJunction(junction3)
-					.withLength(3))
-				.make();
+			.withSegment(segment()
+				.withName("segment0")
+				.withInJunction(junction0)
+				.withOutJunction(junction1)
+				.withLength(4))
+			.withSegment(segment()
+				.withName("segment1")
+				.withInJunction(junction1)
+				.withOutJunction(junction2)
+				.withLength(3))
+			.withSegment(segment()
+				.withName("segment2")
+				.withInJunction(junction1)
+				.withOutJunction(junction3)
+				.withLength(3))
+			.make();
 
 		final Vehicle vehicle0 = vehicleBuilderProvider.get()
-				.withRoadNetwork(roadNetwork)
-				.withTrip(TripFactory.tripFrom(junction0).to(junction2))
-				.make();
+			.withRoadNetwork(roadNetwork)
+			.withTrip(TripFactory.tripFrom(junction0).to(junction2))
+			.make();
 
 		final Simulation simulation = simulationBuilderProvider.get()
-				.withRoadNetwork(roadNetwork)
-				.withVehicle(vehicle0)
-				.make();
+			.withRoadNetwork(roadNetwork)
+			.withVehicle(vehicle0)
+			.make();
 
 		simulation.step(7);
 
@@ -93,29 +93,29 @@ public class TestVehicleMovement {
 		final Junction junction2 = junctionFactory.createJunction("junction2");
 
 		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
-				.withSegment(segment()
-					.withName("segment0")
-					.withInJunction(junction0)
-					.withOutJunction(junction1)
-					.withLength(4))
-				.withSegment(segment()
-					.withName("segment1")
-					.withInJunction(junction1)
-					.withOutJunction(junction2)
-					.withLength(3))
-				.make();
+			.withSegment(segment()
+				.withName("segment0")
+				.withInJunction(junction0)
+				.withOutJunction(junction1)
+				.withLength(4))
+			.withSegment(segment()
+				.withName("segment1")
+				.withInJunction(junction1)
+				.withOutJunction(junction2)
+				.withLength(3))
+			.make();
 
 
 
 		final Vehicle vehicle0 = vehicleBuilderProvider.get()
-				.withRoadNetwork(roadNetwork)
-				.withTrip(TripFactory.tripFrom(junction0).to(junction2))
-				.make();
+			.withRoadNetwork(roadNetwork)
+			.withTrip(TripFactory.tripFrom(junction0).to(junction2))
+			.make();
 
 		final Simulation simulation = simulationBuilderProvider.get()
-				.withRoadNetwork(roadNetwork)
-				.withVehicle(vehicle0)
-				.make();
+			.withRoadNetwork(roadNetwork)
+			.withVehicle(vehicle0)
+			.make();
 
 		simulation.step(10);
 
@@ -129,18 +129,18 @@ public class TestVehicleMovement {
 		final Junction junction1 = junctionFactory.createJunction("junction1");
 
 		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
-				.withSegment(segment()
-					.withName("segment0")
-					.withInJunction(junction0)
-					.withOutJunction(junction1)
-					.withLength(5))
-				.make();
+			.withSegment(segment()
+				.withName("segment0")
+				.withInJunction(junction0)
+				.withOutJunction(junction1)
+				.withLength(5))
+			.make();
 
 
 		final Vehicle vehicle0 = vehicleBuilderProvider.get()
-				.withRoadNetwork(roadNetwork)
-				.withTrip(TripFactory.tripFrom(junction0).to(junction1))
-				.make();
+			.withRoadNetwork(roadNetwork)
+			.withTrip(TripFactory.tripFrom(junction0).to(junction1))
+			.make();
 
 		//Shouldn't simulation .withRoadNetwork and .withVehicle be builders?
 		final Simulation simulation = simulationBuilderProvider.get()
