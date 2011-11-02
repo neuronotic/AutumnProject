@@ -2,6 +2,8 @@ package traffic;
 
 import static java.util.Arrays.*;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -24,4 +26,15 @@ public class RoadNetworkImpl implements RoadNetwork {
 	public List<Segment> segments() {
 		return segments;
 	}
+
+	@Override
+	public Collection<Junction> junctions() {
+		final Collection<Junction> junctions = new HashSet<Junction>();
+		for (final Segment segment : segments) {
+			junctions.add(segment.inJunction());
+			junctions.add(segment.outJunction());
+		}
+		return junctions;
+	}
+
 }
