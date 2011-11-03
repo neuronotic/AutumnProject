@@ -1,5 +1,6 @@
 package traffic;
 
+import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static traffic.VehicleMatchers.*;
@@ -16,15 +17,13 @@ public class TestVehicleImpl {
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
 	private final JourneyHistory history = context.mock(JourneyHistory.class);
-	private final Iterator<Cell> itinerary = context.mock(Iterator.class);
 	private final Cell cell = context.mock(Cell.class, "cell0");
+	private final Iterator<Cell> itinerary = asList(cell).iterator();
 
 	@Test
 	public void eachStepAdvancesUserToIterator() throws Exception {
 		final Vehicle vehicle = new VehicleImpl("myVehicle", itinerary, history);
-
 		context.checking(new Expectations() {{
-			oneOf(itinerary).next(); will(returnValue(cell));
 			oneOf(cell).enter(vehicle);
 			oneOf(history).stepped();
 		}});
@@ -35,7 +34,6 @@ public class TestVehicleImpl {
 	@Test
 	public void journeyTimeIsReadFromHistory() throws Exception {
 		final Vehicle vehicle = new VehicleImpl("myVehicle", itinerary, history);
-
 		context.checking(new Expectations() {{
 			oneOf(history).journeyTime(); will(returnValue(42));
 		}});
