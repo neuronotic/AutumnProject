@@ -1,19 +1,14 @@
 package traffic;
 
 import java.util.Iterator;
-import java.util.logging.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 class VehicleImpl implements Vehicle {
 
-	@Inject Logger logger = Logger.getAnonymousLogger();
-
-	private final Iterator<Cell> remainingItinerary;
-	private Cell location;
-	private final JourneyHistory history;
 	private final String name;
+	private final VehicleStateContext context;
 
 	@Inject VehicleImpl(
 			@Assisted final String name,
@@ -26,27 +21,22 @@ class VehicleImpl implements Vehicle {
 			final Iterator<Cell> remainingItinerary,
 			final JourneyHistory history) {
 		this.name = name;
-		this.remainingItinerary = remainingItinerary;
-		this.history = history;
+		context = new VehicleStateContextImpl(this, remainingItinerary, history);
 	}
 
 	@Override
 	public Cell location() {
-		return location;
+		return context.location();
 	}
 
 	@Override
 	public void step() {
-		final Cell cell = remainingItinerary.next();
-		cell.enter(this);
-		location = cell;
-		history.stepped();
-		logger.info(String.format("Vehicle entered %s", location));
+		context.step();
 	}
 
 	@Override
 	public int journeyTime() {
-		return history.journeyTime();
+		return context.journeyTime();
 	}
 
 	@Override
