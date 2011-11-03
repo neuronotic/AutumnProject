@@ -1,8 +1,6 @@
 package traffic;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Logger;
 
 import com.google.inject.Inject;
@@ -16,8 +14,6 @@ class VehicleImpl implements Vehicle {
 	private Cell location;
 	private final JourneyHistory history;
 	private final String name;
-
-	private final List<JourneyEndListener> journeyEndListeners = new ArrayList<JourneyEndListener>();
 
 	@Inject VehicleImpl(
 			@Assisted final String name,
@@ -56,18 +52,6 @@ class VehicleImpl implements Vehicle {
 	@Override
 	public String name() {
 		return name;
-	}
-
-	@Override
-	public void addJourneyEndListener(final JourneyEndListener journeyEndListener) {
-		journeyEndListeners.add(journeyEndListener);
-	}
-
-	@Override
-	public void journeyEnded() {
-		for (final JourneyEndListener listener : journeyEndListeners) {
-			listener.notifyOfJourneyEnd(this);
-		}
 	}
 
 	@Override

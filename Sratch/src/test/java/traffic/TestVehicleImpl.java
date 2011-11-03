@@ -20,25 +20,6 @@ public class TestVehicleImpl {
 	private final Cell cell = context.mock(Cell.class, "cell0");
 
 	@Test
-	public void addedListenersAreNotifiedWhenJourneyEndedMessageReceived() throws Exception {
-		final Vehicle vehicle = new VehicleImpl("myVehicle", itinerary, history);
-		final JourneyEndListener journeyEndListener0 = context.mock(JourneyEndListener.class, "listener0");
-		final JourneyEndListener journeyEndListener1 = context.mock(JourneyEndListener.class, "listener1");
-
-		vehicle.addJourneyEndListener(journeyEndListener0);
-		vehicle.addJourneyEndListener(journeyEndListener1);
-
-		context.checking(new Expectations() {
-			{
-				oneOf(journeyEndListener0).notifyOfJourneyEnd(vehicle);
-				oneOf(journeyEndListener1).notifyOfJourneyEnd(vehicle);
-			}
-		});
-
-		vehicle.journeyEnded();
-	}
-
-	@Test
 	public void eachStepAdvancesUserToIterator() throws Exception {
 		final Vehicle vehicle = new VehicleImpl("myVehicle", itinerary, history);
 

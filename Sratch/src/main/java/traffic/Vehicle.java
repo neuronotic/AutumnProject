@@ -10,7 +10,4 @@ public interface Vehicle {
 
 	String name();
 
-	void addJourneyEndListener(JourneyEndListener journeyEndListener);
-
-	void journeyEnded();
 }
