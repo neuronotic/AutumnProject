@@ -17,6 +17,7 @@ public class TestVehicleStateContextImpl {
 	private final Cell cell = context.mock(Cell.class);
 	private final Iterator<Cell> remainingItinerary = asList(cell).iterator();
 	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
+	private final Vehicle vehicle = context.mock(Vehicle.class);
 	private final VehicleStateContext stateContext = new VehicleStateContextImpl(remainingItinerary, journeyHistory);
 
 	@Test

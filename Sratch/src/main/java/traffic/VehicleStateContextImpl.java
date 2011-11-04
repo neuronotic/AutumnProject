@@ -1,16 +1,14 @@
 package traffic;
 
 import java.util.Iterator;
-import java.util.logging.Logger;
-
-import com.google.inject.Inject;
 
 public class VehicleStateContextImpl implements VehicleStateContext {
-	@Inject Logger logger = Logger.getAnonymousLogger();
+
 
 	private final Iterator<Cell> remainingItinerary;
 	private final JourneyHistory history;
 	private Cell location;
+
 
 	public VehicleStateContextImpl(
 			final Iterator<Cell> remainingItinerary,
@@ -32,11 +30,6 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	@Override
 	public void setLocation(final Cell cell) {
 		location = cell;
-	}
-
-	@Override
-	public void logStep() {
-		logger.info(String.format("Vehicle located at %s", location()));
 	}
 
 	@Override

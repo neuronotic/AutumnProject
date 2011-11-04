@@ -8,7 +8,6 @@ public interface VehicleStateContext {
 	Cell nextCellInItinerary();
 
 	void setLocation(Cell cell);
-	void logStep();
 	void stepHistory();
 
 }
