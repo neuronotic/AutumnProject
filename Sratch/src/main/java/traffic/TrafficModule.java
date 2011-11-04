@@ -25,6 +25,8 @@ public class TrafficModule extends AbstractModule {
 		bind(VehicleBuilder.class).to(VehicleBuilderImpl.class);
 		bind(JourneyHistory.class).to(JourneyHistoryImpl.class);
 		bind(RoadNetworkBuilder.class).to(RoadNetworkBuilderImpl.class);
+		bind(VehicleStateFactory.class).to(VehicleStateFactoryImpl.class);
+
 
 		install(new FactoryModuleBuilder()
 	    	.implement(VehicleStateContext.class, VehicleStateContextImpl.class)

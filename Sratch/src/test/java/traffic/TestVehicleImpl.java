@@ -14,7 +14,9 @@ public class TestVehicleImpl {
 
 	private final Cell cell = context.mock(Cell.class, "cell0");
 	private final VehicleStateContext stateContext = context.mock(VehicleStateContext.class);
-	final Vehicle vehicle = new VehicleImpl("myVehicle", stateContext);
+	private final VehicleJourneyState state0 = context.mock(VehicleJourneyState.class, "state0");
+	private final VehicleJourneyState state1 = context.mock(VehicleJourneyState.class, "state1");
+	final Vehicle vehicle = new VehicleImpl("myVehicle", stateContext, state0);
 
 	/*
 	@Test
@@ -39,8 +41,28 @@ public class TestVehicleImpl {
 	*/
 
 	@Test
+	public void stepCausesCurrentStateToChangeToReturnedStateInDelegationToPreviousCurrentState() throws Exception {
+		stepDelegatesToCurrentState();
+
+		context.checking(new Expectations() {{
+			oneOf(state1).step();
+		}});
+		vehicle.step();
+	}
+
+	@Test
+	public void stepDelegatesToCurrentState() throws Exception {
+		context.checking(new Expectations() {{
+			ignoring(stateContext);
+			oneOf(state0).step(); will(returnValue(state1));
+		}});
+		vehicle.step();
+	}
+
+	@Test
 	public void stepMovesVehicleAlongItinerary() throws Exception {
 		context.checking(new Expectations() {{
+			ignoring(state0);
 			oneOf(stateContext).nextCellInItinerary(); will(returnValue(cell));
 			oneOf(cell).enter(vehicle);
 			oneOf(stateContext).setLocation(cell);

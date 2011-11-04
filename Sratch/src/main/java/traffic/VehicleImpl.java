@@ -9,13 +9,16 @@ class VehicleImpl implements Vehicle {
 	@Inject Logger logger = Logger.getAnonymousLogger();
 	private final String name;
 	private final VehicleStateContext stateContext;
+	private VehicleJourneyState journeyState;
 
 	@Inject VehicleImpl(
 			@Assisted final String name,
-			@Assisted final VehicleStateContext vehicleStateContext
+			@Assisted final VehicleStateContext vehicleStateContext,
+			@Assisted final VehicleJourneyState journeyState
 			) {
 		this.name = name;
 		stateContext = vehicleStateContext;
+		this.journeyState = journeyState;
 	}
 
 	@Override
@@ -25,6 +28,7 @@ class VehicleImpl implements Vehicle {
 
 	@Override
 	public void step() {
+		journeyState = journeyState.step();
 		final Cell cell = stateContext.nextCellInItinerary();
 		cell.enter(this);
 		stateContext.setLocation(cell);

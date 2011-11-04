@@ -17,6 +17,8 @@ public class TestVehicleBuilderImpl {
 	private final VehicleFactory vehicleFactory = context.mock(VehicleFactory.class);
 	private final VehicleStateContextFactory vehicleStateContextFactory = context.mock(VehicleStateContextFactory.class);
 	private final VehicleStateContext vehicleStateContext = context.mock(VehicleStateContext.class);
+	private final VehicleJourneyState initialState = context.mock(VehicleJourneyState.class);
+	private final VehicleStateFactory vehicleStateFactory = context.mock(VehicleStateFactory.class);
 	private final Trip trip = context.mock(Trip.class);
 	private final RoadNetwork roadNetwork = context.mock(RoadNetwork.class);
 	private final Itinerary itinerary = context.mock(Itinerary.class);
@@ -34,11 +36,12 @@ public class TestVehicleBuilderImpl {
 				oneOf(routeFinder).calculateItinerary(trip); will(returnValue(itinerary));
 				oneOf(itinerary).iterator(); will(returnValue(iterator));
 				oneOf(vehicleStateContextFactory).createStateContext(iterator); will(returnValue(vehicleStateContext));
-				oneOf(vehicleFactory).createVehicle(vehicleName, vehicleStateContext); will(returnValue(vehicle));
+				oneOf(vehicleStateFactory).preJourneyState(); will(returnValue(initialState));
+				oneOf(vehicleFactory).createVehicle(vehicleName, vehicleStateContext, initialState); will(returnValue(vehicle));
 			}
 		});
 
-		final Vehicle createdVehicle = new VehicleBuilderImpl(vehicleFactory, routeFinderFactory, vehicleStateContextFactory)
+		final Vehicle createdVehicle = new VehicleBuilderImpl(vehicleFactory, routeFinderFactory, vehicleStateContextFactory, vehicleStateFactory)
 			.withName(vehicleName)
 			.withRoadNetwork(roadNetwork)
 			.withTrip(trip)
