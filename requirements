@@ -1,0 +1,37 @@
+itineraryBetweenAdjacentJunctionsContainsOnlyTheSegmentBetweenOriginAndDestinationJunctions()
+
+
+
+--------------------------------
+
+- vehicle ends life by leaving junction
+- vehicle has history consisting of creation time and entry time at each J travelled to until trip ends.
+- add multi-vehicle support
+- vehicle begins life in junction "origin" queue cell, awaiting entry for next ts (or immediately entering?)
+- only one vehicle can occupy a cell at a time.
+- measure flow rate across head of segment ({0|1} in any time step)
+ 
+
+
+-------------
+
+- Still not confident where to use '@assisted'
+- difference between 'bind' and 'install' in Guice Module...
+- what about matchers / errors?
+- my builder for RoadNetwork mixes taking builders and objects...(eg withVehicle(Vehicle vehicle) and withSegment(SegmentBuilder segmentBuilder)
+
+- RoadNetwork, VehicleManager, etc are @Singletons - how to do nested modules with Guice?
+Tim: so you can have a top level module that you use to set up the road network
+http://google-guice.googlecode.com/svn/trunk/javadoc/com/google/inject/Injector.html#createChildInjector%28java.lang.Iterable%3C?%20extends%20com.google.inject.Module%3E%29
+
+http://code.google.com/p/google-guice/wiki/BindingResolution
+
+- is my current impl of RouteFinder recreating roadnetwork each time or is it calling ...?
+- ShortestPathRouteFinder needs some work to test it + refactoring.
+- when adding vehicles to VehicleManager, the listener adding is causing testing woes/complications...
+
+- refactor out Listener as per Tim's suggestion so that VehicleManager doesn't directly impl. listener.
+
+- VehicleJourneyStateFactory.journeyOngoingState() want it to return VehicleJourneyOngoingState  but this means cannot unit test in TestVehicleJourneyUnstartedState.stepReturnsVehicleJourneyOngoingStateObject()
+
+

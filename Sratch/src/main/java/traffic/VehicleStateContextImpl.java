@@ -2,6 +2,9 @@ package traffic;
 
 import java.util.Iterator;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 public class VehicleStateContextImpl implements VehicleStateContext {
 
 
@@ -9,9 +12,9 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	private final JourneyHistory history;
 	private Cell location;
 
-
+	@Inject
 	public VehicleStateContextImpl(
-			final Iterator<Cell> remainingItinerary,
+			@Assisted final Iterator<Cell> remainingItinerary,
 			final JourneyHistory history) {
 				this.remainingItinerary = remainingItinerary;
 				this.history = history;

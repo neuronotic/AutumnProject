@@ -6,20 +6,26 @@ public class VehicleBuilderImpl implements VehicleBuilder {
 
 	private final VehicleFactory vehicleFactory;
 	private final RouteFinderFactory routeFinderFactory;
+	private final VehicleStateContextFactory vehicleStateContextFactory;
 	private RoadNetwork roadNetwork;
 	private Trip trip;
 	private String vehicleName = "default name";
 
 	@Inject public VehicleBuilderImpl(
 			final VehicleFactory vehicleFactory,
-			final RouteFinderFactory routeFinderFactory) {
+			final RouteFinderFactory routeFinderFactory,
+			final VehicleStateContextFactory vehicleStateContextFactory) {
 				this.vehicleFactory = vehicleFactory;
 				this.routeFinderFactory = routeFinderFactory;
+				this.vehicleStateContextFactory = vehicleStateContextFactory;
 	}
 
 	@Override
 	public Vehicle make() {
-		return vehicleFactory.createVehicle(vehicleName, routeFinderFactory.createShortestPathRouteFinder(roadNetwork).calculateItinerary(trip));
+		return vehicleFactory.createVehicle(
+				vehicleName,
+				vehicleStateContextFactory.createStateContext(routeFinderFactory.createShortestPathRouteFinder(roadNetwork).calculateItinerary(trip).iterator()));
+		//return vehicleFactory.createVehicle(vehicleName, routeFinderFactory.createShortestPathRouteFinder(roadNetwork).calculateItinerary(trip));
 	}
 
 	@Override
