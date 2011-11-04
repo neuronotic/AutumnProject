@@ -1,11 +1,14 @@
 package traffic;
 
+
 public interface VehicleStateContext {
 
-	void step();
-
 	Cell location();
-
 	int journeyTime();
+	Cell nextCellInItinerary();
+
+	void setLocation(Cell cell);
+	void logStep();
+	void stepHistory();
 
 }

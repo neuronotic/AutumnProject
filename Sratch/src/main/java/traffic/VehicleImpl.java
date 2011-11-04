@@ -21,7 +21,7 @@ class VehicleImpl implements Vehicle {
 			final Iterator<Cell> remainingItinerary,
 			final JourneyHistory history) {
 		this.name = name;
-		context = new VehicleStateContextImpl(this, remainingItinerary, history);
+		context = new VehicleStateContextImpl(remainingItinerary, history);
 	}
 
 	@Override
@@ -31,7 +31,11 @@ class VehicleImpl implements Vehicle {
 
 	@Override
 	public void step() {
-		context.step();
+		final Cell cell = context.nextCellInItinerary();
+		cell.enter(this);
+		context.setLocation(cell);
+		context.stepHistory();
+		context.logStep();
 	}
 
 	@Override
