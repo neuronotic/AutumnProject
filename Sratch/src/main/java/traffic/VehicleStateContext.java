@@ -9,5 +9,6 @@ public interface VehicleStateContext {
 
 	void setLocation(Cell cell);
 	void stepHistory();
+	boolean hasNext();
 
 }

@@ -44,4 +44,9 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	public Cell nextCellInItinerary() {
 		return remainingItinerary.next();
 	}
+
+	@Override
+	public boolean hasNext() {
+		return remainingItinerary.hasNext();
+	}
 }

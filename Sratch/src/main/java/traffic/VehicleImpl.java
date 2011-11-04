@@ -28,11 +28,8 @@ class VehicleImpl implements Vehicle {
 
 	@Override
 	public void step() {
-		journeyState = journeyState.step();
-		final Cell cell = stateContext.nextCellInItinerary();
-		cell.enter(this);
-		stateContext.setLocation(cell);
-		stateContext.stepHistory();
+		journeyState = journeyState.step(this, stateContext);
+
 		logger.info(String.format("Vehicle %s located at %s", name(), location()));
 	}
 

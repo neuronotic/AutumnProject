@@ -2,14 +2,15 @@ package traffic;
 
 public class VehicleJourneyUnstartedState implements VehicleJourneyState {
 
+	private final VehicleStateFactory vehicleStateFactory;
+
 	public VehicleJourneyUnstartedState(final VehicleStateFactory vehicleStateFactory) {
-		// TODO Auto-generated constructor stub
+		this.vehicleStateFactory = vehicleStateFactory;
 	}
 
 	@Override
-	public VehicleJourneyState step() {
-		// TODO Auto-generated method stub
-		return this;
+	public VehicleJourneyState step(final Vehicle vehicle, final VehicleStateContext stateContext) {
+		return vehicleStateFactory.duringJourneyState().step(vehicle, stateContext);
 	}
 
 }

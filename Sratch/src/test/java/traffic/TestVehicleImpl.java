@@ -2,6 +2,7 @@ package traffic;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static traffic.VehicleMatchers.*;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -18,59 +19,32 @@ public class TestVehicleImpl {
 	private final VehicleJourneyState state1 = context.mock(VehicleJourneyState.class, "state1");
 	final Vehicle vehicle = new VehicleImpl("myVehicle", stateContext, state0);
 
-	/*
-	@Test
-	@Ignore
-	public void eachStepAdvancesUserToIterator() throws Exception {
-		context.checking(new Expectations() {{
-			oneOf(cell).enter(vehicle);
-			oneOf(history).stepped();
-		}});
-		vehicle.step();
-		assertThat(vehicle, isLocatedAt(cell));
-	}
-
-	@Test
-	@Ignore
-	public void journeyTimeIsReadFromHistory() throws Exception {
-		context.checking(new Expectations() {{
-			oneOf(history).journeyTime(); will(returnValue(42));
-		}});
-		assertThat(vehicle.journeyTime(), equalTo(42));
-	}
-	*/
-
 	@Test
 	public void stepCausesCurrentStateToChangeToReturnedStateInDelegationToPreviousCurrentState() throws Exception {
-		stepDelegatesToCurrentState();
+		stepDelegatesCallOnToCurrentState();
 
 		context.checking(new Expectations() {{
-			oneOf(state1).step();
+			oneOf(state1).step(vehicle, stateContext);
 		}});
 		vehicle.step();
 	}
 
 	@Test
-	public void stepDelegatesToCurrentState() throws Exception {
+	public void stepDelegatesCallOnToCurrentState() throws Exception {
 		context.checking(new Expectations() {{
 			ignoring(stateContext);
-			oneOf(state0).step(); will(returnValue(state1));
+			oneOf(state0).step(vehicle, stateContext); will(returnValue(state1));
 		}});
 		vehicle.step();
 	}
 
 	@Test
-	public void stepMovesVehicleAlongItinerary() throws Exception {
+	public void locationDelegatedToStateContext() throws Exception {
 		context.checking(new Expectations() {{
 			ignoring(state0);
-			oneOf(stateContext).nextCellInItinerary(); will(returnValue(cell));
-			oneOf(cell).enter(vehicle);
-			oneOf(stateContext).setLocation(cell);
-			oneOf(stateContext).stepHistory();
 			oneOf(stateContext).location(); will(returnValue(cell));
 		}});
-		vehicle.step();
-		//assertThat(vehicle, isLocatedAt(cell));
+		assertThat(vehicle, isLocatedAt(cell));
 	}
 
 	@Test

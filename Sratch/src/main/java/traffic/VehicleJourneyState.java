@@ -2,6 +2,6 @@ package traffic;
 
 public interface VehicleJourneyState {
 
-	VehicleJourneyState step();
+	VehicleJourneyState step(Vehicle vehicle, VehicleStateContext stateContext);
 
 }
