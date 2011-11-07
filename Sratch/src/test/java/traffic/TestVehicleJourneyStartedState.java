@@ -13,7 +13,7 @@ public class TestVehicleJourneyStartedState {
 	private final VehicleJourneyState state1 = context.mock(VehicleJourneyState.class, "state1");
 	private final VehicleStateContext stateContext = context.mock(VehicleStateContext.class);
 	private final Vehicle vehicle = context.mock(Vehicle.class);
-	final VehicleJourneyState vehicleJourneyStartedState = new VehicleJourneyStartedState(vehicleStateFactory);
+	private final VehicleJourneyState vehicleJourneyStartedState = new VehicleJourneyStartedState(vehicleStateFactory);
 
 	@Test
 	public void ifContextHasJourneyRemainingCallMove() throws Exception {

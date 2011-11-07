@@ -1,6 +1,10 @@
 package traffic;
 
+import com.google.inject.Inject;
+
 public class NullCell implements Cell {
+
+	@Inject NullCell() {}
 
 	@Override
 	public boolean enter(final Vehicle vehicle) {

@@ -30,6 +30,10 @@ public class TrafficModule extends AbstractModule {
 		bind(VehicleStateContextBuilder.class).to(VehicleStateContextBuilderImpl.class);
 
 		install(new FactoryModuleBuilder()
+    		.implement(Cell.class, NullCell.class)
+    		.build(NullCellFactory.class));
+
+		install(new FactoryModuleBuilder()
 	    	.implement(VehicleStateContext.class, VehicleStateContextImpl.class)
 	    	.build(VehicleStateContextFactory.class));
 

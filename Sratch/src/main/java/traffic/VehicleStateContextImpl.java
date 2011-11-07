@@ -1,7 +1,7 @@
 package traffic;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -9,16 +9,20 @@ import com.google.inject.assistedinject.Assisted;
 public class VehicleStateContextImpl implements VehicleStateContext {
 
 
-	private final Iterator<Cell> remainingItinerary;
+	private final ListIterator<Cell> remainingItinerary;
 	private final JourneyHistory history;
-	private Cell location = new NullCell();
+	private Cell location;
+	private final NullCellFactory nullCellFactory;
 
 	@Inject
 	public VehicleStateContextImpl(
+			final NullCellFactory nullCellFactory,
 			@Assisted final List<Cell> cellsInItinerary,
 			final JourneyHistory history) {
-				remainingItinerary = cellsInItinerary.iterator();
+				this.nullCellFactory = nullCellFactory;
+				remainingItinerary = cellsInItinerary.listIterator();
 				this.history = history;
+				location = nullCellFactory.createNullCell();
 	}
 
 	@Override
@@ -43,6 +47,8 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 			location.leave(vehicle);
 			setLocation(cell);
 			stepHistory();
+		} else {
+			remainingItinerary.previous();
 		}
 	}
 
@@ -56,5 +62,13 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	private Cell nextCellInItinerary() {
 		return remainingItinerary.next();
+	}
+
+	@Override
+	public void journeyEnded(final Vehicle vehicle) {
+		// TODO Auto-generated method stub
+		//leave cell...
+		location.leave(vehicle);
+		location = nullCellFactory.createNullCell();
 	}
 }
