@@ -5,10 +5,8 @@ public interface VehicleStateContext {
 
 	Cell location();
 	int journeyTime();
-	Cell nextCellInItinerary();
 
-	void setLocation(Cell cell);
-	void stepHistory();
-	boolean hasNext();
+	boolean hasJourneyRemaining();
+	void move(Vehicle vehicle);
 
 }

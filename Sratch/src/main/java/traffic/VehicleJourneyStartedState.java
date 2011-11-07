@@ -11,11 +11,8 @@ public class VehicleJourneyStartedState implements VehicleJourneyState {
 
 	@Override
 	public VehicleJourneyState step(final Vehicle vehicle, final VehicleStateContext stateContext) {
-		if (stateContext.hasNext()) {
-			final Cell cell = stateContext.nextCellInItinerary();
-			cell.enter(vehicle);
-			stateContext.setLocation(cell);
-			stateContext.stepHistory();
+		if (stateContext.hasJourneyRemaining()) {
+			stateContext.move(vehicle);
 			return this;
 		}
 		return vehicleStateFactory.postJourneyState().step(vehicle, stateContext);

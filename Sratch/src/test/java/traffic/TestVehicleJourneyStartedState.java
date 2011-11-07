@@ -16,10 +16,22 @@ public class TestVehicleJourneyStartedState {
 	final VehicleJourneyState vehicleJourneyStartedState = new VehicleJourneyStartedState(vehicleStateFactory);
 
 	@Test
+	public void ifContextHasJourneyRemainingCallMove() throws Exception {
+		context.checking(new Expectations() {
+			{
+				oneOf(stateContext).hasJourneyRemaining(); will(returnValue(true));
+				oneOf(stateContext).move(vehicle);
+			}
+		});
+
+		vehicleJourneyStartedState.step(vehicle, stateContext);
+	}
+
+	@Test
 	public void ifContextIteratorIsExhaustedDelgatesStepToVehicleJourneyCompletedStateReturnedBysFactory() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(stateContext).hasNext(); will(returnValue(false));
+				oneOf(stateContext).hasJourneyRemaining(); will(returnValue(false));
 				oneOf(vehicleStateFactory).postJourneyState(); will(returnValue(state0));
 				oneOf(state0).step(vehicle, stateContext); will(returnValue(state1));
 			}

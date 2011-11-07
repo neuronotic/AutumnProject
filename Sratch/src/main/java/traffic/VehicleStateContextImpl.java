@@ -31,22 +31,27 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	}
 
 	@Override
-	public void setLocation(final Cell cell) {
+	public boolean hasJourneyRemaining() {
+		return remainingItinerary.hasNext();
+	}
+
+	@Override
+	public void move(final Vehicle vehicle) {
+		final Cell cell = nextCellInItinerary();
+		cell.enter(vehicle);
+		setLocation(cell);
+		stepHistory();
+	}
+
+	private void setLocation(final Cell cell) {
 		location = cell;
 	}
 
-	@Override
-	public void stepHistory() {
+	private void stepHistory() {
 		history.stepped();
 	}
 
-	@Override
-	public Cell nextCellInItinerary() {
+	private Cell nextCellInItinerary() {
 		return remainingItinerary.next();
-	}
-
-	@Override
-	public boolean hasNext() {
-		return remainingItinerary.hasNext();
 	}
 }
