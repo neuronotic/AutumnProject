@@ -1,8 +1,6 @@
 package traffic;
 
 
-public class VehicleManagerFactory {
-	public static VehicleManager vehicleManager() {
-		return new VehicleManagerImpl();
-	}
+public interface VehicleManagerFactory {
+	VehicleManager createVehicleManager();
 }

@@ -3,6 +3,7 @@ package traffic.endtoend;
 import static org.hamcrest.MatcherAssert.*;
 import static traffic.VehicleMatchers.*;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -11,12 +12,12 @@ import traffic.JunctionFactory;
 import traffic.RoadNetwork;
 import traffic.RoadNetworkBuilder;
 import traffic.SegmentBuilder;
-import traffic.Simulation;
-import traffic.SimulationBuilder;
 import traffic.TrafficModule;
 import traffic.TripFactory;
 import traffic.Vehicle;
 import traffic.VehicleBuilder;
+import traffic.VehicleManager;
+import traffic.VehicleManagerBuilder;
 
 import com.google.guiceberry.GuiceBerryModule;
 import com.google.guiceberry.junit4.GuiceBerryRule;
@@ -38,10 +39,67 @@ public class TestVehicleMovement {
 		      new GuiceBerryRule(TrafficTestModule.class);
 
 	@Inject private JunctionFactory junctionFactory;
-	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
+	@Inject private Provider<VehicleManagerBuilder> VehicleManagerBuilderProvider;
 	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
 	@Inject private Provider<SegmentBuilder> segmentBuilderProvider;
 	@Inject private Provider<RoadNetworkBuilder> roadNetworkBuilderProvider;
+
+
+	@Test
+	@Ignore
+	public void onlyOneVehicleCanOccupyACellAtATime() throws Exception {
+		final Junction junction0 = junctionFactory.createJunction("junction0");
+		final Junction junction1 = junctionFactory.createJunction("junction1");
+		final Junction junction2 = junctionFactory.createJunction("junction2");
+		final Junction junction3 = junctionFactory.createJunction("junction3");
+
+		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
+			.withSegment(segment()
+				.withName("segment0")
+				.withInJunction(junction0)
+				.withOutJunction(junction1)
+				.withLength(1))
+			.withSegment(segment()
+					.withName("segment1")
+					.withInJunction(junction3)
+					.withOutJunction(junction1)
+					.withLength(1))
+			.withSegment(segment()
+				.withName("segment2")
+				.withInJunction(junction1)
+				.withOutJunction(junction2)
+				.withLength(2))
+			.make();
+
+
+		final Vehicle vehicle0 = vehicleBuilderProvider.get()
+				.withName("vehicle0")
+				.withRoadNetwork(roadNetwork)
+				.withTrip(TripFactory.tripFrom(junction0).to(junction2))
+				.make();
+			final Vehicle vehicle1 = vehicleBuilderProvider.get()
+				.withName("vehicle1")
+				.withRoadNetwork(roadNetwork)
+				.withTrip(TripFactory.tripFrom(junction3).to(junction2))
+				.make();
+
+
+			final VehicleManager manager = VehicleManagerBuilderProvider.get().make();
+			manager.addVehicle(vehicle0);
+
+			manager.step(1);
+
+			assertThat(vehicle0, isLocatedAt(junction1));
+
+			assertThat(vehicle1, isLocatedAt(junction1));
+
+
+	}
+
+	@Test
+	public void orderOfVehicleMovementDeterminedBy() throws Exception {
+
+	}
 
 	@Test
 	public void supportsMultipleVehiclesTakingSameTripOnNetwork1TimestepApart() throws Exception {
@@ -69,21 +127,17 @@ public class TestVehicleMovement {
 			.make();
 
 
-		//Shouldn't simulation .withRoadNetwork and .withVehicle be builders?
-		final Simulation simulation = simulationBuilderProvider.get()
-			.withRoadNetwork(roadNetwork)
-			.make();
-
-		simulation.addVehicle(vehicle0);
-		simulation.step(1);
-		simulation.addVehicle(vehicle1);
-		simulation.step(6);
+		final VehicleManager manager = VehicleManagerBuilderProvider.get().make();
+		manager.addVehicle(vehicle0);
+		manager.step(1);
+		manager.addVehicle(vehicle1);
+		manager.step(6);
 
 		assertThat(vehicle0, isLocatedAt(junction1));
 		assertThat(vehicle0, hasJourneyTime(7));
 		assertThat(vehicle1, hasJourneyTime(6));
 
-		simulation.step(1);
+		manager.step(1);
 		assertThat(vehicle1, isLocatedAt(junction1));
 		assertThat(vehicle1, hasJourneyTime(7));
 
@@ -119,12 +173,9 @@ public class TestVehicleMovement {
 			.withTrip(TripFactory.tripFrom(junction0).to(junction2))
 			.make();
 
-		final Simulation simulation = simulationBuilderProvider.get()
-			.withRoadNetwork(roadNetwork)
-			.make();
-
-		simulation.addVehicle(vehicle0);
-		simulation.step(10);
+		final VehicleManager manager = VehicleManagerBuilderProvider.get().make();
+		manager.addVehicle(vehicle0);
+		manager.step(10);
 
 		assertThat(vehicle0, isLocatedAt(junction2));
 		assertThat(vehicle0, hasJourneyTime(10));
@@ -157,12 +208,9 @@ public class TestVehicleMovement {
 			.withTrip(TripFactory.tripFrom(junction0).to(junction2))
 			.make();
 
-		final Simulation simulation = simulationBuilderProvider.get()
-			.withRoadNetwork(roadNetwork)
-			.make();
-
-		simulation.addVehicle(vehicle0);
-		simulation.step(10);
+		final VehicleManager manager = VehicleManagerBuilderProvider.get().make();
+		manager.addVehicle(vehicle0);
+		manager.step(10);
 
 		assertThat(vehicle0, isLocatedAt(junction2));
 		assertThat(vehicle0, hasJourneyTime(10));
@@ -187,13 +235,10 @@ public class TestVehicleMovement {
 			.withTrip(TripFactory.tripFrom(junction0).to(junction1))
 			.make();
 
-		//Shouldn't simulation .withRoadNetwork and .withVehicle be builders?
-		final Simulation simulation = simulationBuilderProvider.get()
-			.withRoadNetwork(roadNetwork)
-			.make();
 
-		simulation.addVehicle(vehicle0);
-		simulation.step(7);
+		final VehicleManager manager = VehicleManagerBuilderProvider.get().make();
+		manager.addVehicle(vehicle0);
+		manager.step(7);
 
 		assertThat(vehicle0, isLocatedAt(junction1));
 		assertThat(vehicle0, hasJourneyTime(7));

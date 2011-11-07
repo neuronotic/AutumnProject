@@ -19,6 +19,7 @@ public class TrafficModule extends AbstractModule {
 		bind(Traffic.class).to(TrafficImpl.class);
 
 		bind(VehicleManager.class).to(VehicleManagerImpl.class);
+		bind(VehicleManagerBuilder.class).to(VehicleManagerBuilderImpl.class);
 		bind(CellChainBuilder.class).to(CellChainBuilderImpl.class);
 		bind(SimulationBuilder.class).to(SimulationBuilderImpl.class);
 		bind(SegmentBuilder.class).to(SegmentBuilderImpl.class);
@@ -59,6 +60,10 @@ public class TrafficModule extends AbstractModule {
 		install(new FactoryModuleBuilder()
 			.implement(RouteFinder.class, ShortestPathRouteFinder.class)
 			.build(RouteFinderFactory.class));
+
+		install(new FactoryModuleBuilder()
+		.implement(VehicleManager.class, VehicleManagerImpl.class)
+		.build(VehicleManagerFactory.class));
 
 		install(new FactoryModuleBuilder()
 			.implement(Simulation.class, SimulationImpl.class)

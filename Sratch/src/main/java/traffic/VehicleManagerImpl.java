@@ -3,9 +3,14 @@ package traffic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.inject.Inject;
+
 //@Singleton
 class VehicleManagerImpl implements VehicleManager {
 	private final List<Vehicle> vehicles = new ArrayList<Vehicle>();
+
+	@Inject
+	public VehicleManagerImpl() {}
 
 	@Override
 	public void addVehicle(final Vehicle vehicle) {

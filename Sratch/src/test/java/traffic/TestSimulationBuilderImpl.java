@@ -21,12 +21,13 @@ public class TestSimulationBuilderImpl {
 
 		context.checking(new Expectations() {
 			{
-				oneOf(simulationFactory).createSimulation(roadNetwork); will(returnValue(simulation));
+				oneOf(simulationFactory).createSimulation(roadNetwork, vehicleManager); will(returnValue(simulation));
 			}
 		});
 
-		final Simulation simulation = new SimulationBuilderImpl(simulationFactory, null)
+		final Simulation simulation = new SimulationBuilderImpl(simulationFactory)
 			.withRoadNetwork(roadNetwork)
+			.withVehicleManager(vehicleManager)
 			.make();
 
 		assertThat(simulation, notNullValue());

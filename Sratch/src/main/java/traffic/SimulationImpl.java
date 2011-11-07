@@ -11,7 +11,7 @@ public class SimulationImpl implements Simulation {
 	@Inject
 	SimulationImpl(
 			@Assisted final RoadNetwork roadNetwork,
-			final VehicleManager vehicleManager) {
+			@Assisted final VehicleManager vehicleManager) {
 				this.roadNetwork = roadNetwork;
 				this.vehicleManager = vehicleManager;
 	}

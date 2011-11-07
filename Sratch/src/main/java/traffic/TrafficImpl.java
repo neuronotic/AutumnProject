@@ -3,10 +3,10 @@ package traffic;
 import com.google.inject.Inject;
 
 public class TrafficImpl implements Traffic {
-	private final VehicleManager vehicleManager;
+	private final VehicleManager vehicleManager = null;
 
-	@Inject public TrafficImpl(final VehicleManager vehicleManager) {
-		this.vehicleManager = vehicleManager;
+	@Inject public TrafficImpl() {
+		//this.vehicleManager = vehicleManager;
 	}
 
 	@Override
