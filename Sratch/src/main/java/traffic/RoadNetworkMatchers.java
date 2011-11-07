@@ -117,6 +117,22 @@ public class RoadNetworkMatchers {
 		};
 	}
 
+//	public static Object cellOccupantIs(final Vehicle expectedVehicle) {
+//		return new TypeSafeMatcher<Cell>(Cell.class) {
+//
+//			@Override
+//			public void describeTo(final Description description) {
+//				description.appendText("Cell occupant is ").appendValue(expectedVehicle);
+//			}
+//
+//			@Override
+//			protected boolean matchesSafely(final Cell item) {
+//				return item.occupant().equals(expectedVehicle);
+//			}
+//
+//		};
+//	}
+
 
 	public static Matcher<Cell> cellNamed(final String expectedName) {
 		return new TypeSafeMatcher<Cell>(Cell.class) {

@@ -2,7 +2,7 @@ package traffic;
 
 
 public interface Cell {
-	void enter(Vehicle vehicle);
-
+	boolean enter(Vehicle vehicle);
 	String name();
+
 }

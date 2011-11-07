@@ -7,17 +7,24 @@ class CellImpl implements Cell {
 
 	private final Segment segment;
 	private final int index;
+	private final String name;
+	private boolean occupied = false;
 
 	@Inject CellImpl(
 			@Assisted final Segment segment,
 			@Assisted final int index) {
 		this.segment = segment;
+		name = String.format("%s[%s]", segment.name(), index);
 		this.index = index;
 	}
 
 	@Override
-	public void enter(final Vehicle vehicle) {
-
+	public boolean enter(final Vehicle vehicle) {
+		if (occupied) {
+			return false;
+		}
+		occupied = true;
+		return true;
 	}
 
 	@Override
@@ -28,6 +35,7 @@ class CellImpl implements Cell {
 
 	@Override
 	public String name() {
-		return String.format("%s[%s]", segment.name(), index);
+		return name;
 	}
+
 }

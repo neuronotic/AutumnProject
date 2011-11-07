@@ -13,8 +13,8 @@ class JunctionImpl implements Junction {
 	}
 
 	@Override
-	public void enter(final Vehicle vehicle) {
-
+	public boolean enter(final Vehicle vehicle) {
+		return false;
 	}
 
 	@Override
