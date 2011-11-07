@@ -6,6 +6,7 @@ import com.google.inject.assistedinject.Assisted;
 
 class JunctionImpl implements Junction {
 	private final String name;
+	private boolean occupied = false;
 
 	@Inject
 	JunctionImpl(@Assisted final String name) {
@@ -14,7 +15,11 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public boolean enter(final Vehicle vehicle) {
-		return false;
+		if (occupied) {
+			return false;
+		}
+		occupied = true;
+		return true;
 	}
 
 	@Override
@@ -25,5 +30,15 @@ class JunctionImpl implements Junction {
 	@Override
 	public String toString() {
 		return String.format("Junction %s", name);
+	}
+
+	@Override
+	public boolean isOccupied() {
+		return occupied;
+	}
+
+	@Override
+	public void leave(final Vehicle vehicle) {
+		occupied = false;
 	}
 }

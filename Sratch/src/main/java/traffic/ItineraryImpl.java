@@ -3,7 +3,6 @@ package traffic;
 import static java.util.Arrays.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ItineraryImpl implements Itinerary {
@@ -23,7 +22,7 @@ public class ItineraryImpl implements Itinerary {
 	}
 
 	@Override
-	public Iterator<Cell> iterator() {
+	public List<Cell> cells() {
 		final List<Cell> result = new ArrayList<Cell>();
 		for (final Segment segment : segments) {
 			if (!result.isEmpty()) {
@@ -31,11 +30,12 @@ public class ItineraryImpl implements Itinerary {
 			}
 			result.addAll(segment.cells());
 		}
-		return result.iterator();
+		return result;
 	}
 
 	@Override
 	public String toString() {
 		return String.format("Itinerary %s", segments);
 	}
+
 }

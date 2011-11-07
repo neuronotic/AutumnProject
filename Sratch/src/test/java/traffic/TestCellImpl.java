@@ -30,6 +30,21 @@ public class TestCellImpl {
 	}
 
 	@Test
+	public void leaveEmptiesCell() throws Exception {
+		cell.enter(vehicle0);
+		assertThat(cell.isOccupied(), is(true));
+		cell.leave(vehicle0);
+		assertThat(cell.isOccupied(), is(false));
+	}
+
+	@Test
+	public void isOccupiedReturnsTrueOnlyIfVehicleIsInCell() throws Exception {
+		assertThat(cell.isOccupied(), is(false));
+		cell.enter(vehicle0);
+		assertThat(cell.isOccupied(), is(true));
+	}
+
+	@Test
 	public void cellCanOnlyHaveOneOccupantAtATime() throws Exception {
 		assertThat(cell.enter(vehicle0), is(true));
 		assertThat(cell.enter(vehicle1), is(false));

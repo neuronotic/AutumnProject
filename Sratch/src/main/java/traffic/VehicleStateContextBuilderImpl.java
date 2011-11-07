@@ -27,7 +27,7 @@ public class VehicleStateContextBuilderImpl implements
 				routeFinderFactory
 					.createShortestPathRouteFinder(roadNetwork)
 					.calculateItinerary(trip)
-					.iterator());
+					.cells());
 	}
 
 	@Override

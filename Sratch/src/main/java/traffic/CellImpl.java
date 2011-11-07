@@ -5,17 +5,13 @@ import com.google.inject.assistedinject.Assisted;
 
 class CellImpl implements Cell {
 
-	private final Segment segment;
-	private final int index;
 	private final String name;
 	private boolean occupied = false;
 
 	@Inject CellImpl(
 			@Assisted final Segment segment,
 			@Assisted final int index) {
-		this.segment = segment;
 		name = String.format("%s[%s]", segment.name(), index);
-		this.index = index;
 	}
 
 	@Override
@@ -36,6 +32,16 @@ class CellImpl implements Cell {
 	@Override
 	public String name() {
 		return name;
+	}
+
+	@Override
+	public boolean isOccupied() {
+		return occupied;
+	}
+
+	@Override
+	public void leave(final Vehicle vehicle) {
+		occupied = false;
 	}
 
 }

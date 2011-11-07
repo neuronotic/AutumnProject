@@ -1,9 +1,10 @@
 package traffic;
 
-import java.util.Iterator;
+import java.util.List;
+
 
 public interface VehicleStateContextFactory {
 
-	VehicleStateContext createStateContext(Iterator<Cell> journeyRemaining);
+	VehicleStateContext createStateContext(List<Cell> journeyRemaining);
 
 }

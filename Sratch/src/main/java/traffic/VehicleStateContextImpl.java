@@ -1,6 +1,7 @@
 package traffic;
 
 import java.util.Iterator;
+import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -10,13 +11,13 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	private final Iterator<Cell> remainingItinerary;
 	private final JourneyHistory history;
-	private Cell location;
+	private Cell location = new NullCell();
 
 	@Inject
 	public VehicleStateContextImpl(
-			@Assisted final Iterator<Cell> remainingItinerary,
+			@Assisted final List<Cell> cellsInItinerary,
 			final JourneyHistory history) {
-				this.remainingItinerary = remainingItinerary;
+				remainingItinerary = cellsInItinerary.iterator();
 				this.history = history;
 	}
 
@@ -38,9 +39,11 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	@Override
 	public void move(final Vehicle vehicle) {
 		final Cell cell = nextCellInItinerary();
-		cell.enter(vehicle);
-		setLocation(cell);
-		stepHistory();
+		if (cell.enter(vehicle)) {
+			location.leave(vehicle);
+			setLocation(cell);
+			stepHistory();
+		}
 	}
 
 	private void setLocation(final Cell cell) {

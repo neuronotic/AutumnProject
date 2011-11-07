@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static traffic.ItineraryMatchers.*;
 import static traffic.MyJMockActions.*;
-import static traffic.RoadNetworkMatchers.*;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -41,7 +40,7 @@ public class TestItineraryImpl {
 				oneOf(segment1).cells(); will(returnList(junctionCell1, segmentCell2, junctionCell2));
 			}
 		});
-		assertThat(cellsIn(new ItineraryImpl(segment0, segment1)), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1, segmentCell2, junctionCell2));
+		assertThat(new ItineraryImpl(segment0, segment1).cells(), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1, segmentCell2, junctionCell2));
 	}
 
 	@Test
@@ -51,6 +50,6 @@ public class TestItineraryImpl {
 				oneOf(segment0).cells(); will(returnList(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
 			}
 		});
-		assertThat(cellsIn(new ItineraryImpl(segment0)), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
+		assertThat(new ItineraryImpl(segment0).cells(), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
 	}
 }
