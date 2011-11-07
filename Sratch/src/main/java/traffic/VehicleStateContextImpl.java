@@ -66,8 +66,6 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public void journeyEnded(final Vehicle vehicle) {
-		// TODO Auto-generated method stub
-		//leave cell...
 		location.leave(vehicle);
 		location = nullCellFactory.createNullCell();
 	}

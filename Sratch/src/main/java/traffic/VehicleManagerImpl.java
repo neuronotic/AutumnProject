@@ -34,4 +34,11 @@ class VehicleManagerImpl implements VehicleManager {
 	public List<Vehicle> vehicles() {
 		return vehicles;
 	}
+
+	@Override
+	public List<JourneyHistory> getJourneyHistories() {
+		// TODO Auto-generated method stub
+		return null;
+
+	}
 }
