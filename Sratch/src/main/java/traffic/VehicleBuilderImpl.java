@@ -5,8 +5,7 @@ import com.google.inject.Inject;
 public class VehicleBuilderImpl implements VehicleBuilder {
 
 	private final VehicleFactory vehicleFactory;
-	private final RouteFinderFactory routeFinderFactory;
-	private final VehicleStateContextFactory vehicleStateContextFactory;
+	private final VehicleStateContextBuilder vehicleStateContextBuilder;
 	private RoadNetwork roadNetwork;
 	private Trip trip;
 	private String vehicleName = "default name";
@@ -14,12 +13,10 @@ public class VehicleBuilderImpl implements VehicleBuilder {
 
 	@Inject public VehicleBuilderImpl(
 			final VehicleFactory vehicleFactory,
-			final RouteFinderFactory routeFinderFactory,
-			final VehicleStateContextFactory vehicleStateContextFactory,
+			final VehicleStateContextBuilder vehicleStateContextBuilder,
 			final VehicleStateFactory vehicleStateFactory) {
 				this.vehicleFactory = vehicleFactory;
-				this.routeFinderFactory = routeFinderFactory;
-				this.vehicleStateContextFactory = vehicleStateContextFactory;
+				this.vehicleStateContextBuilder = vehicleStateContextBuilder;
 				this.vehicleStateFactory = vehicleStateFactory;
 	}
 
@@ -27,7 +24,7 @@ public class VehicleBuilderImpl implements VehicleBuilder {
 	public Vehicle make() {
 		return vehicleFactory.createVehicle(
 				vehicleName,
-				vehicleStateContextFactory.createStateContext(routeFinderFactory.createShortestPathRouteFinder(roadNetwork).calculateItinerary(trip).iterator()),
+				vehicleStateContextBuilder.withRoadNetwork(roadNetwork).withTrip(trip).make(),
 				vehicleStateFactory.preJourneyState());
 	}
 
