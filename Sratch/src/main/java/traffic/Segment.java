@@ -14,4 +14,6 @@ public interface Segment {
 	String name();
 
 	int length();
+
+	Cell getCell(int index);
 }

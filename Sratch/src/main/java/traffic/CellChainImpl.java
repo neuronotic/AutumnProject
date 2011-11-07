@@ -30,4 +30,9 @@ class CellChainImpl implements CellChain {
 	public String toString() {
 		return roadNetworkReflectionToString(this);
 	}
+
+	@Override
+	public Cell getCellAtIndex(final int index) {
+		return cells.get(index);
+	}
 }

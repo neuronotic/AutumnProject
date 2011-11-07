@@ -22,6 +22,21 @@ public class TestSegmentImpl {
 	private final CellChain cellChain = context.mock(CellChain.class);
 
 	@Test
+	public void getCellAtIndexReturnsDelgatesCallToCellChain() throws Exception {
+		context.checking(new Expectations() {
+			{
+				oneOf(cellChainBuilder).make(with(RoadNetworkMatchers.segmentNamed("mySegment"))); will(returnValue(cellChain));
+				oneOf(cellChain).getCellAtIndex(0); will(returnValue(segmentCell0));
+				oneOf(cellChain).getCellAtIndex(1); will(returnValue(segmentCell1));
+			}
+		});
+		final Segment segment = new SegmentImpl("mySegment", inJunction, cellChainBuilder, outJunction);
+		assertThat(segment.getCell(0), is(segmentCell0));
+		assertThat(segment.getCell(1), is(segmentCell1));
+
+	}
+
+	@Test
 	public void segmentContainsCellsCorrespondingToInJunctionFollowedByCellsInCellChainFollowedByOutJunction() throws Exception {
 		context.checking(new Expectations() {
 			{

@@ -20,6 +20,23 @@ public class VehicleMatchers {
 		};
 	}
 
+	public static Matcher<Vehicle> isLocatedAt(final Segment expectedSegment, final int expectedIndex) {
+		return new TypeSafeMatcher<Vehicle>(Vehicle.class) {
+			@Override
+			public void describeTo(final Description description) {
+				description.appendValue(Vehicle.class.getSimpleName())
+					.appendText(" is located at ")
+					.appendValue(expectedSegment.getCell(expectedIndex));
+			}
+
+			@Override
+			protected boolean matchesSafely(final Vehicle item) {
+				return item.location().equals(expectedSegment.getCell(expectedIndex));
+			}
+		};
+	}
+
+
 	public static Matcher<Vehicle> hasJourneyTime(final int expectedJourneyTime) {
 		return new TypeSafeMatcher<Vehicle>(Vehicle.class) {
 			@Override
@@ -47,5 +64,4 @@ public class VehicleMatchers {
 			}
 		};
 	}
-
 }

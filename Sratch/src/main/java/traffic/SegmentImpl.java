@@ -66,4 +66,9 @@ class SegmentImpl implements Segment {
 	public String toString() {
 		return roadNetworkReflectionToString(this);
 	}
+
+	@Override
+	public Cell getCell(final int index) {
+		return cellChain.getCellAtIndex(index);
+	}
 }

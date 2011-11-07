@@ -3,7 +3,6 @@ package traffic.endtoend;
 import static org.hamcrest.MatcherAssert.*;
 import static traffic.VehicleMatchers.*;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -11,6 +10,7 @@ import traffic.Junction;
 import traffic.JunctionFactory;
 import traffic.RoadNetwork;
 import traffic.RoadNetworkBuilder;
+import traffic.Segment;
 import traffic.SegmentBuilder;
 import traffic.TrafficModule;
 import traffic.TripFactory;
@@ -46,29 +46,35 @@ public class TestVehicleMovement {
 
 
 	@Test
-	@Ignore
 	public void onlyOneVehicleCanOccupyACellAtATime() throws Exception {
 		final Junction junction0 = junctionFactory.createJunction("junction0");
 		final Junction junction1 = junctionFactory.createJunction("junction1");
 		final Junction junction2 = junctionFactory.createJunction("junction2");
 		final Junction junction3 = junctionFactory.createJunction("junction3");
 
+		final Segment segment0 = segment()
+			.withName("segment0")
+			.withInJunction(junction0)
+			.withOutJunction(junction1)
+			.withLength(1)
+			.make();
+		final Segment segment1 = segment()
+			.withName("segment1")
+			.withInJunction(junction3)
+			.withOutJunction(junction1)
+			.withLength(1)
+			.make();
+		final Segment segment2 = segment()
+			.withName("segment2")
+			.withInJunction(junction1)
+			.withOutJunction(junction2)
+			.withLength(2)
+			.make();
+
 		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
-			.withSegment(segment()
-				.withName("segment0")
-				.withInJunction(junction0)
-				.withOutJunction(junction1)
-				.withLength(1))
-			.withSegment(segment()
-					.withName("segment1")
-					.withInJunction(junction3)
-					.withOutJunction(junction1)
-					.withLength(1))
-			.withSegment(segment()
-				.withName("segment2")
-				.withInJunction(junction1)
-				.withOutJunction(junction2)
-				.withLength(2))
+			.withSegment(segment0)
+			.withSegment(segment1)
+			.withSegment(segment2)
 			.make();
 
 
@@ -86,20 +92,29 @@ public class TestVehicleMovement {
 
 			final VehicleManager manager = VehicleManagerBuilderProvider.get().make();
 			manager.addVehicle(vehicle0);
+			manager.addVehicle(vehicle1);
 
 			manager.step(1);
+			assertThat(vehicle0, isLocatedAt(junction0));
+			assertThat(vehicle1, isLocatedAt(junction3));
 
+			manager.step(2);
 			assertThat(vehicle0, isLocatedAt(junction1));
+			assertThat(vehicle1, isLocatedAt(segment1, 0));
 
+			manager.step(1);
+			assertThat(vehicle0, isLocatedAt(segment2,0));
 			assertThat(vehicle1, isLocatedAt(junction1));
 
+			manager.step(1);
+			assertThat(vehicle0, isLocatedAt(junction2));
+			assertThat(vehicle1, isLocatedAt(segment2, 0));
 
+			manager.step(1);
+			assertThat(vehicle1, isLocatedAt(junction2));
 	}
 
-	@Test
-	public void orderOfVehicleMovementDeterminedBy() throws Exception {
 
-	}
 
 	@Test
 	public void supportsMultipleVehiclesTakingSameTripOnNetwork1TimestepApart() throws Exception {
@@ -140,7 +155,6 @@ public class TestVehicleMovement {
 		manager.step(1);
 		assertThat(vehicle1, isLocatedAt(junction1));
 		assertThat(vehicle1, hasJourneyTime(7));
-
 	}
 
 	@Test
