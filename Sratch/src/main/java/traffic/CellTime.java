@@ -5,14 +5,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class CellTime {
 	private final Cell cell;
-	private final int time;
+	private final SimulationTime time;
 
-	private CellTime(final Cell cell, final int time) {
+	private CellTime(final Cell cell, final SimulationTime time) {
 		this.cell = cell;
 		this.time = time;
 	}
 
-	static public CellTime cellTime(final Cell cell, final int time) {
+	static public CellTime cellTime(final Cell cell, final SimulationTime time) {
 		return new CellTime(cell, time);
 	}
 
@@ -35,7 +35,7 @@ public class CellTime {
 			.toHashCode();
 	}
 
-	public int getTime() {
+	public SimulationTime getTime() {
 		return time;
 	}
 
