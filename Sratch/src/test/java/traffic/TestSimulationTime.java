@@ -2,6 +2,7 @@ package traffic;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static traffic.SimulationMatchers.*;
 import static traffic.SimulationTime.*;
 
 import org.junit.Rule;
@@ -10,6 +11,11 @@ import org.junit.Test;
 public class TestSimulationTime {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
+
+	@Test
+	public void differenceBetweenReturnsTimeObjectWithValueRepresentingDifferenceBetweenTimes() throws Exception {
+		assertThat(time(5).differenceBetween(time(2)), isTime(time(3)));
+	}
 
 	@Test
 	public void hashCodeOfTwoTimesConstructedWithSameValuesAreEqual() throws Exception {

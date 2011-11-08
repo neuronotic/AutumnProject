@@ -33,6 +33,10 @@ public class SimulationTime {
 
 	@Override
 	public String toString() {
-		return String.format("%i", time);
+		return String.format("%d", time);
+	}
+
+	public SimulationTime differenceBetween(final SimulationTime other) {
+		return time(time - other.time);
 	}
 }

@@ -8,9 +8,12 @@ import com.google.inject.Inject;
 //@Singleton
 class VehicleManagerImpl implements VehicleManager {
 	private final List<Vehicle> vehicles = new ArrayList<Vehicle>();
+	private final TimeKeeper timeKeeper;
 
 	@Inject
-	public VehicleManagerImpl() {}
+	public VehicleManagerImpl(final TimeKeeper timeKeeper) {
+		this.timeKeeper = timeKeeper;
+	}
 
 	@Override
 	public void addVehicle(final Vehicle vehicle) {
@@ -19,6 +22,7 @@ class VehicleManagerImpl implements VehicleManager {
 
 	@Override
 	public void step() {
+		timeKeeper.step();
 		for (final Vehicle vehicle : vehicles) {
 			vehicle.step();
 		}

@@ -1,11 +1,23 @@
 package traffic;
 
+import static traffic.CellTime.*;
 import static traffic.RoadNetworkToStringStyle.*;
-import static traffic.SimulationTime.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.inject.Inject;
 
 public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
-	private int journeyTime = 0;
+	private final SimulationTime startTime;
+	private SimulationTime endTime;
+	private final List<CellTime> cellEntryTimes = new ArrayList<CellTime>();
+	private final TimeKeeper timeKeeper;
 
+	@Inject public JourneyHistoryBuilderImpl(final TimeKeeper timeKeeper) {
+		this.timeKeeper = timeKeeper;
+		startTime = timeKeeper.currentTime();
+	}
 
 	@Override
 	public JourneyHistory make() {
@@ -16,13 +28,11 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 
 	@Override
 	public void stepped() {
-		journeyTime++;
-		//logger.info(String.format("Step %s", journeyTime));
 	}
 
 	@Override
 	public SimulationTime journeyTime() {
-		return time(journeyTime);
+		return timeKeeper.currentTime().differenceBetween(startTime);
 	}
 
 	@Override
@@ -54,8 +64,34 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 	}
 
 	@Override
+	public SimulationTime startTime() {
+		return startTime;
+	}
+
+	@Override
 	public String toString() {
 		return roadNetworkReflectionToString(this);
 	}
+
+	@Override
+	public void cellEntered(final Cell cell) {
+		cellEntryTimes.add(cellTime(cell, timeKeeper.currentTime()));
+	}
+
+	@Override
+	public List<CellTime> cellEntryTimes() {
+		return cellEntryTimes;
+	}
+
+	@Override
+	public void noteEndTime() {
+		endTime = timeKeeper.currentTime();
+	}
+
+	@Override
+	public SimulationTime endTime() {
+		return endTime;
+	}
+
 
 }

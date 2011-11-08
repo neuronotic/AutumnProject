@@ -45,6 +45,11 @@ public class VehicleMatchers {
 			}
 
 			@Override
+			protected void describeMismatchSafely(final Vehicle item, final Description description) {
+				description.appendText("Vehicle with journey time ").appendValue(item.journeyTime());
+			}
+
+			@Override
 			protected boolean matchesSafely(final Vehicle item) {
 				return item.journeyTime().equals(expectedJourneyTime);
 			}

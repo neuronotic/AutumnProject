@@ -1,5 +1,7 @@
 package traffic;
 
+import java.util.List;
+
 public interface JourneyHistoryBuilder {
 
 	JourneyHistoryBuilder withVehicle(Vehicle vehicle0);
@@ -10,5 +12,10 @@ public interface JourneyHistoryBuilder {
 	JourneyHistory make();
 	SimulationTime journeyTime();
 	void stepped();
+	SimulationTime startTime();
+	void cellEntered(Cell cell0);
+	List<CellTime> cellEntryTimes();
+	void noteEndTime();
+	SimulationTime endTime();
 
 }
