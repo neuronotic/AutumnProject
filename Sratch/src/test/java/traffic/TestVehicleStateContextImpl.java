@@ -15,7 +15,7 @@ public class TestVehicleStateContextImpl {
 
 	private final Cell cell0 = context.mock(Cell.class, "cell0");
 	private final Cell cell1 = context.mock(Cell.class, "cell1");
-	private final JourneyStepper journeyStepper = context.mock(JourneyStepper.class);
+	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
 	private final Vehicle vehicle = context.mock(Vehicle.class);
 	private final NullCellFactory nullCellFactory = context.mock(NullCellFactory.class);
 	private final Cell nullCell0 = context.mock(Cell.class, "nullCell0");
@@ -29,7 +29,7 @@ public class TestVehicleStateContextImpl {
 				ignoring(nullCell0);
 			}
 		});
-		stateContext = new VehicleStateContextImpl(nullCellFactory, asList(cell0, cell1), journeyStepper);
+		stateContext = new VehicleStateContextImpl(nullCellFactory, asList(cell0, cell1), journeyHistory);
 	}
 
 	@Test
@@ -65,7 +65,7 @@ public class TestVehicleStateContextImpl {
 		context.checking(new Expectations() {
 			{
 				oneOf(cell0).enter(vehicle); will(returnValue(true));
-				oneOf(journeyStepper).stepped();
+				oneOf(journeyHistory).stepped();
 			}
 		});
 		stateContext.move(vehicle);
@@ -80,7 +80,7 @@ public class TestVehicleStateContextImpl {
 	@Test
 	public void journeyTimeIsReadFromHistory() throws Exception {
 		context.checking(new Expectations() {{
-			oneOf(journeyStepper).journeyTime(); will(returnValue(42));
+			oneOf(journeyHistory).journeyTime(); will(returnValue(42));
 		}});
 		assertThat(stateContext.journeyTime(), equalTo(42));
 	}

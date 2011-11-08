@@ -29,6 +29,7 @@ class VehicleImpl implements Vehicle {
 	@Override
 	public void step() {
 		journeyState = journeyState.step(this, stateContext);
+
 		logger.info(String.format("Vehicle %s located at %s", name(), location()));
 	}
 

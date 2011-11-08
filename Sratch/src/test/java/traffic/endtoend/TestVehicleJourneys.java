@@ -2,7 +2,6 @@ package traffic.endtoend;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import static traffic.SimulationTime.*;
 import static traffic.VehicleMatchers.*;
 
 import org.junit.Before;
@@ -66,26 +65,26 @@ public class TestVehicleJourneys {
 
 		final JourneyHistory history0 = JourneyHistoryBuilderProvider.get()
 				.withVehicle(vehicle0)
-				.withStartTime(time(0))
-				.withFinishTime(time(6))
-				.withCellEntryTime(junction0, time(0))
-				.withCellEntryTime(segment0.getCell(0),time(1))
-				.withCellEntryTime(junction1, time(2))
-				.withCellEntryTime(segment2.getCell(0),time(3))
-				.withCellEntryTime(segment2.getCell(1),time(4))
-				.withCellEntryTime(junction2, time(5))
+				.withStartTime(0)
+				.withFinishTime(6)
+				.withCellEntryTime(junction0, 0)
+				.withCellEntryTime(segment0.getCell(0),1)
+				.withCellEntryTime(junction1, 2)
+				.withCellEntryTime(segment1.getCell(0),3)
+				.withCellEntryTime(segment1.getCell(1),4)
+				.withCellEntryTime(junction2, 5)
 				.make();
 
 		final JourneyHistory history1 = JourneyHistoryBuilderProvider.get()
 				.withVehicle(vehicle1)
-				.withStartTime(time(0))
-				.withFinishTime(time(7))
-				.withCellEntryTime(junction3, time(0))
-				.withCellEntryTime(segment1.getCell(0),time(1))
-				.withCellEntryTime(junction1, time(3))
-				.withCellEntryTime(segment2.getCell(0),time(4))
-				.withCellEntryTime(segment2.getCell(0),time(5))
-				.withCellEntryTime(junction2, time(6))
+				.withStartTime(0)
+				.withFinishTime(7)
+				.withCellEntryTime(junction3, 0)
+				.withCellEntryTime(segment2.getCell(0),1)
+				.withCellEntryTime(junction1, 3)
+				.withCellEntryTime(segment1.getCell(0),4)
+				.withCellEntryTime(segment1.getCell(0),5)
+				.withCellEntryTime(junction2, 6)
 				.make();
 
 		assertThat(manager.getJourneyHistories(), containsInAnyOrder(history0, history1));
@@ -117,11 +116,35 @@ public class TestVehicleJourneys {
 
 	@Test
 	public void tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime() throws Exception {
-		manager = VehicleManagerBuilderProvider.get().make();
+		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
+			.withSegment(segment()
+				.withName("segment0")
+				.withInJunction(junction0)
+				.withOutJunction(junction1)
+				.withLength(4))
+			.withSegment(segment()
+				.withName("segment1")
+				.withInJunction(junction1)
+				.withOutJunction(junction2)
+				.withLength(3))
+			.withSegment(segment()
+				.withName("segment2")
+				.withInJunction(junction1)
+				.withOutJunction(junction3)
+				.withLength(3))
+			.make();
+
+		final Vehicle vehicle0 = vehicleBuilderProvider.get()
+			.withRoadNetwork(roadNetwork)
+			.withTrip(TripFactory.tripFrom(junction0).to(junction2))
+			.make();
+
+		final VehicleManager manager = VehicleManagerBuilderProvider.get().make();
 		manager.addVehicle(vehicle0);
-		manager.step(6);
+		manager.step(10);
+
 		assertThat(vehicle0, isLocatedAt(junction2));
-		assertThat(vehicle0, hasJourneyTime(6));
+		assertThat(vehicle0, hasJourneyTime(10));
 
 	}
 
@@ -177,4 +200,5 @@ public class TestVehicleJourneys {
 		manager.addVehicle(vehicle0);
 		manager.addVehicle(vehicle1);
 	}
+
 }

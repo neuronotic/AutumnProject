@@ -2,22 +2,21 @@ package traffic;
 
 import static traffic.RoadNetworkToStringStyle.*;
 
-import java.util.List;
-
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-
 public class JourneyHistoryImpl implements JourneyHistory {
+	//@Inject Logger logger = Logger.getAnonymousLogger();
+
 	private int journeyTime;
 
-	@Inject public JourneyHistoryImpl(
-			@Assisted final Vehicle vehicle,
-			@Assisted("startTime") final SimulationTime startTime,
-			@Assisted final List<CellTime> cellTimes,
-			@Assisted("finishTime") final SimulationTime finishTime) {
-
+	@Override
+	public void stepped() {
+		journeyTime++;
+		//logger.info(String.format("Step %s", journeyTime));
 	}
 
+	@Override
+	public int journeyTime() {
+		return journeyTime;
+	}
 
 	@Override
 	public String toString() {

@@ -10,8 +10,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 
 	private final ListIterator<Cell> remainingItinerary;
-	private JourneyHistoryBuilder journeyHistoryBuilder;
-	private final JourneyStepper journeyStepper;
+	private final JourneyHistory history;
 	private Cell location;
 	private final NullCellFactory nullCellFactory;
 
@@ -19,10 +18,10 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	public VehicleStateContextImpl(
 			final NullCellFactory nullCellFactory,
 			@Assisted final List<Cell> cellsInItinerary,
-			final JourneyStepper journeyStepper) {
+			final JourneyHistory history) {
 				this.nullCellFactory = nullCellFactory;
 				remainingItinerary = cellsInItinerary.listIterator();
-				this.journeyStepper = journeyStepper;
+				this.history = history;
 				location = nullCellFactory.createNullCell();
 	}
 
@@ -33,7 +32,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public int journeyTime() {
-		return journeyStepper.journeyTime();
+		return history.journeyTime();
 	}
 
 	@Override
@@ -46,12 +45,19 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 		final Cell cell = nextCellInItinerary();
 		if (cell.enter(vehicle)) {
 			location.leave(vehicle);
-			location = cell;
-			//journeyHistoryBuilder.withCellEntryTime(cell, SimulationTime.timeNow())
-			journeyStepper.stepped();
+			setLocation(cell);
+			stepHistory();
 		} else {
 			remainingItinerary.previous();
 		}
+	}
+
+	private void setLocation(final Cell cell) {
+		location = cell;
+	}
+
+	private void stepHistory() {
+		history.stepped();
 	}
 
 	private Cell nextCellInItinerary() {
