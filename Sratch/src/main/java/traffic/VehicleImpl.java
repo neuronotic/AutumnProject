@@ -34,7 +34,7 @@ class VehicleImpl implements Vehicle {
 	}
 
 	@Override
-	public int journeyTime() {
+	public SimulationTime journeyTime() {
 		return stateContext.journeyTime();
 	}
 

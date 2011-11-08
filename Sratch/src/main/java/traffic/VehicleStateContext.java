@@ -4,7 +4,7 @@ package traffic;
 public interface VehicleStateContext {
 
 	Cell location();
-	int journeyTime();
+	SimulationTime journeyTime();
 
 	boolean hasJourneyRemaining();
 	void move(Vehicle vehicle);

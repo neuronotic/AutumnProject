@@ -5,7 +5,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 public class JourneyHistoryMatchers {
-	public static Matcher<JourneyHistory> journeyTime(final int expectedJourneyTime) {
+	public static Matcher<JourneyHistory> journeyTime(final SimulationTime expectedJourneyTime) {
 		return new TypeSafeMatcher<JourneyHistory>(JourneyHistory.class){
 			@Override
 			public void describeTo(final Description description) {
@@ -14,7 +14,7 @@ public class JourneyHistoryMatchers {
 
 			@Override
 			protected boolean matchesSafely(final JourneyHistory item) {
-				return item.journeyTime() == expectedJourneyTime;
+				return item.journeyTime().equals(expectedJourneyTime);
 			}};
 	}
 }

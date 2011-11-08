@@ -37,7 +37,7 @@ public class VehicleMatchers {
 	}
 
 
-	public static Matcher<Vehicle> hasJourneyTime(final int expectedJourneyTime) {
+	public static Matcher<Vehicle> hasJourneyTime(final SimulationTime expectedJourneyTime) {
 		return new TypeSafeMatcher<Vehicle>(Vehicle.class) {
 			@Override
 			public void describeTo(final Description description) {
@@ -46,7 +46,7 @@ public class VehicleMatchers {
 
 			@Override
 			protected boolean matchesSafely(final Vehicle item) {
-				return item.journeyTime() == expectedJourneyTime;
+				return item.journeyTime().equals(expectedJourneyTime);
 			}
 		};
 	}

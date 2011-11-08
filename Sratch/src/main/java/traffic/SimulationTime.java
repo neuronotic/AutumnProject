@@ -30,4 +30,9 @@ public class SimulationTime {
 	public static SimulationTime time(final int time) {
 		return new SimulationTime(time);
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%i", time);
+	}
 }

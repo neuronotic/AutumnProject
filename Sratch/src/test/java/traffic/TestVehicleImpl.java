@@ -2,6 +2,7 @@ package traffic;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static traffic.SimulationTime.*;
 import static traffic.VehicleMatchers.*;
 
 import org.jmock.Expectations;
@@ -51,10 +52,10 @@ public class TestVehicleImpl {
 	public void journeyTimeDelegatesRequestToStateContext() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(stateContext).journeyTime(); will(returnValue(42));
+				oneOf(stateContext).journeyTime(); will(returnValue(time(42)));
 			}
 		});
-		assertThat(vehicle.journeyTime(), equalTo(42));
+		assertThat(vehicle.journeyTime(), equalTo(time(42)));
 	}
 
 	@Test

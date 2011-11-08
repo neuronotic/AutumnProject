@@ -3,6 +3,7 @@ package traffic;
 import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static traffic.SimulationTime.*;
 
 import org.jmock.Expectations;
 import org.junit.Before;
@@ -80,8 +81,8 @@ public class TestVehicleStateContextImpl {
 	@Test
 	public void journeyTimeIsReadFromHistory() throws Exception {
 		context.checking(new Expectations() {{
-			oneOf(journeyHistory).journeyTime(); will(returnValue(42));
+			oneOf(journeyHistory).journeyTime(); will(returnValue(time(42)));
 		}});
-		assertThat(stateContext.journeyTime(), equalTo(42));
+		assertThat(stateContext.journeyTime(), equalTo(time(42)));
 	}
 }

@@ -6,7 +6,7 @@ public interface Vehicle {
 
 	void step();
 
-	int journeyTime();
+	SimulationTime journeyTime();
 
 	String name();
 

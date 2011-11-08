@@ -1,6 +1,7 @@
 package traffic;
 
 import static traffic.RoadNetworkToStringStyle.*;
+import static traffic.SimulationTime.*;
 
 public class JourneyHistoryImpl implements JourneyHistory {
 	//@Inject Logger logger = Logger.getAnonymousLogger();
@@ -14,8 +15,8 @@ public class JourneyHistoryImpl implements JourneyHistory {
 	}
 
 	@Override
-	public int journeyTime() {
-		return journeyTime;
+	public SimulationTime journeyTime() {
+		return time(journeyTime);
 	}
 
 	@Override
