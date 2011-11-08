@@ -8,5 +8,7 @@ public interface JourneyHistoryBuilder {
 	JourneyHistoryBuilder withCellEntryTime(Cell cell, SimulationTime time);
 
 	JourneyHistory make();
+	SimulationTime journeyTime();
+	void stepped();
 
 }

@@ -16,7 +16,7 @@ public class TestVehicleStateContextImpl {
 
 	private final Cell cell0 = context.mock(Cell.class, "cell0");
 	private final Cell cell1 = context.mock(Cell.class, "cell1");
-	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
+	private final JourneyHistoryBuilder journeyHistory = context.mock(JourneyHistoryBuilder.class);
 	private final Vehicle vehicle = context.mock(Vehicle.class);
 	private final NullCellFactory nullCellFactory = context.mock(NullCellFactory.class);
 	private final Cell nullCell0 = context.mock(Cell.class, "nullCell0");

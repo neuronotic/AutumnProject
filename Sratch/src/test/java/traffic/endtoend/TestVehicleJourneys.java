@@ -64,6 +64,7 @@ public class TestVehicleJourneys {
 		//JourneyHistory as value object, and then in VehicleStateContext, just build the builder...
 		//primitive envy on Time....
 
+
 		final JourneyHistory history0 = JourneyHistoryBuilderProvider.get()
 				.withVehicle(vehicle0)
 				.withStartTime(time(0))

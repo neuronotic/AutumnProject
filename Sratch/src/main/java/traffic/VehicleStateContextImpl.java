@@ -10,7 +10,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 
 	private final ListIterator<Cell> remainingItinerary;
-	private final JourneyHistory history;
+	private final JourneyHistoryBuilder history;
 	private Cell location;
 	private final NullCellFactory nullCellFactory;
 
@@ -18,7 +18,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	public VehicleStateContextImpl(
 			final NullCellFactory nullCellFactory,
 			@Assisted final List<Cell> cellsInItinerary,
-			final JourneyHistory history) {
+			final JourneyHistoryBuilder history) {
 				this.nullCellFactory = nullCellFactory;
 				remainingItinerary = cellsInItinerary.listIterator();
 				this.history = history;

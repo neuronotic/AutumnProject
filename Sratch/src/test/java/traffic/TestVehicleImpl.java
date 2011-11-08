@@ -23,7 +23,6 @@ public class TestVehicleImpl {
 	@Test
 	public void stepCausesCurrentStateToChangeToReturnedStateInDelegationToPreviousCurrentState() throws Exception {
 		stepDelegatesCallOnToCurrentState();
-
 		context.checking(new Expectations() {{
 			oneOf(state1).step(vehicle, stateContext);
 		}});
