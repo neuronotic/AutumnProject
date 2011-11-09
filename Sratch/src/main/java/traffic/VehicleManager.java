@@ -12,4 +12,5 @@ public interface VehicleManager {
 
 	void step(int i);
 	List<JourneyHistory> getCompletedJourneyHistories();
+	void journeyCompleted(JourneyCompletedMessage journeyCompletedMessage);
 }

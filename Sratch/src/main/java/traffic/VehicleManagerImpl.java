@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 
 class VehicleManagerImpl implements VehicleManager {
 	private final List<Vehicle> vehicles = new ArrayList<Vehicle>();
+	private final List<JourneyHistory> completedJourneyHistories = new ArrayList<JourneyHistory>();
 	private final TimeKeeper timeKeeper;
 
 	@Inject
@@ -40,7 +41,12 @@ class VehicleManagerImpl implements VehicleManager {
 
 	@Override
 	public List<JourneyHistory> getCompletedJourneyHistories() {
-		// TODO Auto-generated method stub
-		return null;
+		return completedJourneyHistories;
+	}
+
+	@Override
+	public void journeyCompleted(final JourneyCompletedMessage journeyCompletedMessage) {
+		completedJourneyHistories.add(journeyCompletedMessage.journeyHistory());
+		vehicles.remove(journeyCompletedMessage.vehicle());
 	}
 }
