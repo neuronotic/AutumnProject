@@ -42,4 +42,9 @@ public class CellTime {
 	public Cell getCell() {
 		return cell;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("(%s, %s)", time, cell);
+	}
 }

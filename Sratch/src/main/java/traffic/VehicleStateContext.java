@@ -9,5 +9,6 @@ public interface VehicleStateContext {
 	boolean hasJourneyRemaining();
 	void move(Vehicle vehicle);
 	void journeyEnded(Vehicle vehicle);
+	void subscribeToJourneyEndNotification(Object subscriber);
 
 }

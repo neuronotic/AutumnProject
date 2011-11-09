@@ -2,11 +2,13 @@ package traffic;
 
 import java.util.List;
 import java.util.ListIterator;
+import java.util.logging.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 public class VehicleStateContextImpl implements VehicleStateContext {
+	@Inject Logger logger = Logger.getAnonymousLogger();
 
 
 	private final ListIterator<Cell> remainingItinerary;
@@ -47,22 +49,20 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public void move(final Vehicle vehicle) {
+		logger.info(String.format("MOVE %s", vehicle));
 		final Cell cell = nextCellInItinerary();
 		if (cell.enter(vehicle)) {
 			changeLocation(vehicle, cell);
-			stepHistory();
+			history.cellEntered(cell);
 		} else {
 			remainingItinerary.previous();
 		}
 	}
 
 	private void changeLocation(final Vehicle vehicle, final Cell cell) {
+		//logger.info(String.format("---changeLocation of %s to %s", vehicle, cell));
 		location.leave(vehicle);
 		location = cell;
-	}
-
-	private void stepHistory() {
-		history.stepped();
 	}
 
 	private Cell nextCellInItinerary() {
@@ -71,7 +71,18 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public void journeyEnded(final Vehicle vehicle) {
+		//logger.info(String.format("journey ended for %s", vehicle));
+
 		changeLocation(vehicle, nullCellFactory.createNullCell());
-		journeyEndedEventBus.post(journeyEndedMessageFactory.create(vehicle));
+
+		history.noteEndTime();
+		journeyEndedEventBus.post(journeyEndedMessageFactory.create(vehicle, history.make(vehicle)));
+	}
+
+	@Override
+	public void subscribeToJourneyEndNotification(final Object subscriber) {
+		//logger.info(String.format("subscription to JourneyEndNotification by", subscriber.getClass()));
+
+		journeyEndedEventBus.register(subscriber);
 	}
 }

@@ -28,9 +28,8 @@ class VehicleImpl implements Vehicle {
 
 	@Override
 	public void step() {
+		logger.info(String.format("step: Vehicle %s located at %s", name(), location()));
 		journeyState = journeyState.step(this, stateContext);
-
-		logger.info(String.format("Vehicle %s located at %s", name(), location()));
 	}
 
 	@Override
@@ -46,5 +45,10 @@ class VehicleImpl implements Vehicle {
 	@Override
 	public String toString() {
 		return String.format("Vehicle %s located at %s", name(), location());
+	}
+
+	@Override
+	public void subscribeToJourneyEndNotification(final Object subscriber) {
+		stateContext.subscribeToJourneyEndNotification(subscriber);
 	}
 }

@@ -41,8 +41,7 @@ public class TestJourneyHistoryBuilderImpl {
 	public void makeReturnsResultOfCallToJourneyHistoryFactory() throws Exception {
 		journeyHistoryBuilder
 			.withStartTime(startTime)
-			.withEndTime(endTime)
-			.withVehicle(vehicle);
+			.withEndTime(endTime);
 
 		context.checking(new Expectations() {
 			{
@@ -50,13 +49,7 @@ public class TestJourneyHistoryBuilderImpl {
 			}
 		});
 
-		assertThat(journeyHistoryBuilder.make(), is(journeyHistory));
-	}
-
-	@Test
-	public void withVehicleSetsVehicleReturnedByVehicle() throws Exception {
-		assertThat(journeyHistoryBuilder.withVehicle(vehicle), is(journeyHistoryBuilder));
-		assertThat(journeyHistoryBuilder.vehicle(), is(vehicle));
+		assertThat(journeyHistoryBuilder.make(vehicle), is(journeyHistory));
 	}
 
 	@Test

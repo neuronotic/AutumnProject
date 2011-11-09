@@ -4,12 +4,11 @@ import java.util.List;
 
 public interface JourneyHistoryBuilder {
 
-	JourneyHistoryBuilder withVehicle(Vehicle vehicle0);
 	JourneyHistoryBuilder withStartTime(SimulationTime time);
 	JourneyHistoryBuilder withEndTime(SimulationTime time);
 	JourneyHistoryBuilder withCellEntryTime(Cell cell, SimulationTime time);
 
-	JourneyHistory make();
+	JourneyHistory make(Vehicle vehicle);
 	SimulationTime journeyTime();
 	void stepped();
 	SimulationTime startTime();
@@ -17,6 +16,5 @@ public interface JourneyHistoryBuilder {
 	List<CellTime> cellEntryTimes();
 	void noteEndTime();
 	SimulationTime endTime();
-	Vehicle vehicle();
 
 }

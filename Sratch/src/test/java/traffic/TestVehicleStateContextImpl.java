@@ -17,7 +17,8 @@ public class TestVehicleStateContextImpl {
 	private final MyEventBus journeyEndedEventBus = context.mock(MyEventBus.class);
 	private final Cell cell0 = context.mock(Cell.class, "cell0");
 	private final Cell cell1 = context.mock(Cell.class, "cell1");
-	private final JourneyHistoryBuilder journeyHistory = context.mock(JourneyHistoryBuilder.class);
+	private final JourneyHistoryBuilder journeyHistoryBuilder = context.mock(JourneyHistoryBuilder.class);
+	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
 	private final Vehicle vehicle = context.mock(Vehicle.class);
 	private final NullCellFactory nullCellFactory = context.mock(NullCellFactory.class);
 	private final Cell nullCell0 = context.mock(Cell.class, "nullCell0");
@@ -33,9 +34,19 @@ public class TestVehicleStateContextImpl {
 				ignoring(nullCell0);
 			}
 		});
-		stateContext = new VehicleStateContextImpl(journeyEndedEventBus, journeyEndedMessageFactory, nullCellFactory, asList(cell0, cell1), journeyHistory);
+		stateContext = new VehicleStateContextImpl(journeyEndedEventBus, journeyEndedMessageFactory, nullCellFactory, asList(cell0, cell1), journeyHistoryBuilder);
 	}
 
+	@Test
+	public void subscribeToJourneyEndedNotificationsDelegatesRegistrationToJourneyEndedEventBus() throws Exception {
+		final Object subscriber = new Object();
+		context.checking(new Expectations() {
+			{
+				oneOf(journeyEndedEventBus).register(subscriber);
+			}
+		});
+		stateContext.subscribeToJourneyEndNotification(subscriber);
+	}
 
 	@Test
 	public void journeyEndedCausesCurrentCellToBeReplacedWithNullCellAndMessageSentOnJourneyEndedEventBus() throws Exception {
@@ -44,11 +55,12 @@ public class TestVehicleStateContextImpl {
 
 		context.checking(new Expectations() {
 			{
-				oneOf(journeyEndedMessageFactory).create(vehicle); will(returnValue(journeyEndedMessage));
+				oneOf(journeyHistoryBuilder).noteEndTime();
+				oneOf(journeyHistoryBuilder).make(vehicle); will(returnValue(journeyHistory));
+				oneOf(journeyEndedMessageFactory).create(vehicle, journeyHistory); will(returnValue(journeyEndedMessage));
 				oneOf(journeyEndedEventBus).post(journeyEndedMessage);
 				oneOf(cell0).leave(vehicle);
 				oneOf(nullCellFactory).createNullCell(); will(returnValue(nullCell1));
-
 			}
 		});
 		stateContext.journeyEnded(vehicle);
@@ -74,7 +86,7 @@ public class TestVehicleStateContextImpl {
 		context.checking(new Expectations() {
 			{
 				oneOf(cell0).enter(vehicle); will(returnValue(true));
-				oneOf(journeyHistory).stepped();
+				oneOf(journeyHistoryBuilder).cellEntered(cell0);
 			}
 		});
 		stateContext.move(vehicle);
@@ -89,7 +101,7 @@ public class TestVehicleStateContextImpl {
 	@Test
 	public void journeyTimeIsReadFromHistory() throws Exception {
 		context.checking(new Expectations() {{
-			oneOf(journeyHistory).journeyTime(); will(returnValue(time(42)));
+			oneOf(journeyHistoryBuilder).journeyTime(); will(returnValue(time(42)));
 		}});
 		assertThat(stateContext.journeyTime(), equalTo(time(42)));
 	}

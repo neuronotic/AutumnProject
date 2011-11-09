@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.*;
 import static traffic.SimulationTime.*;
 import static traffic.VehicleMatchers.*;
 
+import java.util.logging.Logger;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,6 +33,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 public class TestVehicleJourneys {
+	@Inject Logger logger = Logger.getAnonymousLogger();
 
 	public static class TrafficTestModule extends AbstractModule {
 		@Override
@@ -59,6 +62,10 @@ public class TestVehicleJourneys {
 
 	@Test
 	public void VehicleManagerMaintainsLogOfJourneyHistories() throws Exception {
+		manager.addVehicle(vehicle0);
+		manager.addVehicle(vehicle1);
+
+
 		manager.step(8);
 
 		//JourneyHistory as value object, and then in VehicleStateContext, just build the builder...
@@ -66,35 +73,38 @@ public class TestVehicleJourneys {
 
 
 		final JourneyHistory history0 = JourneyHistoryBuilderProvider.get()
-				.withVehicle(vehicle0)
-				.withStartTime(time(0))
-				.withEndTime(time(6))
-				.withCellEntryTime(junction0, time(0))
-				.withCellEntryTime(segment0.getCell(0),time(1))
-				.withCellEntryTime(junction1, time(2))
-				.withCellEntryTime(segment2.getCell(0),time(3))
-				.withCellEntryTime(segment2.getCell(1),time(4))
-				.withCellEntryTime(junction2, time(5))
-				.make();
-
-		final JourneyHistory history1 = JourneyHistoryBuilderProvider.get()
-				.withVehicle(vehicle1)
 				.withStartTime(time(0))
 				.withEndTime(time(7))
-				.withCellEntryTime(junction3, time(0))
-				.withCellEntryTime(segment1.getCell(0),time(1))
+				.withCellEntryTime(junction0, time(1))
+				.withCellEntryTime(segment0.getCell(0),time(2))
 				.withCellEntryTime(junction1, time(3))
 				.withCellEntryTime(segment2.getCell(0),time(4))
 				.withCellEntryTime(segment2.getCell(1),time(5))
 				.withCellEntryTime(junction2, time(6))
-				.make();
+				.make(vehicle0);
 
-		assertThat(manager.getCompletedJourneyHistories(), containsInAnyOrder(history0, history1));
+		final JourneyHistory history1 = JourneyHistoryBuilderProvider.get()
+				.withStartTime(time(0))
+				.withEndTime(time(8))
+				.withCellEntryTime(junction3, time(1))
+				.withCellEntryTime(segment1.getCell(0),time(2))
+				.withCellEntryTime(junction1, time(4))
+				.withCellEntryTime(segment2.getCell(0),time(5))
+				.withCellEntryTime(segment2.getCell(1),time(6))
+				.withCellEntryTime(junction2, time(7))
+				.make(vehicle1);
+
+		assertThat(manager.getEndedJourneyHistories().size(), is(2));
+		assertThat(manager.getEndedJourneyHistories().get(0), equalTo(history0));
+		assertThat(manager.getEndedJourneyHistories().get(1), equalTo(history1));
+		assertThat(manager.getEndedJourneyHistories(), containsInAnyOrder(history0, history1));
 
 	}
 
 	@Test
 	public void onlyOneVehicleCanOccupyACellAtATime() throws Exception {
+		manager.addVehicle(vehicle0);
+		manager.addVehicle(vehicle1);
 
 		manager.step(1);
 		assertThat(vehicle0, isLocatedAt(junction0));
@@ -113,6 +123,7 @@ public class TestVehicleJourneys {
 		assertThat(vehicle1, isLocatedAt(segment2, 1));
 
 		manager.step(1);
+		assertThat(vehicle0, not(isLocatedAt(junction2)));
 		assertThat(vehicle1, isLocatedAt(junction2));
 	}
 
@@ -199,8 +210,6 @@ public class TestVehicleJourneys {
 
 
 		manager = VehicleManagerBuilderProvider.get().make();
-		manager.addVehicle(vehicle0);
-		manager.addVehicle(vehicle1);
 	}
 
 }

@@ -10,4 +10,6 @@ public interface Vehicle {
 
 	String name();
 
+	void subscribeToJourneyEndNotification(Object subscriber);
+
 }

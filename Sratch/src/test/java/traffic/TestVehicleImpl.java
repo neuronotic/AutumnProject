@@ -21,6 +21,19 @@ public class TestVehicleImpl {
 	final Vehicle vehicle = new VehicleImpl("myVehicle", stateContext, state0);
 
 	@Test
+	public void subscribeToJourneyEndNotificationDelegatedToContext() throws Exception {
+		final Object subscriber = new Object();
+
+		context.checking(new Expectations() {
+			{
+				oneOf(stateContext).subscribeToJourneyEndNotification(subscriber);
+			}
+		});
+
+		vehicle.subscribeToJourneyEndNotification(subscriber);
+	}
+
+	@Test
 	public void stepCausesCurrentStateToChangeToReturnedStateInDelegationToPreviousCurrentState() throws Exception {
 		stepDelegatesCallOnToCurrentState();
 		context.checking(new Expectations() {{

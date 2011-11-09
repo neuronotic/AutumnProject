@@ -2,12 +2,16 @@ package traffic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 class VehicleManagerImpl implements VehicleManager {
+	@Inject Logger logger = Logger.getAnonymousLogger();
+
 	private final List<Vehicle> vehicles = new ArrayList<Vehicle>();
-	private final List<JourneyHistory> completedJourneyHistories = new ArrayList<JourneyHistory>();
+	private final List<JourneyHistory> endedJourneyHistories = new ArrayList<JourneyHistory>();
 	private final TimeKeeper timeKeeper;
 
 	@Inject
@@ -17,13 +21,15 @@ class VehicleManagerImpl implements VehicleManager {
 
 	@Override
 	public void addVehicle(final Vehicle vehicle) {
+		vehicle.subscribeToJourneyEndNotification(this);
 		vehicles.add(vehicle);
 	}
 
 	@Override
 	public void step() {
 		timeKeeper.step();
-		for (final Vehicle vehicle : vehicles) {
+		//logger.info(String.format(" \n\n %s STEP", timeKeeper.currentTime()));
+		for (final Vehicle vehicle : new ArrayList<Vehicle>(vehicles)) {
 			vehicle.step();
 		}
 	}
@@ -40,13 +46,16 @@ class VehicleManagerImpl implements VehicleManager {
 	}
 
 	@Override
-	public List<JourneyHistory> getCompletedJourneyHistories() {
-		return completedJourneyHistories;
+	public List<JourneyHistory> getEndedJourneyHistories() {
+		return endedJourneyHistories;
 	}
 
+	@Subscribe
 	@Override
-	public void journeyCompleted(final JourneyCompletedMessage journeyCompletedMessage) {
-		completedJourneyHistories.add(journeyCompletedMessage.journeyHistory());
-		vehicles.remove(journeyCompletedMessage.vehicle());
+	public void journeyEnded(final JourneyEndedMessage journeyEndedMessage) {
+		//logger.info(String.format(" JOURNEYENDED at time %s for %s", timeKeeper.currentTime(), journeyEndedMessage.vehicle()));
+
+		endedJourneyHistories.add(journeyEndedMessage.journeyHistory());
+		vehicles.remove(journeyEndedMessage.vehicle());
 	}
 }

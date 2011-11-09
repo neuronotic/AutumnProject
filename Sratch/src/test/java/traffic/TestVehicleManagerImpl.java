@@ -14,22 +14,32 @@ public class TestVehicleManagerImpl {
 
 	private final TimeKeeper timeKeeper = context.mock(TimeKeeper.class);
 	private final Vehicle vehicle0 = context.mock(Vehicle.class, "vehicle0");
-	private final JourneyCompletedMessage journeyCompletedMessage = context.mock(JourneyCompletedMessage.class);
+	private final JourneyEndedMessage journeyEndedMessage = context.mock(JourneyEndedMessage.class);
 	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
 
 	private final VehicleManager vehicleManager = new VehicleManagerImpl(timeKeeper);
 
 	@Test
-	public void journeyCompletedStoresVehiclesJourneyHistoryAndVehicleNoLongerStepped() throws Exception {
-		vehicleManager.addVehicle(vehicle0);
+	public void subscribeToJourneyEndNotificationCalledOnAddedVehicle() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(journeyCompletedMessage).journeyHistory(); will(returnValue(journeyHistory));
-				oneOf(journeyCompletedMessage).vehicle(); will(returnValue(vehicle0));
+				oneOf(vehicle0).subscribeToJourneyEndNotification(vehicleManager);
 			}
 		});
-		vehicleManager.journeyCompleted(journeyCompletedMessage);
-		assertThat(vehicleManager.getCompletedJourneyHistories(), contains(journeyHistory));
+		addVehicle(vehicle0);
+	}
+
+	@Test
+	public void journeyCompletedStoresVehiclesJourneyHistoryAndVehicleNoLongerStepped() throws Exception {
+		addVehicle(vehicle0);
+		context.checking(new Expectations() {
+			{
+				oneOf(journeyEndedMessage).journeyHistory(); will(returnValue(journeyHistory));
+				oneOf(journeyEndedMessage).vehicle(); will(returnValue(vehicle0));
+			}
+		});
+		vehicleManager.journeyEnded(journeyEndedMessage);
+		assertThat(vehicleManager.getEndedJourneyHistories(), contains(journeyHistory));
 
 		context.checking(new Expectations() {
 			{
@@ -62,8 +72,8 @@ public class TestVehicleManagerImpl {
 	public void multipleAddedVehiclesAreSteppedByManager() throws Exception {
 		final Vehicle vehicle1 = context.mock(Vehicle.class, "vehicle1");
 
-		vehicleManager.addVehicle(vehicle0);
-		vehicleManager.addVehicle(vehicle1);
+		addVehicle(vehicle0);
+		addVehicle(vehicle1);
 
 		setVehicleStepExpectation(vehicle0);
 		setVehicleStepExpectation(vehicle1);
@@ -74,13 +84,22 @@ public class TestVehicleManagerImpl {
 
 	@Test
 	public void managerCanBeSteppedMultipleTimes() throws Exception {
-		vehicleManager.addVehicle(vehicle0);
+		addVehicle(vehicle0);
 
 		setVehicleStepExpectation(vehicle0);
 		setVehicleStepExpectation(vehicle0);
 		setVehicleStepExpectation(vehicle0);
 
 		vehicleManager.step(3);
+	}
+
+	private void addVehicle(final Vehicle vehicle) {
+		context.checking(new Expectations() {
+			{
+				allowing(vehicle).subscribeToJourneyEndNotification(vehicleManager);
+			}
+		});
+		vehicleManager.addVehicle(vehicle);
 	}
 
 	private void setVehicleStepExpectation(final Vehicle vehicle) {
@@ -91,6 +110,4 @@ public class TestVehicleManagerImpl {
 			}
 		});
 	}
-
-
 }

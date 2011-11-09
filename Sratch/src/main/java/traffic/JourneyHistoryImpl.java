@@ -2,6 +2,9 @@ package traffic;
 
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
@@ -25,7 +28,30 @@ public class JourneyHistoryImpl implements JourneyHistory {
 	}
 
 	@Override
+	public boolean equals(final Object that) {
+		if (that != null && that.getClass().equals(this.getClass())) {
+			final JourneyHistoryImpl thatJourneyHistory = (JourneyHistoryImpl) that;
+			return new EqualsBuilder()
+				.append(vehicle, thatJourneyHistory.vehicle)
+				.append(startTime, thatJourneyHistory.startTime)
+				.append(endTime, thatJourneyHistory.endTime)
+				.append(cellEntryTimes, thatJourneyHistory.cellEntryTimes)
+				.isEquals();
+		} return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+			.append(vehicle)
+			.append(startTime)
+			.append(cellEntryTimes)
+			.append(endTime)
+			.toHashCode();
+	}
+
+	@Override
 	public String toString() {
-		return String.format("Journey history for %s, with startTime %s and finishTime %s", vehicle.name(), startTime, endTime);
+		return String.format("Journey history for %s, with startTime %s and finishTime %s and cellTimes %s", vehicle.name(), startTime, endTime, cellEntryTimes);
 	}
 }

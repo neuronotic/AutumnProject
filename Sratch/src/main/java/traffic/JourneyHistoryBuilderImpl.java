@@ -1,5 +1,7 @@
 package traffic;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 import static traffic.CellTime.*;
 import static traffic.RoadNetworkToStringStyle.*;
 
@@ -11,7 +13,6 @@ import com.google.inject.Inject;
 public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 	private SimulationTime startTime;
 	private SimulationTime endTime;
-	private Vehicle vehicle;
 	private final List<CellTime> cellEntryTimes = new ArrayList<CellTime>();
 	private final TimeKeeper timeKeeper;
 	private final JourneyHistoryFactory journeyHistoryFactory;
@@ -25,7 +26,11 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 	}
 
 	@Override
-	public JourneyHistory make() {
+	public JourneyHistory make(final Vehicle vehicle) {
+		assertThat(vehicle, notNullValue());
+		assertThat(endTime, notNullValue());
+		assertThat(startTime, notNullValue());
+		assertThat(cellEntryTimes, notNullValue());
 		return journeyHistoryFactory.create(vehicle, startTime, cellEntryTimes, endTime);
 	}
 
@@ -36,12 +41,6 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 	@Override
 	public SimulationTime journeyTime() {
 		return timeKeeper.currentTime().differenceBetween(startTime);
-	}
-
-	@Override
-	public JourneyHistoryBuilder withVehicle(final Vehicle vehicle) {
-		this.vehicle = vehicle;
-		return this;
 	}
 
 	@Override
@@ -91,11 +90,5 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 	public SimulationTime endTime() {
 		return endTime;
 	}
-
-	@Override
-	public Vehicle vehicle() {
-		return vehicle;
-	}
-
 
 }
