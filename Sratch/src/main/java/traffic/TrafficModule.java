@@ -29,11 +29,15 @@ public class TrafficModule extends AbstractModule {
 		bind(VehicleStateContextBuilder.class).to(VehicleStateContextBuilderImpl.class);
 		bind(JourneyHistoryBuilder.class).to(JourneyHistoryBuilderImpl.class);
 		bind(TimeKeeper.class).to(TimeKeeperImpl.class);
+		bind(MyEventBus.class).to(MyEventBusImpl.class);
+
+		install(new FactoryModuleBuilder()
+			.implement(JourneyEndedMessage.class, JourneyEndedMessageImpl.class)
+			.build(JourneyEndedMessageFactory.class));
 
 		install(new FactoryModuleBuilder()
 			.implement(JourneyHistory.class, JourneyHistoryImpl.class)
 			.build(JourneyHistoryFactory.class));
-
 
 		install(new FactoryModuleBuilder()
     		.implement(Cell.class, NullCell.class)

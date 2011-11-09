@@ -14,12 +14,15 @@ public class TestVehicleStateContextImpl {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
+	private final MyEventBus journeyEndedEventBus = context.mock(MyEventBus.class);
 	private final Cell cell0 = context.mock(Cell.class, "cell0");
 	private final Cell cell1 = context.mock(Cell.class, "cell1");
 	private final JourneyHistoryBuilder journeyHistory = context.mock(JourneyHistoryBuilder.class);
 	private final Vehicle vehicle = context.mock(Vehicle.class);
 	private final NullCellFactory nullCellFactory = context.mock(NullCellFactory.class);
 	private final Cell nullCell0 = context.mock(Cell.class, "nullCell0");
+	private final JourneyEndedMessageFactory journeyEndedMessageFactory = context.mock(JourneyEndedMessageFactory.class);
+	private final JourneyEndedMessage journeyEndedMessage = context.mock(JourneyEndedMessage.class);
 	private VehicleStateContext stateContext;
 
 	@Before
@@ -30,17 +33,22 @@ public class TestVehicleStateContextImpl {
 				ignoring(nullCell0);
 			}
 		});
-		stateContext = new VehicleStateContextImpl(nullCellFactory, asList(cell0, cell1), journeyHistory);
+		stateContext = new VehicleStateContextImpl(journeyEndedEventBus, journeyEndedMessageFactory, nullCellFactory, asList(cell0, cell1), journeyHistory);
 	}
 
+
 	@Test
-	public void journeyEndedCausesCurrentCellToBeReplacedWithNullCell() throws Exception {
+	public void journeyEndedCausesCurrentCellToBeReplacedWithNullCellAndMessageSentOnJourneyEndedEventBus() throws Exception {
 		currentLocationChangesToCellIfMoveSuccessfullyCallsEnter();
 		final Cell nullCell1 = context.mock(Cell.class, "nullCell1");
+
 		context.checking(new Expectations() {
 			{
+				oneOf(journeyEndedMessageFactory).create(vehicle); will(returnValue(journeyEndedMessage));
+				oneOf(journeyEndedEventBus).post(journeyEndedMessage);
 				oneOf(cell0).leave(vehicle);
 				oneOf(nullCellFactory).createNullCell(); will(returnValue(nullCell1));
+
 			}
 		});
 		stateContext.journeyEnded(vehicle);
