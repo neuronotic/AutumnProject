@@ -44,15 +44,15 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	public void move(final Vehicle vehicle) {
 		final Cell cell = nextCellInItinerary();
 		if (cell.enter(vehicle)) {
-			location.leave(vehicle);
-			setLocation(cell);
+			changeLocation(vehicle, cell);
 			stepHistory();
 		} else {
 			remainingItinerary.previous();
 		}
 	}
 
-	private void setLocation(final Cell cell) {
+	private void changeLocation(final Vehicle vehicle, final Cell cell) {
+		location.leave(vehicle);
 		location = cell;
 	}
 
@@ -66,7 +66,6 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public void journeyEnded(final Vehicle vehicle) {
-		location.leave(vehicle);
-		location = nullCellFactory.createNullCell();
+		changeLocation(vehicle, nullCellFactory.createNullCell());
 	}
 }
