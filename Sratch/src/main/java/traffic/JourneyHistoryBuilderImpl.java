@@ -9,21 +9,24 @@ import java.util.List;
 import com.google.inject.Inject;
 
 public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
-	private final SimulationTime startTime;
+	private SimulationTime startTime;
 	private SimulationTime endTime;
+	private Vehicle vehicle;
 	private final List<CellTime> cellEntryTimes = new ArrayList<CellTime>();
 	private final TimeKeeper timeKeeper;
+	private final JourneyHistoryFactory journeyHistoryFactory;
 
-	@Inject public JourneyHistoryBuilderImpl(final TimeKeeper timeKeeper) {
+	@Inject public JourneyHistoryBuilderImpl(
+			final JourneyHistoryFactory journeyHistoryFactory,
+			final TimeKeeper timeKeeper) {
+		this.journeyHistoryFactory = journeyHistoryFactory;
 		this.timeKeeper = timeKeeper;
-		startTime = timeKeeper.currentTime();
+		withStartTime(timeKeeper.currentTime());
 	}
 
 	@Override
 	public JourneyHistory make() {
-		// TODO Auto-generated method stub
-		return null;
-
+		return journeyHistoryFactory.create(vehicle, startTime, cellEntryTimes, endTime);
 	}
 
 	@Override
@@ -37,30 +40,26 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 
 	@Override
 	public JourneyHistoryBuilder withVehicle(final Vehicle vehicle) {
-		// TODO Auto-generated method stub
-		return null;
-
+		this.vehicle = vehicle;
+		return this;
 	}
 
 	@Override
 	public JourneyHistoryBuilder withStartTime(final SimulationTime startTime) {
-		// TODO Auto-generated method stub
-		return null;
-
+		this.startTime = startTime;
+		return this;
 	}
 
 	@Override
-	public JourneyHistoryBuilder withFinishTime(final SimulationTime finishTime) {
-		// TODO Auto-generated method stub
-		return null;
-
+	public JourneyHistoryBuilder withEndTime(final SimulationTime endTime) {
+		this.endTime = endTime;
+		return this;
 	}
 
 	@Override
 	public JourneyHistoryBuilder withCellEntryTime(final Cell cell, final SimulationTime time) {
-		// TODO Auto-generated method stub
-		return null;
-
+		cellEntryTimes.add(cellTime(cell, time));
+		return this;
 	}
 
 	@Override
@@ -75,7 +74,7 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 
 	@Override
 	public void cellEntered(final Cell cell) {
-		cellEntryTimes.add(cellTime(cell, timeKeeper.currentTime()));
+		withCellEntryTime(cell, timeKeeper.currentTime());
 	}
 
 	@Override
@@ -85,12 +84,17 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 
 	@Override
 	public void noteEndTime() {
-		endTime = timeKeeper.currentTime();
+		withEndTime(timeKeeper.currentTime());
 	}
 
 	@Override
 	public SimulationTime endTime() {
 		return endTime;
+	}
+
+	@Override
+	public Vehicle vehicle() {
+		return vehicle;
 	}
 
 

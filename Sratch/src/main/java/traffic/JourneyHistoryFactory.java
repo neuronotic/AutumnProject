@@ -9,7 +9,7 @@ public interface JourneyHistoryFactory {
 	JourneyHistory create(
 			Vehicle vehicle,
 			@Assisted("startTime") SimulationTime startTime,
-			List<CellTime> cellTimes,
-			@Assisted("finishTime") SimulationTime finishTime);
+			List<CellTime> cellEntryTimes,
+			@Assisted("endTime") SimulationTime endTime);
 
 }

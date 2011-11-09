@@ -68,28 +68,28 @@ public class TestVehicleJourneys {
 		final JourneyHistory history0 = JourneyHistoryBuilderProvider.get()
 				.withVehicle(vehicle0)
 				.withStartTime(time(0))
-				.withFinishTime(time(6))
+				.withEndTime(time(6))
 				.withCellEntryTime(junction0, time(0))
 				.withCellEntryTime(segment0.getCell(0),time(1))
 				.withCellEntryTime(junction1, time(2))
-				.withCellEntryTime(segment1.getCell(0),time(3))
-				.withCellEntryTime(segment1.getCell(1),time(4))
+				.withCellEntryTime(segment2.getCell(0),time(3))
+				.withCellEntryTime(segment2.getCell(1),time(4))
 				.withCellEntryTime(junction2, time(5))
 				.make();
 
 		final JourneyHistory history1 = JourneyHistoryBuilderProvider.get()
 				.withVehicle(vehicle1)
 				.withStartTime(time(0))
-				.withFinishTime(time(7))
+				.withEndTime(time(7))
 				.withCellEntryTime(junction3, time(0))
-				.withCellEntryTime(segment2.getCell(0),time(1))
+				.withCellEntryTime(segment1.getCell(0),time(1))
 				.withCellEntryTime(junction1, time(3))
-				.withCellEntryTime(segment1.getCell(0),time(4))
-				.withCellEntryTime(segment1.getCell(0),time(5))
+				.withCellEntryTime(segment2.getCell(0),time(4))
+				.withCellEntryTime(segment2.getCell(1),time(5))
 				.withCellEntryTime(junction2, time(6))
 				.make();
 
-		assertThat(manager.getJourneyHistories(), containsInAnyOrder(history0, history1));
+		assertThat(manager.getCompletedJourneyHistories(), containsInAnyOrder(history0, history1));
 
 	}
 

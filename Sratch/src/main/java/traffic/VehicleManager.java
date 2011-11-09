@@ -11,5 +11,5 @@ public interface VehicleManager {
 	void step();
 
 	void step(int i);
-	List<JourneyHistory> getJourneyHistories();
+	List<JourneyHistory> getCompletedJourneyHistories();
 }

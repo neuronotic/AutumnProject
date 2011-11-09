@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.google.inject.Inject;
 
-//@Singleton
 class VehicleManagerImpl implements VehicleManager {
 	private final List<Vehicle> vehicles = new ArrayList<Vehicle>();
 	private final TimeKeeper timeKeeper;
@@ -40,9 +39,8 @@ class VehicleManagerImpl implements VehicleManager {
 	}
 
 	@Override
-	public List<JourneyHistory> getJourneyHistories() {
+	public List<JourneyHistory> getCompletedJourneyHistories() {
 		// TODO Auto-generated method stub
 		return null;
-
 	}
 }
