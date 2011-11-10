@@ -18,9 +18,9 @@ public class TestVehicleManagerImpl {
 	private final JourneyEndedMessage journeyEndedMessage = context.mock(JourneyEndedMessage.class);
 	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
 	private final JourneyStartedMessage journeyStartedMessage = context.mock(JourneyStartedMessage.class);
-
 	private final VehicleManager vehicleManager = new VehicleManagerImpl(timeKeeper);
 	//TODO: ought i to test if the @Subscribe annotations are in place for the message receiving classes?
+
 
 	@Test
 	public void vehiclesSuppliedByMultipleJourneyStartedMessagesAreStepped() throws Exception {

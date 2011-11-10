@@ -1,10 +1,16 @@
 package traffic;
 
+import java.util.logging.Logger;
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.google.inject.Inject;
 
 public class NullCell implements Cell {
+	@Inject Logger logger = Logger.getAnonymousLogger();
 
-	@Inject NullCell() {}
+	@Inject
+	public NullCell() {}
 
 	@Override
 	public boolean enter(final Vehicle vehicle) {
@@ -13,7 +19,13 @@ public class NullCell implements Cell {
 
 	@Override
 	public String name() {
-		return null;
+		return "Null cell";
+	}
+
+	@Override
+	public String toString() {
+		//return reflectionToString(this, roadNetworkToStringStyle());
+		return name();
 	}
 
 	@Override
@@ -23,6 +35,20 @@ public class NullCell implements Cell {
 	@Override
 	public boolean isOccupied() {
 		return false;
+	}
+
+	@Override
+	public boolean equals(final Object that) {
+		logger.info(String.format("NULL: %s equals %s", this, that));
+		if (that != null && that.getClass().equals(this.getClass())) {
+			return true;
+		} return false;
+	}
+
+	@Override //TODO: is this ok?
+	public int hashCode() {
+		return new HashCodeBuilder()
+			.toHashCode();
 	}
 
 }

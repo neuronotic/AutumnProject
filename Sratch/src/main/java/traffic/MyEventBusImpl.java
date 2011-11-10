@@ -2,7 +2,9 @@ package traffic;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+@Singleton
 public class MyEventBusImpl implements MyEventBus {
 	//TODO: untested
 

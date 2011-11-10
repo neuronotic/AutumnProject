@@ -15,10 +15,13 @@ import traffic.JourneyHistory;
 import traffic.JourneyHistoryBuilder;
 import traffic.Junction;
 import traffic.JunctionFactory;
+import traffic.NullCell;
 import traffic.RoadNetwork;
 import traffic.RoadNetworkBuilder;
 import traffic.Segment;
 import traffic.SegmentBuilder;
+import traffic.Simulation;
+import traffic.SimulationBuilder;
 import traffic.TrafficModule;
 import traffic.TripFactory;
 import traffic.Vehicle;
@@ -27,7 +30,6 @@ import traffic.VehicleManager;
 import traffic.VehicleManagerBuilder;
 
 import com.google.guiceberry.GuiceBerryModule;
-import com.google.guiceberry.junit4.GuiceBerryRule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -43,8 +45,8 @@ public class TestVehicleJourneys {
 		}
 	};
 
-	@Rule public GuiceBerryRule guiceBerry =
-		      new GuiceBerryRule(TrafficTestModule.class);
+	//@Rule public GuiceBerryRule guiceBerry = new GuiceBerryRule(TrafficTestModule.class);
+	@Rule public MyGuiceBerryRule guiceBerry = new MyGuiceBerryRule();
 
 	@Inject private JunctionFactory junctionFactory;
 	@Inject private Provider<VehicleManagerBuilder> VehicleManagerBuilderProvider;
@@ -52,111 +54,108 @@ public class TestVehicleJourneys {
 	@Inject private Provider<SegmentBuilder> segmentBuilderProvider;
 	@Inject private Provider<RoadNetworkBuilder> roadNetworkBuilderProvider;
 	@Inject private Provider<JourneyHistoryBuilder> JourneyHistoryBuilderProvider;
+	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 
 	private Junction junction0, junction1, junction2, junction3;
 	private Segment segment0, segment1, segment2;
 	private RoadNetwork roadNetwork;
+	private JourneyHistory history0, history1;
 	private Vehicle vehicle0, vehicle1;
-	private VehicleManager manager;
+	private VehicleManager vehicleManager;
 
+	@Before
+	public void setUp() throws Exception {
+		logger.info(String.format("\n\nSETUP============"));
 
-	@Test
-	public void VehicleManagerMaintainsLogOfJourneyHistories() throws Exception {
-		vehicle0.startJourney();
-		vehicle1.startJourney();
-
-		manager.step(8);
-
-
-		final JourneyHistory history0 = JourneyHistoryBuilderProvider.get()
-				.withStartTime(time(0))
-				.withEndTime(time(7))
-				.withCellEntryTime(junction0, time(1))
-				.withCellEntryTime(segment0.getCell(0),time(2))
-				.withCellEntryTime(junction1, time(3))
-				.withCellEntryTime(segment2.getCell(0),time(4))
-				.withCellEntryTime(segment2.getCell(1),time(5))
-				.withCellEntryTime(junction2, time(6))
-				.make(vehicle0);
-
-		final JourneyHistory history1 = JourneyHistoryBuilderProvider.get()
-				.withStartTime(time(0))
-				.withEndTime(time(8))
-				.withCellEntryTime(junction3, time(1))
-				.withCellEntryTime(segment1.getCell(0),time(2))
-				.withCellEntryTime(junction1, time(4))
-				.withCellEntryTime(segment2.getCell(0),time(5))
-				.withCellEntryTime(segment2.getCell(1),time(6))
-				.withCellEntryTime(junction2, time(7))
-				.make(vehicle1);
-
-		assertThat(manager.getEndedJourneyHistories().size(), is(2));
-		assertThat(manager.getEndedJourneyHistories(), containsInAnyOrder(history0, history1));
+		createJunctions();
+		createSegments();
+		createRoadNetwork();
+		vehicleManager = VehicleManagerBuilderProvider.get().make();
+		createVehicles();
 	}
 
 	@Test
-	public void onlyOneVehicleCanOccupyACellAtATime() throws Exception {
-		vehicle0.startJourney();
-		vehicle1.startJourney();
+	public void newlyCreatedVehiclesRemainOffRoadNetworkUntilJunctionPullsThemIn() throws Exception {
+		logger.info(String.format("\n============newlyCreatedVehiclesRemainOffRoadNetworkUntilJunctionPullsThemIn"));
 
-		manager.step(1);
+		final Simulation sim = simulationBuilderProvider.get()
+				.withRoadNetwork(roadNetwork)
+				.withVehicleManager(vehicleManager)
+				.make();
+		assertThat(vehicle0, isLocatedAt(new NullCell()));
+		assertThat(vehicle1, isLocatedAt(new NullCell()));
+		sim.step(1);
 		assertThat(vehicle0, isLocatedAt(junction0));
 		assertThat(vehicle1, isLocatedAt(junction3));
 
-		manager.step(2);
+	}
+
+	@Test
+	public void VehicleManagerMaintainsLogOfJourneyHistories() throws Exception {
+		logger.info(String.format("\n============VehicleManagerMaintainsLogOfJourneyHistories"));
+		vehicle0.startJourney();
+		vehicle1.startJourney();
+
+		vehicleManager.step(8);
+
+
+		createJourneyHistories();
+
+		assertThat(vehicleManager.getEndedJourneyHistories().size(), is(2));
+		assertThat(vehicleManager.getEndedJourneyHistories(), containsInAnyOrder(history0, history1));
+	}
+
+
+	@Test
+	public void onlyOneVehicleCanOccupyACellAtATime() throws Exception {
+		logger.info(String.format("\n============onlyOneVehicleCanOccupyACellAtATime"));
+		vehicle0.startJourney();
+		vehicle1.startJourney();
+
+		vehicleManager.step(1);
+		assertThat(vehicle0, isLocatedAt(junction0));
+		assertThat(vehicle1, isLocatedAt(junction3));
+
+		vehicleManager.step(2);
 		assertThat(vehicle0, isLocatedAt(junction1));
 		assertThat(vehicle1, isLocatedAt(segment1, 0));
 
-		manager.step(1);
+		vehicleManager.step(1);
 		assertThat(vehicle0, isLocatedAt(segment2,0));
 		assertThat(vehicle1, isLocatedAt(junction1));
 	}
 
 	@Test
 	public void tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime() throws Exception {
-		final RoadNetwork roadNetwork = roadNetworkBuilderProvider.get()
-			.withSegment(segment()
-				.withName("segment0")
-				.withInJunction(junction0)
-				.withOutJunction(junction1)
-				.withLength(4))
-			.withSegment(segment()
-				.withName("segment1")
-				.withInJunction(junction1)
-				.withOutJunction(junction2)
-				.withLength(3))
-			.withSegment(segment()
-				.withName("segment2")
-				.withInJunction(junction1)
-				.withOutJunction(junction3)
-				.withLength(3))
-			.make();
+		logger.info(String.format("\n============tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime"));
+		vehicle0.startJourney();
+		vehicleManager.step(7);
+		assertThat(vehicle0, isLocatedAt(junction2));
+		assertThat(vehicle0, hasJourneyTime(time(7)));
+	}
 
-		final Vehicle vehicle0 = vehicleBuilderProvider.get()
+	private void createVehicles() {
+		vehicle0 = vehicleBuilderProvider.get()
+			.withName("vehicle0")
 			.withRoadNetwork(roadNetwork)
 			.withTrip(TripFactory.tripFrom(junction0).to(junction2))
 			.make();
-
-		final VehicleManager manager = VehicleManagerBuilderProvider.get().make();
-		vehicle0.startJourney();
-		manager.step(10);
-
-		assertThat(vehicle0, isLocatedAt(junction2));
-		assertThat(vehicle0, hasJourneyTime(time(10)));
-
+		vehicle1 = vehicleBuilderProvider.get()
+			.withName("vehicle1")
+			.withRoadNetwork(roadNetwork)
+			.withTrip(TripFactory.tripFrom(junction3).to(junction2))
+			.make();
 	}
 
-	private SegmentBuilder segment() {
-		return segmentBuilderProvider.get();
+	private void createRoadNetwork() {
+		roadNetwork = roadNetworkBuilderProvider.get()
+			.withSegment(segment0)
+			.withSegment(segment1)
+			.withSegment(segment2)
+			.make();
 	}
 
-	@Before
-	public void setUp() throws Exception {
-		junction0 = junctionFactory.createJunction("junction0");
-		junction1 = junctionFactory.createJunction("junction1");
-		junction2 = junctionFactory.createJunction("junction2");
-		junction3 = junctionFactory.createJunction("junction3");
-
+	private void createSegments() {
 		segment0 = segment()
 			.withName("segment0")
 			.withInJunction(junction0)
@@ -175,26 +174,40 @@ public class TestVehicleJourneys {
 			.withOutJunction(junction2)
 			.withLength(2)
 			.make();
-
-		roadNetwork = roadNetworkBuilderProvider.get()
-			.withSegment(segment0)
-			.withSegment(segment1)
-			.withSegment(segment2)
-			.make();
-
-		vehicle0 = vehicleBuilderProvider.get()
-			.withName("vehicle0")
-			.withRoadNetwork(roadNetwork)
-			.withTrip(TripFactory.tripFrom(junction0).to(junction2))
-			.make();
-		vehicle1 = vehicleBuilderProvider.get()
-			.withName("vehicle1")
-			.withRoadNetwork(roadNetwork)
-			.withTrip(TripFactory.tripFrom(junction3).to(junction2))
-			.make();
-
-
-		manager = VehicleManagerBuilderProvider.get().make();
 	}
 
+	private SegmentBuilder segment() {
+		return segmentBuilderProvider.get();
+	}
+
+	private void createJunctions() {
+		junction0 = junctionFactory.createJunction("junction0");
+		junction1 = junctionFactory.createJunction("junction1");
+		junction2 = junctionFactory.createJunction("junction2");
+		junction3 = junctionFactory.createJunction("junction3");
+	}
+
+	private void createJourneyHistories() {
+		history0 = JourneyHistoryBuilderProvider.get()
+				.withStartTime(time(0))
+				.withEndTime(time(7))
+				.withCellEntryTime(junction0, time(1))
+				.withCellEntryTime(segment0.getCell(0),time(2))
+				.withCellEntryTime(junction1, time(3))
+				.withCellEntryTime(segment2.getCell(0),time(4))
+				.withCellEntryTime(segment2.getCell(1),time(5))
+				.withCellEntryTime(junction2, time(6))
+				.make(vehicle0);
+
+		history1 = JourneyHistoryBuilderProvider.get()
+				.withStartTime(time(0))
+				.withEndTime(time(8))
+				.withCellEntryTime(junction3, time(1))
+				.withCellEntryTime(segment1.getCell(0),time(2))
+				.withCellEntryTime(junction1, time(4))
+				.withCellEntryTime(segment2.getCell(0),time(5))
+				.withCellEntryTime(segment2.getCell(1),time(6))
+				.withCellEntryTime(junction2, time(7))
+				.make(vehicle1);
+	}
 }
