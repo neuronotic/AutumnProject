@@ -11,6 +11,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import traffic.ConstantTemporalPattern;
+import traffic.FlowBuilder;
+import traffic.FlowGroupBuilder;
 import traffic.JourneyHistory;
 import traffic.JourneyHistoryBuilder;
 import traffic.Junction;
@@ -55,6 +58,8 @@ public class TestVehicleJourneys {
 	@Inject private Provider<RoadNetworkBuilder> roadNetworkBuilderProvider;
 	@Inject private Provider<JourneyHistoryBuilder> JourneyHistoryBuilderProvider;
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
+	@Inject private Provider<FlowGroupBuilder> flowGroupBuilderProvider;
+	@Inject private Provider<FlowBuilder> flowBuilderProvider;
 
 	private Junction junction0, junction1, junction2, junction3;
 	private Segment segment0, segment1, segment2;
@@ -72,6 +77,21 @@ public class TestVehicleJourneys {
 		createRoadNetwork();
 		vehicleManager = VehicleManagerBuilderProvider.get().make();
 		createVehicles();
+	}
+
+
+	@Test
+	public void runSimAfterAddingFlowGroupFor10StepsResultsIn4JourneyHistoriesToThatPoint() throws Exception {
+		final Simulation sim = simulationBuilderProvider.get()
+				.withRoadNetwork(roadNetwork)
+				.withFlowGroup(flowGroupBuilderProvider.get()
+						.withTemporalPattern(new ConstantTemporalPattern())
+						.withFlow(flowBuilderProvider.get()
+								.withSegments(segment0, segment1)
+								.withProbability(1)))
+				.make();
+		sim.step(10);
+		assertThat(sim.getJourneyEndedHistories().size(), equalTo(4));
 	}
 
 	@Test

@@ -1,5 +1,7 @@
 package traffic;
 
+import java.util.List;
+
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
@@ -16,8 +18,6 @@ public class SimulationImpl implements Simulation {
 				this.vehicleManager = vehicleManager;
 	}
 
-
-
 	@Override
 	public void step() {
 		for (final Junction junction : roadNetwork.junctions()) {
@@ -31,5 +31,12 @@ public class SimulationImpl implements Simulation {
 		for (int i=0; i<timesteps; i++) {
 			step();
 		}
+	}
+
+	@Override
+	public List<JourneyHistory> getJourneyEndedHistories() {
+		// TODO Auto-generated method stub
+		return null;
+
 	}
 }

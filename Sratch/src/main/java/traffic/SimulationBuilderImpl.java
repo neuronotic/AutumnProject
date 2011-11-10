@@ -24,4 +24,11 @@ public class SimulationBuilderImpl implements SimulationBuilder {
 		return simulationFactory.createSimulation(roadNetwork);
 	}
 
+	@Override
+	public SimulationBuilder withFlowGroup(final FlowGroupBuilder withFlow) {
+		// TODO Auto-generated method stub
+		return null;
+
+	}
+
 }
