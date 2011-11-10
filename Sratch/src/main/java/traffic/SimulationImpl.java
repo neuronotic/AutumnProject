@@ -9,18 +9,24 @@ public class SimulationImpl implements Simulation {
 
 	private final RoadNetwork roadNetwork;
 	private final VehicleManager vehicleManager;
+	private final VehicleCreator vehicleCreator;
+	private final List<FlowGroup> flowGroups;
 
 	@Inject
 	SimulationImpl(
 			@Assisted final RoadNetwork roadNetwork,
 			@Assisted final List<FlowGroup> flowGroups,
-			final VehicleManager vehicleManager) {
-				this.roadNetwork = roadNetwork;
-				this.vehicleManager = vehicleManager;
+			final VehicleManager vehicleManager,
+			final VehicleCreatorFactory vehicleCreatorFactory) {
+		this.roadNetwork = roadNetwork;
+		this.flowGroups = flowGroups;
+		this.vehicleManager = vehicleManager;
+		vehicleCreator = vehicleCreatorFactory.create(flowGroups);
 	}
 
 	@Override
 	public void step() {
+		vehicleCreator.step();
 		for (final Junction junction : roadNetwork.junctions()) {
 			junction.step();
 		}
