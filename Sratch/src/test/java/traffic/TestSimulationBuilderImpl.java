@@ -13,7 +13,6 @@ public class TestSimulationBuilderImpl {
 
 	private final SimulationFactory simulationFactory = context.mock(SimulationFactory.class);
 	private final RoadNetwork roadNetwork = context.mock(RoadNetwork.class);
-	private final VehicleManager vehicleManager = context.mock(VehicleManager.class);
 	private final Simulation simulation = context.mock(Simulation.class);
 
 	@Test
@@ -21,13 +20,12 @@ public class TestSimulationBuilderImpl {
 
 		context.checking(new Expectations() {
 			{
-				oneOf(simulationFactory).createSimulation(roadNetwork, vehicleManager); will(returnValue(simulation));
+				oneOf(simulationFactory).createSimulation(roadNetwork); will(returnValue(simulation));
 			}
 		});
 
 		final Simulation simulation = new SimulationBuilderImpl(simulationFactory)
 			.withRoadNetwork(roadNetwork)
-			.withVehicleManager(vehicleManager)
 			.make();
 
 		assertThat(simulation, notNullValue());

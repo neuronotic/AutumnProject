@@ -77,14 +77,12 @@ public class TestVehicleJourneys {
 	@Test
 	public void newlyCreatedVehiclesRemainOffRoadNetworkUntilJunctionPullsThemIn() throws Exception {
 		//logger.info(String.format("\n============newlyCreatedVehiclesRemainOffRoadNetworkUntilJunctionPullsThemIn"));
-
 		final Simulation sim = simulationBuilderProvider.get()
 				.withRoadNetwork(roadNetwork)
-				.withVehicleManager(vehicleManager)
 				.make();
+
 		junction0.addVehicle(vehicle0);
 		junction3.addVehicle(vehicle1);
-
 
 		assertThat(vehicle0, isLocatedAt(new NullCell()));
 		assertThat(vehicle1, isLocatedAt(new NullCell()));

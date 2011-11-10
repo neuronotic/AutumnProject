@@ -14,12 +14,6 @@ public class SimulationBuilderImpl implements SimulationBuilder {
 	}
 
 	@Override
-	public SimulationBuilder withVehicleManager(final VehicleManager vehicleManager) {
-		this.vehicleManager = vehicleManager;
-		return this;
-	}
-
-	@Override
 	public SimulationBuilder withRoadNetwork(final RoadNetwork roadNetwork) {
 		this.roadNetwork = roadNetwork;
 		return this;
@@ -27,7 +21,7 @@ public class SimulationBuilderImpl implements SimulationBuilder {
 
 	@Override
 	public Simulation make() {
-		return simulationFactory.createSimulation(roadNetwork, vehicleManager);
+		return simulationFactory.createSimulation(roadNetwork);
 	}
 
 }
