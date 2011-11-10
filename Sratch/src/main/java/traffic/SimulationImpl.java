@@ -23,7 +23,7 @@ public class SimulationImpl implements Simulation {
 
 	@Override
 	public void addVehicle(final Vehicle vehicle) {
-		vehicleManager.addVehicle(vehicle);
+		//vehicleManager.addVehicle(vehicle);
 	}
 
 }

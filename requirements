@@ -32,6 +32,6 @@ http://code.google.com/p/google-guice/wiki/BindingResolution
 
 - refactor out Listener as per Tim's suggestion so that VehicleManager doesn't directly impl. listener.
 
-- VehicleJourneyStateFactory.journeyOngoingState() want it to return VehicleJourneyOngoingState  but this means cannot unit test in TestVehicleJourneyUnstartedState.stepReturnsVehicleJourneyOngoingStateObject()
-
+- TestVehicleImpl.stepMovesVehicleAlongItinerary: doesn't work with isLocatedAt  assertion....why? 
+- TestVehicleBuilderImpl etc seems overly complicated?
 

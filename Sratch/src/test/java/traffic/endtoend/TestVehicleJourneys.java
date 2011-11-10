@@ -62,8 +62,6 @@ public class TestVehicleJourneys {
 
 	@Test
 	public void VehicleManagerMaintainsLogOfJourneyHistories() throws Exception {
-		manager.addVehicle(vehicle0);
-		manager.addVehicle(vehicle1);
 		vehicle0.startJourney();
 		vehicle1.startJourney();
 
@@ -98,8 +96,8 @@ public class TestVehicleJourneys {
 
 	@Test
 	public void onlyOneVehicleCanOccupyACellAtATime() throws Exception {
-		manager.addVehicle(vehicle0);
-		manager.addVehicle(vehicle1);
+		vehicle0.startJourney();
+		vehicle1.startJourney();
 
 		manager.step(1);
 		assertThat(vehicle0, isLocatedAt(junction0));
@@ -140,7 +138,7 @@ public class TestVehicleJourneys {
 			.make();
 
 		final VehicleManager manager = VehicleManagerBuilderProvider.get().make();
-		manager.addVehicle(vehicle0);
+		vehicle0.startJourney();
 		manager.step(10);
 
 		assertThat(vehicle0, isLocatedAt(junction2));

@@ -20,11 +20,6 @@ class VehicleManagerImpl implements VehicleManager {
 	}
 
 	@Override
-	public void addVehicle(final Vehicle vehicle) {
-		vehicles.add(vehicle);
-	}
-
-	@Override
 	public void step() {
 		timeKeeper.step();
 		//logger.info(String.format(" \n\n %s STEP", timeKeeper.currentTime()));
@@ -49,12 +44,19 @@ class VehicleManagerImpl implements VehicleManager {
 		return endedJourneyHistories;
 	}
 
+
+
 	@Subscribe
 	@Override
 	public void journeyEnded(final JourneyEndedMessage journeyEndedMessage) {
 		//logger.info(String.format(" JOURNEYENDED at time %s for %s", timeKeeper.currentTime(), journeyEndedMessage.vehicle()));
-
 		endedJourneyHistories.add(journeyEndedMessage.journeyHistory());
 		vehicles.remove(journeyEndedMessage.vehicle());
+	}
+
+	@Subscribe
+	@Override
+	public void journeyStarted(final JourneyStartedMessage journeyStartedMessage) {
+		vehicles.add(journeyStartedMessage.vehicle());
 	}
 }

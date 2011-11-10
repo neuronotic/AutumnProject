@@ -14,10 +14,30 @@ public class TestVehicleManagerImpl {
 
 	private final TimeKeeper timeKeeper = context.mock(TimeKeeper.class);
 	private final Vehicle vehicle0 = context.mock(Vehicle.class, "vehicle0");
+	private final Vehicle vehicle1 = context.mock(Vehicle.class, "vehicle1");
 	private final JourneyEndedMessage journeyEndedMessage = context.mock(JourneyEndedMessage.class);
 	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
+	private final JourneyStartedMessage journeyStartedMessage = context.mock(JourneyStartedMessage.class);
 
 	private final VehicleManager vehicleManager = new VehicleManagerImpl(timeKeeper);
+	//TODO: ought i to test if the @Subscribe annotations are in place for the message receiving classes?
+
+	@Test
+	public void vehiclesSuppliedByMultipleJourneyStartedMessagesAreStepped() throws Exception {
+		setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle0();
+		setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle1();
+		setExpectationForStepForVehicle(vehicle0);
+		setExpectationForStepForVehicle(vehicle1);
+		vehicleManager.step();
+	}
+
+	@Test
+	public void managerCanBeSteppedMultipleTimes() throws Exception {
+		setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle0();
+		setExpectationForStepForVehicle(vehicle0);
+		setExpectationForStepForVehicle(vehicle0);
+		vehicleManager.step(2);
+	}
 
 	@Test
 	public void journeyEndedStoresJourneyHistory() throws Exception {
@@ -33,7 +53,7 @@ public class TestVehicleManagerImpl {
 
 	@Test
 	public void journeyEndedResultsInVehicleNoLongerBeingStepped() throws Exception {
-		vehicleManager.addVehicle(vehicle0);
+		setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle0();
 		context.checking(new Expectations() {
 			{
 				oneOf(journeyEndedMessage).journeyHistory();
@@ -55,45 +75,32 @@ public class TestVehicleManagerImpl {
 	public void timeKeeperSteppedWithEachStep() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(timeKeeper).step();
-			}
-		});
-		vehicleManager.step();
-
-		context.checking(new Expectations() {
-			{
 				exactly(2).of(timeKeeper).step();
 			}
 		});
 		vehicleManager.step(2);
 	}
 
-	@Test
-	public void multipleAddedVehiclesAreSteppedByManager() throws Exception {
-		final Vehicle vehicle1 = context.mock(Vehicle.class, "vehicle1");
 
-		vehicleManager.addVehicle(vehicle0);
-		vehicleManager.addVehicle(vehicle1);
-
-		setVehicleExpectationForCallToStep(vehicle0);
-		setVehicleExpectationForCallToStep(vehicle1);
-
-		vehicleManager.step();
+	private void setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle1() {
+		context.checking(new Expectations() {
+			{
+				oneOf(journeyStartedMessage).vehicle(); will(returnValue(vehicle1));
+			}
+		});
+		vehicleManager.journeyStarted(journeyStartedMessage);
 	}
 
-
-	@Test
-	public void managerCanBeSteppedMultipleTimes() throws Exception {
-		vehicleManager.addVehicle(vehicle0);
-
-		setVehicleExpectationForCallToStep(vehicle0);
-		setVehicleExpectationForCallToStep(vehicle0);
-		setVehicleExpectationForCallToStep(vehicle0);
-
-		vehicleManager.step(3);
+	private void setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle0() {
+		context.checking(new Expectations() {
+			{
+				oneOf(journeyStartedMessage).vehicle(); will(returnValue(vehicle0));
+			}
+		});
+		vehicleManager.journeyStarted(journeyStartedMessage);
 	}
 
-	private void setVehicleExpectationForCallToStep(final Vehicle vehicle) {
+	private void setExpectationForStepForVehicle(final Vehicle vehicle) {
 		context.checking(new Expectations() {
 			{
 				oneOf(vehicle).step();
