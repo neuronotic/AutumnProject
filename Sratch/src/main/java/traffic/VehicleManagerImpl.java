@@ -44,8 +44,6 @@ class VehicleManagerImpl implements VehicleManager {
 		return endedJourneyHistories;
 	}
 
-
-
 	@Subscribe
 	@Override
 	public void journeyEnded(final JourneyEndedMessage journeyEndedMessage) {

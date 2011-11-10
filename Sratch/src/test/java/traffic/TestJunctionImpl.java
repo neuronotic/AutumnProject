@@ -4,6 +4,8 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static traffic.RoadNetworkMatchers.*;
 
+import org.jmock.Expectations;
+import org.jmock.Sequence;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -15,6 +17,22 @@ public class TestJunctionImpl {
 	private final Vehicle vehicle1 = context.mock(Vehicle.class, "vehicle1");
 
 	private final Junction junction = new JunctionImpl("myJunction");
+
+	@Test
+	public void addedVehiclesArePlacedInOrderOnQueue() throws Exception {
+		junction.addVehicle(vehicle0);
+		junction.addVehicle(vehicle1);
+
+		final Sequence vehicleStarts = context.sequence("vehicleStarts");
+		context.checking(new Expectations() {
+			{
+				oneOf(vehicle0).startJourney(); inSequence(vehicleStarts);
+				oneOf(vehicle1).startJourney(); inSequence(vehicleStarts);
+			} //what about vehicle actually entering junction? who cares. vehicle is responsible for that.
+		});
+		junction.step();
+		junction.step();
+	}
 
 	@Test
 	public void isOccupiedReturnsTrueOnlyIfVehicleIsInCell() throws Exception {

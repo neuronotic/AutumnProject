@@ -1,7 +1,9 @@
 package traffic;
 
+import static java.util.Arrays.*;
+
 import org.jmock.Expectations;
-import org.junit.Ignore;
+import org.jmock.Sequence;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -11,32 +13,23 @@ public class TestSimulationImpl {
 
 	private final RoadNetwork roadNetwork = context.mock(RoadNetwork.class);
 	private final VehicleManager vehicleManager = context.mock(VehicleManager.class);
+	private final Junction junction0 = context.mock(Junction.class);
 	private final Simulation simulation = new SimulationImpl(roadNetwork, vehicleManager);
 
+	//TODO: test for step being called multiple times?
+
 	@Test
-	@Ignore
-	public void addVehicleCallsAddVehicleOnVehicleManager() throws Exception {
-		final Vehicle vehicle = context.mock(Vehicle.class);
+	public void VehicleManagerAndJunctionsAreSteppedInOrderWithEachSimulationStep() throws Exception {
+		final Sequence steppingOrder = context.sequence("steppingOrder");
 
 		context.checking(new Expectations() {
 			{
-				//oneOf(vehicleManager).addVehicle(vehicle);
+				oneOf(roadNetwork).junctions(); will(returnValue(asList(junction0)));
+				oneOf(junction0).step(); inSequence(steppingOrder);
+				oneOf(vehicleManager).step(); inSequence(steppingOrder);
 			}
 		});
-
-		simulation.addVehicle(vehicle);
+		simulation.step();
 	}
 
-	@Test
-	public void stepCallsVehicleManagerStepWithEquivilantNumberOfTimesteps() throws Exception {
-		final int timesteps = 10;
-
-		context.checking(new Expectations() {
-			{
-				oneOf(vehicleManager).step(timesteps);
-			}
-		});
-
-		simulation.step(timesteps);
-	}
 }

@@ -16,14 +16,20 @@ public class SimulationImpl implements Simulation {
 				this.vehicleManager = vehicleManager;
 	}
 
+
+
+	@Override
+	public void step() {
+		for (final Junction junction : roadNetwork.junctions()) {
+			junction.step();
+		}
+		vehicleManager.step();
+	}
+
 	@Override
 	public void step(final int timesteps) {
-		vehicleManager.step(timesteps);
+		for (int i=0; i<timesteps; i++) {
+			step();
+		}
 	}
-
-	@Override
-	public void addVehicle(final Vehicle vehicle) {
-		//vehicleManager.addVehicle(vehicle);
-	}
-
 }

@@ -35,6 +35,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 		remainingItinerary = cellsInItinerary.listIterator();
 		this.journeyHistoryBuilder = journeyHistoryBuilder;
 		currentLocation = nullCell;
+
 	}
 
 	@Override
@@ -54,18 +55,18 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public void move(final Vehicle vehicle) {
-		//logger.info(String.format("MOVE %s", vehicle));
+		logger.info(String.format("MOVE %s", vehicle));
 		final Cell cell = nextCellInItinerary();
 		if (cell.enter(vehicle)) {
-			leaveCurrentLocationAndUpdateTo(cell);
+			leaveCurrentLocationAndUpdateTo(vehicle, cell);
 			journeyHistoryBuilder.cellEntered(cell);
 		} else {
 			remainingItinerary.previous();
 		}
 	}
 
-	private void leaveCurrentLocationAndUpdateTo(final Cell cell) {
-		//logger.info(String.format("---changeLocation of %s to %s", vehicle, cell));
+	private void leaveCurrentLocationAndUpdateTo(final Vehicle vehicle, final Cell cell) {
+		logger.info(String.format("---changeLocation of %s to %s", vehicle, cell));
 		leaveCurrentLocation();
 		currentLocation = cell;
 	}
@@ -88,6 +89,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public void startJourney(final Vehicle vehicle) {
+		logger.info(String.format("journey started for %s ", vehicle));
 		eventBus.post(journeyStartedMessageFactory.create(vehicle));
 	}
 }

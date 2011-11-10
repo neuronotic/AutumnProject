@@ -82,12 +82,15 @@ public class TestVehicleJourneys {
 				.withRoadNetwork(roadNetwork)
 				.withVehicleManager(vehicleManager)
 				.make();
+		junction0.addVehicle(vehicle0);
+		junction3.addVehicle(vehicle1);
+
+
 		assertThat(vehicle0, isLocatedAt(new NullCell()));
 		assertThat(vehicle1, isLocatedAt(new NullCell()));
 		sim.step(1);
 		assertThat(vehicle0, isLocatedAt(junction0));
 		assertThat(vehicle1, isLocatedAt(junction3));
-
 	}
 
 	@Test
@@ -97,10 +100,7 @@ public class TestVehicleJourneys {
 		vehicle1.startJourney();
 
 		vehicleManager.step(8);
-
-
 		createJourneyHistories();
-
 		assertThat(vehicleManager.getEndedJourneyHistories().size(), is(2));
 		assertThat(vehicleManager.getEndedJourneyHistories(), containsInAnyOrder(history0, history1));
 	}
