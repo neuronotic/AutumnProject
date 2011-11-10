@@ -1,9 +1,13 @@
 package traffic;
 
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.matcher.AbstractMatcher;
+import com.google.inject.name.Names;
 
 /**
  * build the project with "mvn clean package" in the directory containing pom.xml
@@ -16,6 +20,17 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 public class TrafficModule extends AbstractModule {
 	@Override
 	protected void configure() {
+		final EventBus eventBus = new EventBus();
+		bind(MyEventBus.class).toInstance(new MyEventBusImpl(eventBus));
+		bindListener(new AbstractMatcher<TypeLiteral<?>>()
+		      {
+		         @Override
+		         public boolean matches(@SuppressWarnings("unused") final TypeLiteral<?> t)
+		         {
+		            return true;
+		         }
+		      }, new EventBusTypeListener(eventBus));
+
 		bind(Traffic.class).to(TrafficImpl.class);
 
 		bind(VehicleManager.class).to(VehicleManagerImpl.class);
@@ -29,7 +44,6 @@ public class TrafficModule extends AbstractModule {
 		bind(VehicleStateContextBuilder.class).to(VehicleStateContextBuilderImpl.class);
 		bind(JourneyHistoryBuilder.class).to(JourneyHistoryBuilderImpl.class);
 		bind(TimeKeeper.class).to(TimeKeeperImpl.class);
-		bind(MyEventBus.class).to(MyEventBusImpl.class);
 
 		install(new FactoryModuleBuilder()
 			.implement(JourneyEndedMessage.class, JourneyEndedMessageImpl.class)
@@ -39,9 +53,7 @@ public class TrafficModule extends AbstractModule {
 			.implement(JourneyHistory.class, JourneyHistoryImpl.class)
 			.build(JourneyHistoryFactory.class));
 
-		install(new FactoryModuleBuilder()
-    		.implement(Cell.class, NullCell.class)
-    		.build(NullCellFactory.class));
+		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
 
 		install(new FactoryModuleBuilder()
 	    	.implement(VehicleStateContext.class, VehicleStateContextImpl.class)

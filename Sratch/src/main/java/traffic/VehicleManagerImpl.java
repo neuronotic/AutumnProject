@@ -21,7 +21,6 @@ class VehicleManagerImpl implements VehicleManager {
 
 	@Override
 	public void addVehicle(final Vehicle vehicle) {
-		vehicle.subscribeToJourneyEndNotification(this);
 		vehicles.add(vehicle);
 	}
 

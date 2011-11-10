@@ -9,7 +9,4 @@ public interface Vehicle {
 	SimulationTime journeyTime();
 
 	String name();
-
-	void subscribeToJourneyEndNotification(Object subscriber);
-
 }

@@ -19,7 +19,6 @@ public class TestVehicleStateContextImpl {
 	private final JourneyHistoryBuilder journeyHistoryBuilder = context.mock(JourneyHistoryBuilder.class);
 	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
 	private final Vehicle vehicle = context.mock(Vehicle.class);
-	private final NullCellFactory nullCellFactory = context.mock(NullCellFactory.class);
 	private final Cell nullCell0 = context.mock(Cell.class, "nullCell0");
 	private final JourneyEndedMessageFactory journeyEndedMessageFactory = context.mock(JourneyEndedMessageFactory.class);
 	private final JourneyEndedMessage journeyEndedMessage = context.mock(JourneyEndedMessage.class);
@@ -29,11 +28,10 @@ public class TestVehicleStateContextImpl {
 	public void setUp() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(nullCellFactory).createNullCell(); will(returnValue(nullCell0));
 				ignoring(nullCell0);
 			}
 		});
-		stateContext = new VehicleStateContextImpl(journeyEndedEventBus, journeyEndedMessageFactory, nullCellFactory, journeyHistoryBuilder, asList(cell0));
+		stateContext = new VehicleStateContextImpl(journeyEndedEventBus, journeyEndedMessageFactory, journeyHistoryBuilder, new NullCell(), asList(cell0));
 	}
 
 	@Test
@@ -61,7 +59,7 @@ public class TestVehicleStateContextImpl {
 	}
 
 	@Test
-	public void journeyEndedCausesCurrentCellToLeftAndJourneyEndedMessageSentOnJourneyEndedEventBus() throws Exception {
+	public void journeyEndedCausesCurrentCellToLeftAndJourneyEndedMessagePostedOnEventBus() throws Exception {
 		currentLocationChangesToCellIfMoveSuccessfullyCallsEnter();
 		context.checking(new Expectations() {
 			{
@@ -73,17 +71,6 @@ public class TestVehicleStateContextImpl {
 			}
 		});
 		stateContext.journeyEnded(vehicle);
-	}
-
-	@Test
-	public void subscribeToJourneyEndedNotificationsDelegatesRegistrationToJourneyEndedEventBus() throws Exception {
-		final Object subscriber = new Object();
-		context.checking(new Expectations() {
-			{
-				oneOf(journeyEndedEventBus).register(subscriber);
-			}
-		});
-		stateContext.subscribeToJourneyEndNotification(subscriber);
 	}
 
 	@Test

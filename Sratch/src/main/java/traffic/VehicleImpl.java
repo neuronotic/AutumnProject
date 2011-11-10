@@ -46,9 +46,4 @@ class VehicleImpl implements Vehicle {
 	public String toString() {
 		return String.format("Vehicle %s located at %s", name(), location());
 	}
-
-	@Override
-	public void subscribeToJourneyEndNotification(final Object subscriber) {
-		stateContext.subscribeToJourneyEndNotification(subscriber);
-	}
 }

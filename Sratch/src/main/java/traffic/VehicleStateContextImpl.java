@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import com.google.inject.name.Named;
 
 public class VehicleStateContextImpl implements VehicleStateContext {
 	@Inject Logger logger = Logger.getAnonymousLogger();
@@ -14,21 +15,21 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	private final ListIterator<Cell> remainingItinerary;
 	private final JourneyHistoryBuilder journeyHistoryBuilder;
 	private Cell currentLocation;
-	private final MyEventBus journeyEndedEventBus;
+	private final MyEventBus eventBus;
 	private final JourneyEndedMessageFactory journeyEndedMessageFactory;
 
 	@Inject
 	public VehicleStateContextImpl(
-			final MyEventBus journeyEndedEventBus,
+			final MyEventBus eventBus,
 			final JourneyEndedMessageFactory journeyEndedMessageFactory,
-			final NullCellFactory nullCellFactory,
 			final JourneyHistoryBuilder journeyHistoryBuilder,
+			@Named("NullCell") final Cell nullCell,
 			@Assisted final List<Cell> cellsInItinerary) {
-		this.journeyEndedEventBus = journeyEndedEventBus;
+		this.eventBus = eventBus;
 		this.journeyEndedMessageFactory = journeyEndedMessageFactory;
 		remainingItinerary = cellsInItinerary.listIterator();
 		this.journeyHistoryBuilder = journeyHistoryBuilder;
-		currentLocation = nullCellFactory.createNullCell();
+		currentLocation = nullCell;
 	}
 
 	@Override
@@ -77,12 +78,6 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 		//logger.info(String.format("journey ended for %s", vehicle));
 		leaveCurrentLocation();
 		journeyHistoryBuilder.noteEndTime();
-		journeyEndedEventBus.post(journeyEndedMessageFactory.create(vehicle, journeyHistoryBuilder.make(vehicle)));
-	}
-
-	@Override
-	public void subscribeToJourneyEndNotification(final Object subscriber) {
-		//logger.info(String.format("subscription to JourneyEndNotification by", subscriber.getClass()));
-		journeyEndedEventBus.register(subscriber);
+		eventBus.post(journeyEndedMessageFactory.create(vehicle, journeyHistoryBuilder.make(vehicle)));
 	}
 }

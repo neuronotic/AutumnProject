@@ -68,9 +68,6 @@ public class TestVehicleJourneys {
 
 		manager.step(8);
 
-		//JourneyHistory as value object, and then in VehicleStateContext, just build the builder...
-		//primitive envy on Time....
-
 
 		final JourneyHistory history0 = JourneyHistoryBuilderProvider.get()
 				.withStartTime(time(0))
