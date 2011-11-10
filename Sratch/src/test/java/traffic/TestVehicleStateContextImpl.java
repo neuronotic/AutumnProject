@@ -16,7 +16,6 @@ public class TestVehicleStateContextImpl {
 
 	private final MyEventBus journeyEndedEventBus = context.mock(MyEventBus.class);
 	private final Cell cell0 = context.mock(Cell.class, "cell0");
-	private final Cell cell1 = context.mock(Cell.class, "cell1");
 	private final JourneyHistoryBuilder journeyHistoryBuilder = context.mock(JourneyHistoryBuilder.class);
 	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
 	private final Vehicle vehicle = context.mock(Vehicle.class);
@@ -34,51 +33,19 @@ public class TestVehicleStateContextImpl {
 				ignoring(nullCell0);
 			}
 		});
-		stateContext = new VehicleStateContextImpl(journeyEndedEventBus, journeyEndedMessageFactory, nullCellFactory, asList(cell0, cell1), journeyHistoryBuilder);
-	}
-
-	@Test
-	public void subscribeToJourneyEndedNotificationsDelegatesRegistrationToJourneyEndedEventBus() throws Exception {
-		final Object subscriber = new Object();
-		context.checking(new Expectations() {
-			{
-				oneOf(journeyEndedEventBus).register(subscriber);
-			}
-		});
-		stateContext.subscribeToJourneyEndNotification(subscriber);
-	}
-
-	@Test
-	public void journeyEndedCausesCurrentCellToBeReplacedWithNullCellAndMessageSentOnJourneyEndedEventBus() throws Exception {
-		currentLocationChangesToCellIfMoveSuccessfullyCallsEnter();
-		final Cell nullCell1 = context.mock(Cell.class, "nullCell1");
-
-		context.checking(new Expectations() {
-			{
-				oneOf(journeyHistoryBuilder).noteEndTime();
-				oneOf(journeyHistoryBuilder).make(vehicle); will(returnValue(journeyHistory));
-				oneOf(journeyEndedMessageFactory).create(vehicle, journeyHistory); will(returnValue(journeyEndedMessage));
-				oneOf(journeyEndedEventBus).post(journeyEndedMessage);
-				oneOf(cell0).leave(vehicle);
-				oneOf(nullCellFactory).createNullCell(); will(returnValue(nullCell1));
-			}
-		});
-		stateContext.journeyEnded(vehicle);
-		assertThat(stateContext.location(), is(nullCell1));
+		stateContext = new VehicleStateContextImpl(journeyEndedEventBus, journeyEndedMessageFactory, nullCellFactory, asList(cell0), journeyHistoryBuilder);
 	}
 
 	@Test
 	public void currentLocationRemainsUnchangedIfMoveUnsuccessfullyCallsEnter() throws Exception {
-		currentLocationChangesToCellIfMoveSuccessfullyCallsEnter();
-
+		final Cell previousLocation = stateContext.location();
 		context.checking(new Expectations() {
 			{
-				oneOf(cell1).enter(vehicle); will(returnValue(false));
+				oneOf(cell0).enter(vehicle); will(returnValue(false));
 			}
 		});
 		stateContext.move(vehicle);
-		assertThat(stateContext.location(), is(cell0));
-
+		assertThat(stateContext.location(), is(previousLocation));
 	}
 
 	@Test
@@ -91,6 +58,32 @@ public class TestVehicleStateContextImpl {
 		});
 		stateContext.move(vehicle);
 		assertThat(stateContext.location(), is(cell0));
+	}
+
+	@Test
+	public void journeyEndedCausesCurrentCellToLeftAndJourneyEndedMessageSentOnJourneyEndedEventBus() throws Exception {
+		currentLocationChangesToCellIfMoveSuccessfullyCallsEnter();
+		context.checking(new Expectations() {
+			{
+				oneOf(journeyHistoryBuilder).noteEndTime();
+				oneOf(journeyHistoryBuilder).make(vehicle); will(returnValue(journeyHistory));
+				oneOf(journeyEndedMessageFactory).create(vehicle, journeyHistory); will(returnValue(journeyEndedMessage));
+				oneOf(journeyEndedEventBus).post(journeyEndedMessage);
+				oneOf(cell0).leave();
+			}
+		});
+		stateContext.journeyEnded(vehicle);
+	}
+
+	@Test
+	public void subscribeToJourneyEndedNotificationsDelegatesRegistrationToJourneyEndedEventBus() throws Exception {
+		final Object subscriber = new Object();
+		context.checking(new Expectations() {
+			{
+				oneOf(journeyEndedEventBus).register(subscriber);
+			}
+		});
+		stateContext.subscribeToJourneyEndNotification(subscriber);
 	}
 
 	@Test

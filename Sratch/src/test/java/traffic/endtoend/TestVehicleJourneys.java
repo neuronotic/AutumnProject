@@ -117,14 +117,6 @@ public class TestVehicleJourneys {
 		manager.step(1);
 		assertThat(vehicle0, isLocatedAt(segment2,0));
 		assertThat(vehicle1, isLocatedAt(junction1));
-
-		manager.step(2);
-		assertThat(vehicle0, isLocatedAt(junction2));
-		assertThat(vehicle1, isLocatedAt(segment2, 1));
-
-		manager.step(1);
-		assertThat(vehicle0, not(isLocatedAt(junction2)));
-		assertThat(vehicle1, isLocatedAt(junction2));
 	}
 
 	@Test

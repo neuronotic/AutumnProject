@@ -30,11 +30,9 @@ public class TestCellImpl {
 	}
 
 	@Test
-	public void leaveEmptiesCell() throws Exception {
-		cell.enter(vehicle0);
-		assertThat(cell.isOccupied(), is(true));
-		cell.leave(vehicle0);
-		assertThat(cell.isOccupied(), is(false));
+	public void cellCanOnlyHaveOneOccupantAtATime() throws Exception {
+		assertThat(cell.enter(vehicle0), is(true));
+		assertThat(cell.enter(vehicle1), is(false));
 	}
 
 	@Test
@@ -45,9 +43,11 @@ public class TestCellImpl {
 	}
 
 	@Test
-	public void cellCanOnlyHaveOneOccupantAtATime() throws Exception {
-		assertThat(cell.enter(vehicle0), is(true));
-		assertThat(cell.enter(vehicle1), is(false));
+	public void leaveUnoccupiesCell() throws Exception {
+		cell.enter(vehicle0);
+		assertThat(cell.isOccupied(), is(true));
+		cell.leave();
+		assertThat(cell.isOccupied(), is(false));
 	}
 
 	@Test

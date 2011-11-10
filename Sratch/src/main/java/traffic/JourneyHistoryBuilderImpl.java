@@ -35,10 +35,6 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 	}
 
 	@Override
-	public void stepped() {
-	}
-
-	@Override
 	public SimulationTime journeyTime() {
 		return timeKeeper.currentTime().differenceBetween(startTime);
 	}

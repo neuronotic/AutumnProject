@@ -17,7 +17,7 @@ public class NullCell implements Cell {
 	}
 
 	@Override
-	public void leave(final Vehicle vehicle) {
+	public void leave() {
 	}
 
 	@Override

@@ -10,7 +10,6 @@ public interface JourneyHistoryBuilder {
 
 	JourneyHistory make(Vehicle vehicle);
 	SimulationTime journeyTime();
-	void stepped();
 	SimulationTime startTime();
 	void cellEntered(Cell cell0);
 	List<CellTime> cellEntryTimes();

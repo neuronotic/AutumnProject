@@ -38,7 +38,7 @@ class JunctionImpl implements Junction {
 	}
 
 	@Override
-	public void leave(final Vehicle vehicle) {
+	public void leave() {
 		occupied = false;
 	}
 }

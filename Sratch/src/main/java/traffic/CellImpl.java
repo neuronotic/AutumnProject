@@ -40,7 +40,7 @@ class CellImpl implements Cell {
 	}
 
 	@Override
-	public void leave(final Vehicle vehicle) {
+	public void leave() {
 		occupied = false;
 	}
 

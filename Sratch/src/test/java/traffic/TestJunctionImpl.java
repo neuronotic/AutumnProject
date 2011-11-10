@@ -17,14 +17,6 @@ public class TestJunctionImpl {
 	private final Junction junction = new JunctionImpl("myJunction");
 
 	@Test
-	public void leaveEmptiesJunction() throws Exception {
-		junction.enter(vehicle0);
-		assertThat(junction.isOccupied(), is(true));
-		junction.leave(vehicle0);
-		assertThat(junction.isOccupied(), is(false));
-	}
-
-	@Test
 	public void isOccupiedReturnsTrueOnlyIfVehicleIsInCell() throws Exception {
 		assertThat(junction.isOccupied(), is(false));
 		junction.enter(vehicle0);
@@ -38,7 +30,15 @@ public class TestJunctionImpl {
 	}
 
 	@Test
-	public void junctionCanBeCreated() {
+	public void leaveEmptiesJunction() throws Exception {
+		junction.enter(vehicle0);
+		assertThat(junction.isOccupied(), is(true));
+		junction.leave();
+		assertThat(junction.isOccupied(), is(false));
+	}
+
+	@Test
+	public void junctionIsCreatedWithGivenName() {
 		assertThat(junction, isJunctionCalled("myJunction"));
 	}
 }

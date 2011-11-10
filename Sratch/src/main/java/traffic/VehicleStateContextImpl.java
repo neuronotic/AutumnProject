@@ -13,7 +13,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	private final ListIterator<Cell> remainingItinerary;
 	private final JourneyHistoryBuilder history;
-	private Cell location;
+	private Cell currentLocation;
 	private final NullCellFactory nullCellFactory;
 	private final MyEventBus journeyEndedEventBus;
 	private final JourneyEndedMessageFactory journeyEndedMessageFactory;
@@ -21,20 +21,21 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	@Inject
 	public VehicleStateContextImpl(
 			final MyEventBus journeyEndedEventBus,
-			final JourneyEndedMessageFactory journeyEndedMessageFactory, final NullCellFactory nullCellFactory,
+			final JourneyEndedMessageFactory journeyEndedMessageFactory,
+			final NullCellFactory nullCellFactory,
 			@Assisted final List<Cell> cellsInItinerary,
 			final JourneyHistoryBuilder history) {
-				this.journeyEndedEventBus = journeyEndedEventBus;
-				this.journeyEndedMessageFactory = journeyEndedMessageFactory;
-				this.nullCellFactory = nullCellFactory;
-				remainingItinerary = cellsInItinerary.listIterator();
-				this.history = history;
-				location = nullCellFactory.createNullCell();
+		this.journeyEndedEventBus = journeyEndedEventBus;
+		this.journeyEndedMessageFactory = journeyEndedMessageFactory;
+		this.nullCellFactory = nullCellFactory;
+		remainingItinerary = cellsInItinerary.listIterator();
+		this.history = history;
+		currentLocation = nullCellFactory.createNullCell();
 	}
 
 	@Override
 	public Cell location() {
-		return location;
+		return currentLocation;
 	}
 
 	@Override
@@ -52,17 +53,21 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 		logger.info(String.format("MOVE %s", vehicle));
 		final Cell cell = nextCellInItinerary();
 		if (cell.enter(vehicle)) {
-			changeLocation(vehicle, cell);
+			leaveCurrentLocationAndUpdateTo(cell);
 			history.cellEntered(cell);
 		} else {
 			remainingItinerary.previous();
 		}
 	}
 
-	private void changeLocation(final Vehicle vehicle, final Cell cell) {
+	private void leaveCurrentLocationAndUpdateTo(final Cell cell) {
 		//logger.info(String.format("---changeLocation of %s to %s", vehicle, cell));
-		location.leave(vehicle);
-		location = cell;
+		leaveCurrentLocation();
+		currentLocation = cell;
+	}
+
+	private void leaveCurrentLocation() {
+		currentLocation.leave();
 	}
 
 	private Cell nextCellInItinerary() {
@@ -72,9 +77,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	@Override
 	public void journeyEnded(final Vehicle vehicle) {
 		//logger.info(String.format("journey ended for %s", vehicle));
-
-		changeLocation(vehicle, nullCellFactory.createNullCell());
-
+		leaveCurrentLocation();
 		history.noteEndTime();
 		journeyEndedEventBus.post(journeyEndedMessageFactory.create(vehicle, history.make(vehicle)));
 	}
@@ -82,7 +85,6 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	@Override
 	public void subscribeToJourneyEndNotification(final Object subscriber) {
 		//logger.info(String.format("subscription to JourneyEndNotification by", subscriber.getClass()));
-
 		journeyEndedEventBus.register(subscriber);
 	}
 }
