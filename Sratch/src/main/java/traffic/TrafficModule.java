@@ -46,6 +46,10 @@ public class TrafficModule extends AbstractModule {
 		bind(TimeKeeper.class).to(TimeKeeperImpl.class);
 
 		install(new FactoryModuleBuilder()
+			.implement(JourneyStartedMessage.class, JourneyStartedMessageImpl.class)
+			.build(JourneyStartedMessageFactory.class));
+
+		install(new FactoryModuleBuilder()
 			.implement(JourneyEndedMessage.class, JourneyEndedMessageImpl.class)
 			.build(JourneyEndedMessageFactory.class));
 

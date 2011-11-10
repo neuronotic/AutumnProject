@@ -64,7 +64,8 @@ public class TestVehicleJourneys {
 	public void VehicleManagerMaintainsLogOfJourneyHistories() throws Exception {
 		manager.addVehicle(vehicle0);
 		manager.addVehicle(vehicle1);
-
+		vehicle0.startJourney();
+		vehicle1.startJourney();
 
 		manager.step(8);
 
@@ -92,10 +93,7 @@ public class TestVehicleJourneys {
 				.make(vehicle1);
 
 		assertThat(manager.getEndedJourneyHistories().size(), is(2));
-		assertThat(manager.getEndedJourneyHistories().get(0), equalTo(history0));
-		assertThat(manager.getEndedJourneyHistories().get(1), equalTo(history1));
 		assertThat(manager.getEndedJourneyHistories(), containsInAnyOrder(history0, history1));
-
 	}
 
 	@Test

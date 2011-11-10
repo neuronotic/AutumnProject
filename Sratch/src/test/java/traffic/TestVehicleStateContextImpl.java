@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.*;
 import static traffic.SimulationTime.*;
 
 import org.jmock.Expectations;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -14,24 +13,27 @@ public class TestVehicleStateContextImpl {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
-	private final MyEventBus journeyEndedEventBus = context.mock(MyEventBus.class);
+	private final MyEventBus eventBus = context.mock(MyEventBus.class);
 	private final Cell cell0 = context.mock(Cell.class, "cell0");
 	private final JourneyHistoryBuilder journeyHistoryBuilder = context.mock(JourneyHistoryBuilder.class);
 	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
 	private final Vehicle vehicle = context.mock(Vehicle.class);
-	private final Cell nullCell0 = context.mock(Cell.class, "nullCell0");
+	private final JourneyStartedMessageFactory journeyStartedMessageFactory = context.mock(JourneyStartedMessageFactory.class);
+	private final JourneyStartedMessage journeyStartedMessage = context.mock(JourneyStartedMessage.class);
 	private final JourneyEndedMessageFactory journeyEndedMessageFactory = context.mock(JourneyEndedMessageFactory.class);
 	private final JourneyEndedMessage journeyEndedMessage = context.mock(JourneyEndedMessage.class);
-	private VehicleStateContext stateContext;
+	private final VehicleStateContext stateContext =
+			new VehicleStateContextImpl(eventBus, journeyStartedMessageFactory, journeyEndedMessageFactory, journeyHistoryBuilder, new NullCell(), asList(cell0));;
 
-	@Before
-	public void setUp() throws Exception {
+	@Test
+	public void startJourneyCausesJourneyStartedMessageToBeSentOnEventBus() throws Exception {
 		context.checking(new Expectations() {
 			{
-				ignoring(nullCell0);
+				oneOf(journeyStartedMessageFactory).create(vehicle); will(returnValue(journeyStartedMessage));
+				oneOf(eventBus).post(journeyStartedMessage);
 			}
 		});
-		stateContext = new VehicleStateContextImpl(journeyEndedEventBus, journeyEndedMessageFactory, journeyHistoryBuilder, new NullCell(), asList(cell0));
+		stateContext.startJourney(vehicle);
 	}
 
 	@Test
@@ -66,7 +68,7 @@ public class TestVehicleStateContextImpl {
 				oneOf(journeyHistoryBuilder).noteEndTime();
 				oneOf(journeyHistoryBuilder).make(vehicle); will(returnValue(journeyHistory));
 				oneOf(journeyEndedMessageFactory).create(vehicle, journeyHistory); will(returnValue(journeyEndedMessage));
-				oneOf(journeyEndedEventBus).post(journeyEndedMessage);
+				oneOf(eventBus).post(journeyEndedMessage);
 				oneOf(cell0).leave();
 			}
 		});

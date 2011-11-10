@@ -9,4 +9,6 @@ public interface Vehicle {
 	SimulationTime journeyTime();
 
 	String name();
+
+	void startJourney();
 }

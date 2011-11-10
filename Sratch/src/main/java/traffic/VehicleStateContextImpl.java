@@ -18,14 +18,19 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	private final MyEventBus eventBus;
 	private final JourneyEndedMessageFactory journeyEndedMessageFactory;
 
+
+	private final JourneyStartedMessageFactory journeyStartedMessageFactory;
+
 	@Inject
 	public VehicleStateContextImpl(
 			final MyEventBus eventBus,
+			final JourneyStartedMessageFactory journeyStartedMessageFactory,
 			final JourneyEndedMessageFactory journeyEndedMessageFactory,
 			final JourneyHistoryBuilder journeyHistoryBuilder,
 			@Named("NullCell") final Cell nullCell,
 			@Assisted final List<Cell> cellsInItinerary) {
 		this.eventBus = eventBus;
+		this.journeyStartedMessageFactory = journeyStartedMessageFactory;
 		this.journeyEndedMessageFactory = journeyEndedMessageFactory;
 		remainingItinerary = cellsInItinerary.listIterator();
 		this.journeyHistoryBuilder = journeyHistoryBuilder;
@@ -79,5 +84,10 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 		leaveCurrentLocation();
 		journeyHistoryBuilder.noteEndTime();
 		eventBus.post(journeyEndedMessageFactory.create(vehicle, journeyHistoryBuilder.make(vehicle)));
+	}
+
+	@Override
+	public void startJourney(final Vehicle vehicle) {
+		eventBus.post(journeyStartedMessageFactory.create(vehicle));
 	}
 }
