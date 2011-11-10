@@ -1,9 +1,11 @@
 package traffic;
 
 public interface FlowBuilder {
-
-	FlowBuilder withSegments(Segment...segments);
+	Flow make();
 
 	FlowBuilder withProbability(double probability);
+
+	FlowBuilder withItinerary(Itinerary itinerary);
+
 
 }

@@ -13,6 +13,7 @@ public class SimulationImpl implements Simulation {
 	@Inject
 	SimulationImpl(
 			@Assisted final RoadNetwork roadNetwork,
+			@Assisted final List<FlowGroup> flowGroups,
 			final VehicleManager vehicleManager) {
 				this.roadNetwork = roadNetwork;
 				this.vehicleManager = vehicleManager;
@@ -34,9 +35,7 @@ public class SimulationImpl implements Simulation {
 	}
 
 	@Override
-	public List<JourneyHistory> getJourneyEndedHistories() {
-		// TODO Auto-generated method stub
-		return null;
-
+	public List<JourneyHistory> getEndedJourneyHistories() {
+		return vehicleManager.getEndedJourneyHistories();
 	}
 }

@@ -1,19 +1,31 @@
 package traffic;
 
+import com.google.inject.Inject;
+
 public class FlowBuilderImpl implements FlowBuilder {
 
-	@Override
-	public FlowBuilder withSegments(final Segment... segments) {
-		// TODO Auto-generated method stub
-		return null;
+	private double probability;
+	private Itinerary itinerary;
+	private final FlowFactory flowFactory;
 
+	@Inject public FlowBuilderImpl(final FlowFactory flowFactory) {
+		this.flowFactory = flowFactory;
+	}
+
+	@Override
+	public Flow make() {
+		return flowFactory.create(itinerary, probability);
 	}
 
 	@Override
 	public FlowBuilder withProbability(final double probability) {
-		// TODO Auto-generated method stub
-		return null;
-
+		this.probability = probability;
+		return this;
 	}
 
+	@Override
+	public FlowBuilder withItinerary(final Itinerary itinerary) {
+		this.itinerary = itinerary;
+		return this;
+	}
 }

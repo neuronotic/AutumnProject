@@ -14,6 +14,7 @@ import org.junit.Test;
 import traffic.ConstantTemporalPattern;
 import traffic.FlowBuilder;
 import traffic.FlowGroupBuilder;
+import traffic.ItineraryImpl;
 import traffic.JourneyHistory;
 import traffic.JourneyHistoryBuilder;
 import traffic.Junction;
@@ -87,11 +88,11 @@ public class TestVehicleJourneys {
 				.withFlowGroup(flowGroupBuilderProvider.get()
 						.withTemporalPattern(new ConstantTemporalPattern())
 						.withFlow(flowBuilderProvider.get()
-								.withSegments(segment0, segment1)
+								.withItinerary(new ItineraryImpl(segment0, segment1))
 								.withProbability(1)))
 				.make();
 		sim.step(10);
-		assertThat(sim.getJourneyEndedHistories().size(), equalTo(4));
+		assertThat(sim.getEndedJourneyHistories().size(), equalTo(4));
 	}
 
 	@Test

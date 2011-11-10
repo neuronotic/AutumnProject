@@ -48,6 +48,15 @@ public class TrafficModule extends AbstractModule {
 		bind(JourneyHistoryBuilder.class).to(JourneyHistoryBuilderImpl.class);
 		bind(TimeKeeper.class).to(TimeKeeperImpl.class);
 
+
+		install(new FactoryModuleBuilder()
+			.implement(Flow.class, FlowImpl.class)
+			.build(FlowFactory.class));
+
+		install(new FactoryModuleBuilder()
+			.implement(FlowGroup.class, FlowGroupImpl.class)
+			.build(FlowGroupFactory.class));
+
 		install(new FactoryModuleBuilder()
 			.implement(JourneyStartedMessage.class, JourneyStartedMessageImpl.class)
 			.build(JourneyStartedMessageFactory.class));
