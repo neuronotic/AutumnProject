@@ -65,7 +65,7 @@ public class TestVehicleJourneys {
 
 	@Before
 	public void setUp() throws Exception {
-		logger.info(String.format("\n\nSETUP============"));
+		//logger.info(String.format("\n\nSETUP============"));
 
 		createJunctions();
 		createSegments();
@@ -76,7 +76,7 @@ public class TestVehicleJourneys {
 
 	@Test
 	public void newlyCreatedVehiclesRemainOffRoadNetworkUntilJunctionPullsThemIn() throws Exception {
-		logger.info(String.format("\n============newlyCreatedVehiclesRemainOffRoadNetworkUntilJunctionPullsThemIn"));
+		//logger.info(String.format("\n============newlyCreatedVehiclesRemainOffRoadNetworkUntilJunctionPullsThemIn"));
 
 		final Simulation sim = simulationBuilderProvider.get()
 				.withRoadNetwork(roadNetwork)
@@ -92,7 +92,7 @@ public class TestVehicleJourneys {
 
 	@Test
 	public void VehicleManagerMaintainsLogOfJourneyHistories() throws Exception {
-		logger.info(String.format("\n============VehicleManagerMaintainsLogOfJourneyHistories"));
+		//logger.info(String.format("\n============VehicleManagerMaintainsLogOfJourneyHistories"));
 		vehicle0.startJourney();
 		vehicle1.startJourney();
 
@@ -108,7 +108,7 @@ public class TestVehicleJourneys {
 
 	@Test
 	public void onlyOneVehicleCanOccupyACellAtATime() throws Exception {
-		logger.info(String.format("\n============onlyOneVehicleCanOccupyACellAtATime"));
+		//logger.info(String.format("\n============onlyOneVehicleCanOccupyACellAtATime"));
 		vehicle0.startJourney();
 		vehicle1.startJourney();
 
@@ -127,7 +127,7 @@ public class TestVehicleJourneys {
 
 	@Test
 	public void tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime() throws Exception {
-		logger.info(String.format("\n============tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime"));
+		//logger.info(String.format("\n============tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime"));
 		vehicle0.startJourney();
 		vehicleManager.step(7);
 		assertThat(vehicle0, isLocatedAt(junction2));

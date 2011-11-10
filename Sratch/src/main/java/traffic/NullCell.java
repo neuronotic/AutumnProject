@@ -39,7 +39,7 @@ public class NullCell implements Cell {
 
 	@Override
 	public boolean equals(final Object that) {
-		logger.info(String.format("NULL: %s equals %s", this, that));
+		//logger.info(String.format("NULL: %s equals %s", this, that));
 		if (that != null && that.getClass().equals(this.getClass())) {
 			return true;
 		} return false;

@@ -54,7 +54,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public void move(final Vehicle vehicle) {
-		logger.info(String.format("MOVE %s", vehicle));
+		//logger.info(String.format("MOVE %s", vehicle));
 		final Cell cell = nextCellInItinerary();
 		if (cell.enter(vehicle)) {
 			leaveCurrentLocationAndUpdateTo(cell);
