@@ -4,9 +4,8 @@ public class VehicleJourneyStartedState implements VehicleJourneyState {
 
 	private final VehicleStateFactory vehicleStateFactory;
 
-	public VehicleJourneyStartedState(
-			final VehicleStateFactory vehicleStateFactory) {
-				this.vehicleStateFactory = vehicleStateFactory;
+	public VehicleJourneyStartedState(final VehicleStateFactory vehicleStateFactory) {
+		this.vehicleStateFactory = vehicleStateFactory;
 	}
 
 	@Override

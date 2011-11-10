@@ -33,7 +33,7 @@ public class TestVehicleStateContextImpl {
 				ignoring(nullCell0);
 			}
 		});
-		stateContext = new VehicleStateContextImpl(journeyEndedEventBus, journeyEndedMessageFactory, nullCellFactory, asList(cell0), journeyHistoryBuilder);
+		stateContext = new VehicleStateContextImpl(journeyEndedEventBus, journeyEndedMessageFactory, nullCellFactory, journeyHistoryBuilder, asList(cell0));
 	}
 
 	@Test

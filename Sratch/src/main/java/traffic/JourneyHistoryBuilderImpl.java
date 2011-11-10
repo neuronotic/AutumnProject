@@ -35,11 +35,6 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 	}
 
 	@Override
-	public SimulationTime journeyTime() {
-		return timeKeeper.currentTime().differenceBetween(startTime);
-	}
-
-	@Override
 	public JourneyHistoryBuilder withStartTime(final SimulationTime startTime) {
 		this.startTime = startTime;
 		return this;
@@ -58,18 +53,19 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 	}
 
 	@Override
-	public SimulationTime startTime() {
-		return startTime;
-	}
-
-	@Override
-	public String toString() {
-		return roadNetworkReflectionToString(this);
-	}
-
-	@Override
 	public void cellEntered(final Cell cell) {
 		withCellEntryTime(cell, timeKeeper.currentTime());
+	}
+
+	@Override
+	public void noteEndTime() {
+		withEndTime(timeKeeper.currentTime());
+	}
+
+
+	@Override
+	public SimulationTime startTime() {
+		return startTime;
 	}
 
 	@Override
@@ -78,13 +74,17 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 	}
 
 	@Override
-	public void noteEndTime() {
-		withEndTime(timeKeeper.currentTime());
-	}
-
-	@Override
 	public SimulationTime endTime() {
 		return endTime;
 	}
 
+	@Override
+	public SimulationTime journeyTime() {
+		return timeKeeper.currentTime().differenceBetween(startTime);
+	}
+
+	@Override
+	public String toString() {
+		return roadNetworkReflectionToString(this);
+	}
 }

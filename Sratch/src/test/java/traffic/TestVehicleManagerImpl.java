@@ -75,8 +75,8 @@ public class TestVehicleManagerImpl {
 		addVehicle(vehicle0);
 		addVehicle(vehicle1);
 
-		setVehicleStepExpectation(vehicle0);
-		setVehicleStepExpectation(vehicle1);
+		setVehicleExpectationForCallToStep(vehicle0);
+		setVehicleExpectationForCallToStep(vehicle1);
 
 		vehicleManager.step();
 	}
@@ -86,9 +86,9 @@ public class TestVehicleManagerImpl {
 	public void managerCanBeSteppedMultipleTimes() throws Exception {
 		addVehicle(vehicle0);
 
-		setVehicleStepExpectation(vehicle0);
-		setVehicleStepExpectation(vehicle0);
-		setVehicleStepExpectation(vehicle0);
+		setVehicleExpectationForCallToStep(vehicle0);
+		setVehicleExpectationForCallToStep(vehicle0);
+		setVehicleExpectationForCallToStep(vehicle0);
 
 		vehicleManager.step(3);
 	}
@@ -102,7 +102,7 @@ public class TestVehicleManagerImpl {
 		vehicleManager.addVehicle(vehicle);
 	}
 
-	private void setVehicleStepExpectation(final Vehicle vehicle) {
+	private void setVehicleExpectationForCallToStep(final Vehicle vehicle) {
 		context.checking(new Expectations() {
 			{
 				oneOf(vehicle).step();

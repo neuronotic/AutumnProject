@@ -12,9 +12,8 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 
 	private final ListIterator<Cell> remainingItinerary;
-	private final JourneyHistoryBuilder history;
+	private final JourneyHistoryBuilder journeyHistoryBuilder;
 	private Cell currentLocation;
-	private final NullCellFactory nullCellFactory;
 	private final MyEventBus journeyEndedEventBus;
 	private final JourneyEndedMessageFactory journeyEndedMessageFactory;
 
@@ -23,13 +22,12 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 			final MyEventBus journeyEndedEventBus,
 			final JourneyEndedMessageFactory journeyEndedMessageFactory,
 			final NullCellFactory nullCellFactory,
-			@Assisted final List<Cell> cellsInItinerary,
-			final JourneyHistoryBuilder history) {
+			final JourneyHistoryBuilder journeyHistoryBuilder,
+			@Assisted final List<Cell> cellsInItinerary) {
 		this.journeyEndedEventBus = journeyEndedEventBus;
 		this.journeyEndedMessageFactory = journeyEndedMessageFactory;
-		this.nullCellFactory = nullCellFactory;
 		remainingItinerary = cellsInItinerary.listIterator();
-		this.history = history;
+		this.journeyHistoryBuilder = journeyHistoryBuilder;
 		currentLocation = nullCellFactory.createNullCell();
 	}
 
@@ -40,7 +38,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public SimulationTime journeyTime() {
-		return history.journeyTime();
+		return journeyHistoryBuilder.journeyTime();
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 		final Cell cell = nextCellInItinerary();
 		if (cell.enter(vehicle)) {
 			leaveCurrentLocationAndUpdateTo(cell);
-			history.cellEntered(cell);
+			journeyHistoryBuilder.cellEntered(cell);
 		} else {
 			remainingItinerary.previous();
 		}
@@ -78,8 +76,8 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	public void journeyEnded(final Vehicle vehicle) {
 		//logger.info(String.format("journey ended for %s", vehicle));
 		leaveCurrentLocation();
-		history.noteEndTime();
-		journeyEndedEventBus.post(journeyEndedMessageFactory.create(vehicle, history.make(vehicle)));
+		journeyHistoryBuilder.noteEndTime();
+		journeyEndedEventBus.post(journeyEndedMessageFactory.create(vehicle, journeyHistoryBuilder.make(vehicle)));
 	}
 
 	@Override
