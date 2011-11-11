@@ -37,7 +37,6 @@ public class TrafficModule extends AbstractModule {
 		bind(FlowBuilder.class).to(FlowBuilderImpl.class);
 		bind(FlowGroupBuilder.class).to(FlowGroupBuilderImpl.class);
 		bind(VehicleManager.class).to(VehicleManagerImpl.class);
-		bind(VehicleManagerBuilder.class).to(VehicleManagerBuilderImpl.class);
 		bind(CellChainBuilder.class).to(CellChainBuilderImpl.class);
 		bind(SimulationBuilder.class).to(SimulationBuilderImpl.class);
 		bind(SegmentBuilder.class).to(SegmentBuilderImpl.class);

@@ -19,7 +19,7 @@ class VehicleImpl implements Vehicle {
 		this.name = name;
 		stateContext = vehicleStateContext;
 		this.journeyState = journeyState;
-		logger.info(String.format("CREATED %s", this));
+		//logger.info(String.format("CREATED %s", this));
 	}
 
 	@Override
@@ -29,7 +29,7 @@ class VehicleImpl implements Vehicle {
 
 	@Override
 	public void step() {
-		logger.info(String.format("step: Vehicle %s located at %s", name(), location()));
+		//logger.info(String.format("step: Vehicle %s located at %s", name(), location()));
 		journeyState = journeyState.step(this, stateContext);
 	}
 
