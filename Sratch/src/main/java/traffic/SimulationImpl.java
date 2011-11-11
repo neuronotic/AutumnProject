@@ -37,6 +37,7 @@ public class SimulationImpl implements Simulation {
 		roadNetwork.step();
 		vehicleCreator.step();
 		vehicleManager.step();
+		statistics.step(roadNetwork);
 		timeKeeper.step();
 	}
 

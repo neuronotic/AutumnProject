@@ -26,6 +26,8 @@ public class TestSegmentBuilderImpl {
 			{
 				oneOf(segmentFactory).createSegment(segmentName, inJunction, cellChainBuilder, outJunction); will(returnValue(segment));
 				oneOf(cellChainBuilder).cellChainOfLength(segmentLength); will(returnValue(cellChainBuilder));
+				oneOf(inJunction).addOutgoingSegment(segment);
+				oneOf(outJunction).addIncomingSegment(segment);
 			}
 		});
 

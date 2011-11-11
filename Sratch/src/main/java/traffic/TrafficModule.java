@@ -72,6 +72,11 @@ public class TrafficModule extends AbstractModule {
 			.build(FlowGroupFactory.class));
 
 		install(new FactoryModuleBuilder()
+			.implement(JunctionMeasuresMessage.class, JunctionMeasuresMessageImpl.class)
+			.build(JunctionMeasuresMessageFactory.class));
+
+
+		install(new FactoryModuleBuilder()
 			.implement(JourneyStartedMessage.class, JourneyStartedMessageImpl.class)
 			.build(JourneyStartedMessageFactory.class));
 

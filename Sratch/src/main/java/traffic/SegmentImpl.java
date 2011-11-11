@@ -71,4 +71,18 @@ class SegmentImpl implements Segment {
 	public Cell getCell(final int index) {
 		return cellChain.getCellAtIndex(index);
 	}
+
+	@Override
+	public int cellCount() {
+		return cellChain.cellCount();
+	}
+
+	@Override
+	public int occupiedCount() {
+		int occupiedCount = 0;
+		for (final Cell cell : cellChain) {
+			occupiedCount += cell.isOccupied() ? 1 : 0;
+		}
+		return occupiedCount;
+	}
 }

@@ -23,7 +23,8 @@ public class DefaultRoadNetworksImpl implements DefaultRoadNetworks {
 		junction3 = junctionFactory.createJunction("junction3");
 		junction4 = junctionFactory.createJunction("junction4");
 
-		final int segmentLength = 10;
+		final int segmentLength = 5;
+
 		return roadNetworkBuilder()
 			.withSegment( segment()
 				.withName("segment0")
@@ -44,7 +45,7 @@ public class DefaultRoadNetworksImpl implements DefaultRoadNetworks {
 				.withLength(segmentLength)
 				.make())
 			.withSegment( segment()
-				.withName("segment4")
+				.withName("segment3")
 				.withInJunction(junction1)
 				.withOutJunction(junction4)
 				.withLength(segmentLength)

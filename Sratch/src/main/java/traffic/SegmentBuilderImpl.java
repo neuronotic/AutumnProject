@@ -19,7 +19,10 @@ public class SegmentBuilderImpl implements SegmentBuilder {
 
 	@Override
 	public Segment make() {
-		return segmentFactory.createSegment(segmentName, inJunction, cellChainBuilder, outJunction);
+		final Segment segment = segmentFactory.createSegment(segmentName, inJunction, cellChainBuilder, outJunction);
+		outJunction.addIncomingSegment(segment);
+		inJunction.addOutgoingSegment(segment);
+		return segment;
 	}
 
 	@Override

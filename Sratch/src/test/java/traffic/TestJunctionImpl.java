@@ -13,8 +13,15 @@ public class TestJunctionImpl {
 
 	private final Vehicle vehicle0 = context.mock(Vehicle.class, "vehicle0");
 	private final Vehicle vehicle1 = context.mock(Vehicle.class, "vehicle1");
+	private final MyEventBus eventBus = context.mock(MyEventBus.class);
+	private final JunctionMeasuresMessageFactory messageFactory = context.mock(JunctionMeasuresMessageFactory.class);
 
-	private final Junction junction = new JunctionImpl("myJunction");
+	private final Junction junction = new JunctionImpl(eventBus, messageFactory, "myJunction");
+
+	@Test
+	public void junctionCapacity() throws Exception {
+
+	}
 
 	@Test
 	public void addedVehiclesArePlacedInOrderOnQueue() throws Exception {

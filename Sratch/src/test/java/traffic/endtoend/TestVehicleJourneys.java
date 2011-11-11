@@ -48,7 +48,7 @@ public class TestVehicleJourneys {
 	//@Rule public GuiceBerryRule guiceBerry = new GuiceBerryRule(TrafficTestModule.class);
 	@Rule public MyGuiceBerryRule guiceBerry = new MyGuiceBerryRule();
 
-	@Inject ConstantTemporalPattern constantTemporalPattern;
+	ConstantTemporalPattern constantTemporalPattern = new ConstantTemporalPattern(1);
 	@Inject private JunctionFactory junctionFactory;
 	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
 	@Inject private Provider<SegmentBuilder> segmentBuilderProvider;

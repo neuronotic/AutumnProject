@@ -48,6 +48,7 @@ public class TestSimulationImpl {
 				oneOf(roadNetwork).step(); inSequence(steppingOrder);
 				oneOf(vehicleCreator).step(); inSequence(steppingOrder);
 				oneOf(vehicleManager).step(); inSequence(steppingOrder);
+				oneOf(statistics).step(roadNetwork); inSequence(steppingOrder);
 			}
 		});
 		simulation.step();
