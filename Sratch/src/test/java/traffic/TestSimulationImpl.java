@@ -22,6 +22,7 @@ public class TestSimulationImpl {
 	private final VehicleCreatorFactory vehicleCreationManagerFactory = context.mock(VehicleCreatorFactory.class);
 	private final JourneyHistory journeyHistory0 = context.mock(JourneyHistory.class, "journeyHistory0");
 	private final VehicleCreator vehicleCreator = context.mock(VehicleCreator.class);
+	private final Statistics statistics = context.mock(Statistics.class);
 	//private final JourneyHistory journeyHistory1 = context.mock(JourneyHistory.class, "journeyHistory1");
 
 	private final Simulation simulation = simulation();
@@ -38,17 +39,23 @@ public class TestSimulationImpl {
 	}
 
 	@Test
-	public void VehicleManagerAndJunctionsAreSteppedInOrderWithEachSimulationStep() throws Exception {
+	public void VehicleManagerRoadManagerAndJunctionsAreSteppedInOrderWithEachSimulationStep() throws Exception {
 		final Sequence steppingOrder = context.sequence("steppingOrder");
 
 		context.checking(new Expectations() {
 			{
 				oneOf(timeKeeper).step();
+				oneOf(roadNetwork).step(); inSequence(steppingOrder);
 				oneOf(vehicleCreator).step(); inSequence(steppingOrder);
 				oneOf(vehicleManager).step(); inSequence(steppingOrder);
 			}
 		});
 		simulation.step();
+	}
+
+	@Test
+	public void statisticsProvidesObjectSuppliedUponInstantiation() throws Exception {
+		assertThat(simulation.statistics(), is(statistics));
 	}
 
 	private SimulationImpl simulation() {
@@ -57,7 +64,7 @@ public class TestSimulationImpl {
 				oneOf(vehicleCreationManagerFactory).create(asList(flowGroup0, flowGroup1)); will(returnValue(vehicleCreator));
 			}
 		});
-		return new SimulationImpl(roadNetwork, asList(flowGroup0, flowGroup1), timeKeeper, vehicleManager, vehicleCreationManagerFactory);
+		return new SimulationImpl(roadNetwork, asList(flowGroup0, flowGroup1), timeKeeper, statistics, vehicleManager, vehicleCreationManagerFactory);
 	}
 
 }

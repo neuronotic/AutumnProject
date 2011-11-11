@@ -31,7 +31,7 @@ public class RoadNetworkImpl implements RoadNetwork {
 
 	@Override
 	public Collection<Junction> junctions() {
-		return junctions();
+		return junctions;
 	}
 
 	private Set<Junction> buildSetOfJunctions() {
@@ -41,6 +41,13 @@ public class RoadNetworkImpl implements RoadNetwork {
 			junctions.add(segment.outJunction());
 		}
 		return junctions;
+	}
+
+	@Override
+	public void step() {
+		for (final Junction junction : junctions) {
+			junction.step();
+		}
 	}
 
 }

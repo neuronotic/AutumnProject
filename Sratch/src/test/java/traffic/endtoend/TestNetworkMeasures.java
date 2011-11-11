@@ -40,7 +40,7 @@ public class TestNetworkMeasures {
 			.withRoadNetwork(roadNetwork)
 			.make();
 
-		final Statistics stats = sim.getStatistics();
+		final Statistics stats = sim.statistics();
 		assertThat(stats.congestion(), equalTo(0.0));
 		for (final Junction junction : roadNetwork.junctions()) {
 			assertThat(stats.congestion(junction), equalTo(0.0));

@@ -8,4 +8,6 @@ public interface RoadNetwork {
 	List<Segment> segments();
 
 	Collection<Junction> junctions();
+
+	void step();
 }

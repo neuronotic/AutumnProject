@@ -32,9 +32,9 @@ public class TrafficModule extends AbstractModule {
 			      }, new EventBusTypeListener(eventBus));
 
 
+		bind(Statistics.class).to(StatisticsImpl.class);
 		//bind(RoadNetworkBuilder.class).annotatedWith(Names.named("xNetwork4Segment")).to(XNetwork4Segment.class);
 		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
-
 		bind(Traffic.class).to(TrafficImpl.class);
 		bind(MyRandom.class).to(MyRandomImpl.class);
 		//bind(Itinerary.class).to(ItineraryImpl.class);

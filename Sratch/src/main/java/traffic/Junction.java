@@ -6,4 +6,6 @@ public interface Junction extends Cell {
 	String name();
 
 	void addVehicle(Vehicle vehicle);
+
+	void step();
 }

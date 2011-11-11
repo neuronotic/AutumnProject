@@ -16,20 +16,43 @@ public class TestRoadNetworkImpl {
 	private final Junction junction1 = context.mock(Junction.class, "junction1");
 
 	@Test
+	public void stepCallsStepOnAllJunctions() throws Exception {
+		final RoadNetwork roadNetwork = createOneSegmentRoadNetworkAndConstructorExpectations();
+
+		context.checking(new Expectations() {
+			{
+				oneOf(junction0).step();
+				oneOf(junction1).step();
+			}
+		});
+
+		roadNetwork.step();
+	}
+
+	@Test
 	public void junctionsReturnsListOfJunctionsOnNetwork() throws Exception {
+		assertThat(createOneSegmentRoadNetworkAndConstructorExpectations().junctions(), containsInAnyOrder(junction0, junction1));
+	}
+
+	@Test
+	public void segmentsReturnsListOfSegmentsOnNetwork() throws Exception {
+		context.checking(new Expectations() {
+			{
+				ignoring(segment);
+			}
+		});
+		assertThat(new RoadNetworkImpl(segment).segments(), contains(segment));
+		//assertThat(new RoadNetworkImpl(segment).route(origin, destination), contains(segment));
+	}
+
+	private RoadNetwork createOneSegmentRoadNetworkAndConstructorExpectations() {
 		context.checking(new Expectations() {
 			{
 				oneOf(segment).inJunction(); will(returnValue(junction0));
 				oneOf(segment).outJunction(); will(returnValue(junction1));
 			}
 		});
-
-		assertThat(new RoadNetworkImpl(segment).junctions(), containsInAnyOrder(junction0, junction1));
-	}
-
-	@Test
-	public void segmentsReturnsListOfSegmentsOnNetwork() throws Exception {
-		assertThat(new RoadNetworkImpl(segment).segments(), contains(segment));
-		//assertThat(new RoadNetworkImpl(segment).route(origin, destination), contains(segment));
+		final RoadNetwork roadNetwork = new RoadNetworkImpl(segment);
+		return roadNetwork;
 	}
 }

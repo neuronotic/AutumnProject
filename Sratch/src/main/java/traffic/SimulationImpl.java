@@ -15,21 +15,26 @@ public class SimulationImpl implements Simulation {
 
 	private final TimeKeeper timeKeeper;
 
+	private final Statistics statistics;
+
 	@Inject
 	SimulationImpl(
 			@Assisted final RoadNetwork roadNetwork,
 			@Assisted final List<FlowGroup> flowGroups,
 			final TimeKeeper timeKeeper,
+			final Statistics statistics,
 			final VehicleManager vehicleManager,
 			final VehicleCreatorFactory vehicleCreatorFactory) {
 		this.roadNetwork = roadNetwork;
 		this.timeKeeper = timeKeeper;
+		this.statistics = statistics;
 		this.vehicleManager = vehicleManager;
 		vehicleCreator = vehicleCreatorFactory.create(flowGroups);
 	}
 
 	@Override
 	public void step() {
+		roadNetwork.step();
 		vehicleCreator.step();
 		vehicleManager.step();
 		timeKeeper.step();
@@ -48,9 +53,7 @@ public class SimulationImpl implements Simulation {
 	}
 
 	@Override
-	public Statistics getStatistics() {
-		// TODO Auto-generated method stub
-		return null;
-
+	public Statistics statistics() {
+		return statistics;
 	}
 }

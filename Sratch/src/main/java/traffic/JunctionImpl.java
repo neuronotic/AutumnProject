@@ -66,4 +66,10 @@ class JunctionImpl implements Junction {
 	public void addVehicle(final Vehicle vehicle) {
 		vehiclesWaiting.add(vehicle);
 	}
+
+	@Override
+	public void step() {
+		// TODO Auto-generated method stub
+
+	}
 }

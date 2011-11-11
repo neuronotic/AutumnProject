@@ -2,7 +2,7 @@ package traffic;
 
 public interface Statistics {
 
-	double congestion();
+	Double congestion();
 
 	Double congestion(Junction junction);
 

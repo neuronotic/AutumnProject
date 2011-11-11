@@ -7,5 +7,5 @@ public interface Simulation {
 	void step(int timesteps);
 	void step();
 	List<JourneyHistory> getEndedJourneyHistories();
-	Statistics getStatistics();
+	Statistics statistics();
 }
