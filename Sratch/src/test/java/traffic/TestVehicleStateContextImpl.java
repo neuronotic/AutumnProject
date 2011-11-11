@@ -23,18 +23,7 @@ public class TestVehicleStateContextImpl {
 	private final JourneyEndedMessageFactory journeyEndedMessageFactory = context.mock(JourneyEndedMessageFactory.class);
 	private final JourneyEndedMessage journeyEndedMessage = context.mock(JourneyEndedMessage.class);
 	private final VehicleStateContext stateContext =
-			new VehicleStateContextImpl(eventBus, journeyStartedMessageFactory, journeyEndedMessageFactory, journeyHistoryBuilder, new NullCell(), asList(cell0));;
-
-	@Test
-	public void startJourneyCausesJourneyStartedMessageToBeSentOnEventBus() throws Exception {
-		context.checking(new Expectations() {
-			{
-				oneOf(journeyStartedMessageFactory).create(vehicle); will(returnValue(journeyStartedMessage));
-				oneOf(eventBus).post(journeyStartedMessage);
-			}
-		});
-		stateContext.startJourney(vehicle);
-	}
+			new VehicleStateContextImpl(eventBus, journeyEndedMessageFactory, journeyHistoryBuilder, new NullCell(), asList(cell0));;
 
 	@Test
 	public void currentLocationRemainsUnchangedIfMoveUnsuccessfullyCallsEnter() throws Exception {

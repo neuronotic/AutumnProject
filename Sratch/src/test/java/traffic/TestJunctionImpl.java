@@ -4,8 +4,6 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static traffic.RoadNetworkMatchers.*;
 
-import org.jmock.Expectations;
-import org.jmock.Sequence;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -23,21 +21,16 @@ public class TestJunctionImpl {
 		junction.addVehicle(vehicle0);
 		junction.addVehicle(vehicle1);
 
-		final Sequence vehicleStarts = context.sequence("vehicleStarts");
-		context.checking(new Expectations() {
-			{
-				oneOf(vehicle0).startJourney(); inSequence(vehicleStarts);
-				oneOf(vehicle1).startJourney(); inSequence(vehicleStarts);
-			} //what about vehicle actually entering junction? who cares. vehicle is responsible for that.
-		});
-		junction.step();
-		junction.step();
+		assertThat(junction.enter(vehicle1), is(false));
+		assertThat(junction.enter(vehicle0), is(true));
+		junction.leave();
+		assertThat(junction.enter(vehicle1), is(true));
 	}
 
 	@Test
 	public void isOccupiedReturnsTrueOnlyIfVehicleIsInCell() throws Exception {
 		assertThat(junction.isOccupied(), is(false));
-		junction.enter(vehicle0);
+		assertThat(junction.enter(vehicle0), is(true));
 		assertThat(junction.isOccupied(), is(true));
 	}
 

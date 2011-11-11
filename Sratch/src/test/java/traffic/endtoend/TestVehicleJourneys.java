@@ -74,9 +74,9 @@ public class TestVehicleJourneys {
 						.withTemporalPattern(constantTemporalPattern)
 						.withFlow(flowBuilderProvider.get()
 								.withItinerary(new ItineraryImpl(segment0, segment2))
-								.withProbability(1)))
+								.withProbability(1.0)))
 				.make();
-		sim.step(12);
+		sim.step(10);
 		assertThat(sim.getEndedJourneyHistories().size(), equalTo(4));
 	}
 
@@ -86,10 +86,10 @@ public class TestVehicleJourneys {
 		createJunctions();
 		createSegments();
 		createRoadNetwork();
-		createVehicles();
+
 		final Simulation sim = simulationBuilder()
 				.make();
-
+		createVehicles();
 		junction0.addVehicle(vehicle0);
 		junction3.addVehicle(vehicle1);
 
@@ -107,12 +107,9 @@ public class TestVehicleJourneys {
 		createSegments();
 		createRoadNetwork();
 
-		createVehicles();
 		final Simulation sim = simulationBuilder()
 				.make();
-		vehicle0.startJourney();
-		vehicle1.startJourney();
-
+		createVehicles();
 		sim.step(8);
 		createJourneyHistories();
 		assertThat(sim.getEndedJourneyHistories().size(), is(2));
@@ -127,12 +124,10 @@ public class TestVehicleJourneys {
 		createSegments();
 		createRoadNetwork();
 
-		createVehicles();
+
 		final Simulation sim = simulationBuilder()
 				.make();
-		vehicle0.startJourney();
-		vehicle1.startJourney();
-
+		createVehicles();
 		sim.step(1);
 		assertThat(vehicle0, isLocatedAt(junction0));
 		assertThat(vehicle1, isLocatedAt(junction3));
@@ -152,10 +147,10 @@ public class TestVehicleJourneys {
 		createJunctions();
 		createSegments();
 		createRoadNetwork();
-		createVehicles();
+
 		final Simulation sim = simulationBuilder()
 				.make();
-		vehicle0.startJourney();
+		createVehicles();
 		sim.step(7);
 		assertThat(vehicle0, isLocatedAt(junction2));
 		assertThat(vehicle0, hasJourneyTime(time(7)));

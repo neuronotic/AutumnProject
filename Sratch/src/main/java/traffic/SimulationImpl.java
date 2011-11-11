@@ -31,9 +31,6 @@ public class SimulationImpl implements Simulation {
 	@Override
 	public void step() {
 		vehicleCreator.step();
-		for (final Junction junction : roadNetwork.junctions()) {
-			junction.step();
-		}
 		vehicleManager.step();
 		timeKeeper.step();
 	}
@@ -48,5 +45,12 @@ public class SimulationImpl implements Simulation {
 	@Override
 	public List<JourneyHistory> getEndedJourneyHistories() {
 		return vehicleManager.getEndedJourneyHistories();
+	}
+
+	@Override
+	public Statistics getStatistics() {
+		// TODO Auto-generated method stub
+		return null;
+
 	}
 }

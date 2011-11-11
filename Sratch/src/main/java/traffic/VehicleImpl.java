@@ -48,8 +48,4 @@ class VehicleImpl implements Vehicle {
 		return String.format("%s located at %s", name(), location());
 	}
 
-	@Override
-	public void startJourney() {
-		stateContext.startJourney(this);
-	}
 }

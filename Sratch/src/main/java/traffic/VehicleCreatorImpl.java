@@ -50,6 +50,7 @@ public class VehicleCreatorImpl implements VehicleCreator {
 			final Junction junction = (Junction) itinerary.cells().get(0);
 			junction.addVehicle(vehicle);
 		}
+		logger.info(String.format("vehicleCreatorStep: %s", vehicle));
 		return vehicle;
 	}
 

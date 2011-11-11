@@ -19,7 +19,7 @@ class VehicleManagerImpl implements VehicleManager {
 
 	@Override
 	public void step() {
-		logger.info(String.format(" VEHICLEMANAGER: %s", vehicles));
+		//logger.info(String.format(" VEHICLEMANAGER: %s", vehicles));
 		for (final Vehicle vehicle : new ArrayList<Vehicle>(vehicles)) {
 			vehicle.step();
 		}

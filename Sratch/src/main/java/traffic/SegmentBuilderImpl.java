@@ -7,7 +7,6 @@ public class SegmentBuilderImpl implements SegmentBuilder {
 	private CellChainBuilder cellChainBuilder;
 	private final SegmentFactory segmentFactory;
 	private String segmentName;
-	private int segmentLength;
 	private Junction outJunction;
 	private Junction inJunction;
 

@@ -20,7 +20,6 @@ public class TestSimulationImpl {
 	private final FlowGroup flowGroup1 = context.mock(FlowGroup.class, "flowGroup1");
 	private final VehicleManager vehicleManager = context.mock(VehicleManager.class);
 	private final VehicleCreatorFactory vehicleCreationManagerFactory = context.mock(VehicleCreatorFactory.class);
-	private final Junction junction0 = context.mock(Junction.class);
 	private final JourneyHistory journeyHistory0 = context.mock(JourneyHistory.class, "journeyHistory0");
 	private final VehicleCreator vehicleCreator = context.mock(VehicleCreator.class);
 	//private final JourneyHistory journeyHistory1 = context.mock(JourneyHistory.class, "journeyHistory1");
@@ -45,9 +44,7 @@ public class TestSimulationImpl {
 		context.checking(new Expectations() {
 			{
 				oneOf(timeKeeper).step();
-				oneOf(roadNetwork).junctions(); will(returnValue(asList(junction0)));
 				oneOf(vehicleCreator).step(); inSequence(steppingOrder);
-				oneOf(junction0).step(); inSequence(steppingOrder);
 				oneOf(vehicleManager).step(); inSequence(steppingOrder);
 			}
 		});

@@ -21,16 +21,6 @@ public class TestVehicleImpl {
 	final Vehicle vehicle = new VehicleImpl("myVehicle", stateContext, state0);
 
 	@Test
-	public void startJourneyDelegatesCallToStateContext() throws Exception {
-		context.checking(new Expectations() {
-			{
-				oneOf(stateContext).startJourney(vehicle);
-			}
-		});
-		vehicle.startJourney();
-	}
-
-	@Test
 	public void stepCausesCurrentStateToChangeToReturnedStateInDelegationToPreviousCurrentState() throws Exception {
 		stepDelegatesCallOnToCurrentState();
 		context.checking(new Expectations() {{

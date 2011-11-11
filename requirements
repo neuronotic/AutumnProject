@@ -8,18 +8,15 @@ HACKAGE:
 
 preexisting:
 - ShortestPathRouteFinder : creates new ItineraryImpl rather than building it/factorying.
+-vehicleBuilder /Vehicle
+- vehicleStateContext
 
+Misc:
+- need to refactor vehicleBuilder to take itinerary rather than route blah blah.
 
---------------------------------
+---------------
 
-- vehicle ends life by leaving junction
-- vehicle has history consisting of creation time and entry time at each J travelled to until trip ends.
-- add multi-vehicle support
-- vehicle begins life in junction "origin" queue cell, awaiting entry for next ts (or immediately entering?)
-- only one vehicle can occupy a cell at a time.
-- measure flow rate across head of segment ({0|1} in any time step)
- 
-
+still have to randomise order of vehicles update
 
 -------------
 

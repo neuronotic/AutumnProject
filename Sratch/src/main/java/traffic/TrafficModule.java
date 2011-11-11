@@ -23,13 +23,17 @@ public class TrafficModule extends AbstractModule {
 		final EventBus eventBus = new EventBus();
 		bind(MyEventBus.class).toInstance(new MyEventBusImpl(eventBus));
 		bindListener(new AbstractMatcher<TypeLiteral<?>>()
-		      {
-		         @Override
-		         public boolean matches(@SuppressWarnings("unused") final TypeLiteral<?> t)
-		         {
-		            return true;
-		         }
-		      }, new EventBusTypeListener(eventBus));
+			      {
+			         @Override
+			         public boolean matches(@SuppressWarnings("unused") final TypeLiteral<?> t)
+			         {
+			            return true;
+			         }
+			      }, new EventBusTypeListener(eventBus));
+
+
+		//bind(RoadNetworkBuilder.class).annotatedWith(Names.named("xNetwork4Segment")).to(XNetwork4Segment.class);
+		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
 
 		bind(Traffic.class).to(TrafficImpl.class);
 		bind(MyRandom.class).to(MyRandomImpl.class);
@@ -45,6 +49,15 @@ public class TrafficModule extends AbstractModule {
 		bind(VehicleStateFactory.class).to(VehicleStateFactoryImpl.class);
 		bind(JourneyHistoryBuilder.class).to(JourneyHistoryBuilderImpl.class);
 		bind(TimeKeeper.class).to(TimeKeeperImpl.class);
+		bind(DefaultRoadNetworks.class).to(DefaultRoadNetworksImpl.class);
+
+		install(new FactoryModuleBuilder()
+			.implement(RoadNetworkBuilder.class, RoadNetworkBuilderImpl.class)
+			.build(RoadNetworkBuilderFactory.class));
+
+		install(new FactoryModuleBuilder()
+			.implement(SegmentBuilder.class, SegmentBuilderImpl.class)
+			.build(SegmentBuilderFactory.class));
 
 		install(new FactoryModuleBuilder()
 			.implement(VehicleCreator.class, VehicleCreatorImpl.class)
@@ -69,8 +82,6 @@ public class TrafficModule extends AbstractModule {
 		install(new FactoryModuleBuilder()
 			.implement(JourneyHistory.class, JourneyHistoryImpl.class)
 			.build(JourneyHistoryFactory.class));
-
-		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
 
 		install(new FactoryModuleBuilder()
 	    	.implement(VehicleStateContext.class, VehicleStateContextImpl.class)

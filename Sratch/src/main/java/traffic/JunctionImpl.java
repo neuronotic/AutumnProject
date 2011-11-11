@@ -12,7 +12,6 @@ class JunctionImpl implements Junction {
 
 	private final String name;
 	private boolean occupied = false;
-	private Vehicle occupationReservee;
 	private final LinkedList<Vehicle> vehiclesWaiting = new LinkedList<Vehicle>();
 
 	@Inject
@@ -22,11 +21,25 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public boolean enter(final Vehicle vehicle) {
-		if (occupied) {
-			return vehicle.equals(occupationReservee);
-		}
-		occupied = true;
-		return true;
+		if (!occupied) {
+			if (vehiclesWaiting.isEmpty()) {
+				occupied = true;
+				return true;
+			}
+			if (!inQueue(vehicle) || inQueue(vehicle) && isFirstInQueue(vehicle)) {
+				occupied = true;
+				vehiclesWaiting.pop();
+				return true;
+			}
+		} return false;
+	}
+
+	private boolean isFirstInQueue(final Vehicle vehicle) {
+		return vehicle.equals(vehiclesWaiting.getFirst());
+	}
+
+	private boolean inQueue(final Vehicle vehicle) {
+		return vehiclesWaiting.contains(vehicle);
 	}
 
 	@Override
@@ -47,16 +60,6 @@ class JunctionImpl implements Junction {
 	@Override
 	public void leave() {
 		occupied = false;
-	}
-
-	@Override
-	public void step() {
-		//when have lights, also introduce check for lights green....
-		if (!isOccupied() && !vehiclesWaiting.isEmpty()) {
-			final Vehicle vehicle = vehiclesWaiting.pop();
-			vehicle.startJourney();
-			occupationReservee = vehicle;
-		}
 	}
 
 	@Override
