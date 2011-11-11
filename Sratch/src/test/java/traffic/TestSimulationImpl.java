@@ -14,7 +14,7 @@ public class TestSimulationImpl {
 	//TODO: merge VM and VC
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
-
+	private final TimeKeeper timeKeeper = context.mock(TimeKeeper.class);
 	private final RoadNetwork roadNetwork = context.mock(RoadNetwork.class);
 	private final FlowGroup flowGroup0 = context.mock(FlowGroup.class, "flowGroup0");
 	private final FlowGroup flowGroup1 = context.mock(FlowGroup.class, "flowGroup1");
@@ -44,6 +44,7 @@ public class TestSimulationImpl {
 
 		context.checking(new Expectations() {
 			{
+				oneOf(timeKeeper).step();
 				oneOf(roadNetwork).junctions(); will(returnValue(asList(junction0)));
 				oneOf(vehicleCreator).step(); inSequence(steppingOrder);
 				oneOf(junction0).step(); inSequence(steppingOrder);
@@ -59,6 +60,8 @@ public class TestSimulationImpl {
 				oneOf(vehicleCreationManagerFactory).create(asList(flowGroup0, flowGroup1)); will(returnValue(vehicleCreator));
 			}
 		});
-		return new SimulationImpl(roadNetwork, asList(flowGroup0, flowGroup1), vehicleManager, vehicleCreationManagerFactory);
+		return new SimulationImpl(roadNetwork, asList(flowGroup0, flowGroup1), timeKeeper, vehicleManager, vehicleCreationManagerFactory);
 	}
+
 }
+

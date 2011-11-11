@@ -5,18 +5,17 @@ import com.google.inject.Inject;
 public class VehicleBuilderImpl implements VehicleBuilder {
 
 	private final VehicleFactory vehicleFactory;
-	private final VehicleStateContextBuilder vehicleStateContextBuilder;
-	private RoadNetwork roadNetwork;
-	private Trip trip;
 	private String vehicleName = "default name";
 	private final VehicleStateFactory vehicleStateFactory;
+	private Itinerary itinerary;
+	private final VehicleStateContextFactory vehicleStateContextFactory;
 
 	@Inject public VehicleBuilderImpl(
 			final VehicleFactory vehicleFactory,
-			final VehicleStateContextBuilder vehicleStateContextBuilder,
+			final VehicleStateContextFactory vehicleStateContextFactory,
 			final VehicleStateFactory vehicleStateFactory) {
 				this.vehicleFactory = vehicleFactory;
-				this.vehicleStateContextBuilder = vehicleStateContextBuilder;
+				this.vehicleStateContextFactory = vehicleStateContextFactory;
 				this.vehicleStateFactory = vehicleStateFactory;
 	}
 
@@ -24,25 +23,19 @@ public class VehicleBuilderImpl implements VehicleBuilder {
 	public Vehicle make() {
 		return vehicleFactory.createVehicle(
 				vehicleName,
-				vehicleStateContextBuilder.withRoadNetwork(roadNetwork).withTrip(trip).make(),
+				vehicleStateContextFactory.createStateContext(itinerary.cells()),
 				vehicleStateFactory.preJourneyState());
-	}
-
-	@Override
-	public VehicleBuilder withRoadNetwork(final RoadNetwork roadNetwork) {
-		this.roadNetwork = roadNetwork;
-		return this;
-	}
-
-	@Override
-	public VehicleBuilder withTrip(final Trip trip) {
-		this.trip = trip;
-		return this;
 	}
 
 	@Override
 	public VehicleBuilder withName(final String vehicleName) {
 		this.vehicleName = vehicleName;
+		return this;
+	}
+
+	@Override
+	public VehicleBuilder withItinerary(final Itinerary itinerary) {
+		this.itinerary = itinerary;
 		return this;
 	}
 }

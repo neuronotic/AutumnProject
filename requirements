@@ -1,5 +1,13 @@
-itineraryBetweenAdjacentJunctionsContainsOnlyTheSegmentBetweenOriginAndDestinationJunctions()
 
+
+HACKAGE:
+
+- ConstantTemporalPattern
+- MyRandom
+- VehicleCreator
+
+preexisting:
+- ShortestPathRouteFinder : creates new ItineraryImpl rather than building it/factorying.
 
 
 --------------------------------

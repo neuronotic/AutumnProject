@@ -89,7 +89,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public void startJourney(final Vehicle vehicle) {
-		logger.info(String.format("journey started for %s ", vehicle));
+		//logger.info(String.format("journey started for %s ", vehicle));
 		eventBus.post(journeyStartedMessageFactory.create(vehicle));
 	}
 }

@@ -12,13 +12,12 @@ public class TestVehicleManagerImpl {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
-	private final TimeKeeper timeKeeper = context.mock(TimeKeeper.class);
 	private final Vehicle vehicle0 = context.mock(Vehicle.class, "vehicle0");
 	private final Vehicle vehicle1 = context.mock(Vehicle.class, "vehicle1");
 	private final JourneyEndedMessage journeyEndedMessage = context.mock(JourneyEndedMessage.class);
 	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
 	private final JourneyStartedMessage journeyStartedMessage = context.mock(JourneyStartedMessage.class);
-	private final VehicleManager vehicleManager = new VehicleManagerImpl(timeKeeper);
+	private final VehicleManager vehicleManager = new VehicleManagerImpl();
 	//TODO: ought i to test if the @Subscribe annotations are in place for the message receiving classes?
 
 
@@ -65,22 +64,10 @@ public class TestVehicleManagerImpl {
 		context.checking(new Expectations() {
 			{
 				never(vehicle0).step();
-				ignoring(timeKeeper);
 			}
 		});
 		vehicleManager.step();
 	}
-
-	@Test
-	public void timeKeeperSteppedWithEachStep() throws Exception {
-		context.checking(new Expectations() {
-			{
-				exactly(2).of(timeKeeper).step();
-			}
-		});
-		vehicleManager.step(2);
-	}
-
 
 	private void setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle1() {
 		context.checking(new Expectations() {
@@ -104,7 +91,6 @@ public class TestVehicleManagerImpl {
 		context.checking(new Expectations() {
 			{
 				oneOf(vehicle).step();
-				ignoring(timeKeeper);
 			}
 		});
 	}

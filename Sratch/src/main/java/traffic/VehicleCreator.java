@@ -1,7 +1,11 @@
 package traffic;
 
+import java.util.List;
+
+
+
 public interface VehicleCreator {
 
-	void step();
+	List<Vehicle> step();
 
 }

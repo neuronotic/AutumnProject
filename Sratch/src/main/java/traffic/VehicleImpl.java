@@ -19,6 +19,7 @@ class VehicleImpl implements Vehicle {
 		this.name = name;
 		stateContext = vehicleStateContext;
 		this.journeyState = journeyState;
+		logger.info(String.format("CREATED %s", this));
 	}
 
 	@Override

@@ -12,17 +12,14 @@ class VehicleManagerImpl implements VehicleManager {
 
 	private final List<Vehicle> vehicles = new ArrayList<Vehicle>();
 	private final List<JourneyHistory> endedJourneyHistories = new ArrayList<JourneyHistory>();
-	private final TimeKeeper timeKeeper;
 
 	@Inject
-	public VehicleManagerImpl(final TimeKeeper timeKeeper) {
-		this.timeKeeper = timeKeeper;
+	public VehicleManagerImpl() {
 	}
 
 	@Override
 	public void step() {
-		timeKeeper.step();
-		//logger.info(String.format(" \n\n %s STEP", timeKeeper.currentTime()));
+		logger.info(String.format(" VEHICLEMANAGER: %s", vehicles));
 		for (final Vehicle vehicle : new ArrayList<Vehicle>(vehicles)) {
 			vehicle.step();
 		}

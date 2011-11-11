@@ -32,7 +32,8 @@ public class TrafficModule extends AbstractModule {
 		      }, new EventBusTypeListener(eventBus));
 
 		bind(Traffic.class).to(TrafficImpl.class);
-
+		bind(MyRandom.class).to(MyRandomImpl.class);
+		//bind(Itinerary.class).to(ItineraryImpl.class);
 		bind(FlowBuilder.class).to(FlowBuilderImpl.class);
 		bind(FlowGroupBuilder.class).to(FlowGroupBuilderImpl.class);
 		bind(VehicleManager.class).to(VehicleManagerImpl.class);
@@ -43,7 +44,6 @@ public class TrafficModule extends AbstractModule {
 		bind(VehicleBuilder.class).to(VehicleBuilderImpl.class);
 		bind(RoadNetworkBuilder.class).to(RoadNetworkBuilderImpl.class);
 		bind(VehicleStateFactory.class).to(VehicleStateFactoryImpl.class);
-		bind(VehicleStateContextBuilder.class).to(VehicleStateContextBuilderImpl.class);
 		bind(JourneyHistoryBuilder.class).to(JourneyHistoryBuilderImpl.class);
 		bind(TimeKeeper.class).to(TimeKeeperImpl.class);
 
