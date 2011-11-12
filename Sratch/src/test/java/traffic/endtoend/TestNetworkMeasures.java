@@ -20,10 +20,12 @@ import traffic.JunctionOccupancyBuilder;
 import traffic.Link;
 import traffic.LinkBuilder;
 import traffic.LinkOccupancy;
+import traffic.LinkOccupancyFactory;
 import traffic.Network;
 import traffic.NetworkBuilder;
 import traffic.NetworkOccupancy;
 import traffic.NetworkOccupancyBuilder;
+import traffic.OccupancyFactory;
 import traffic.Simulation;
 import traffic.SimulationBuilder;
 import traffic.TrafficModule;
@@ -47,6 +49,8 @@ public class TestNetworkMeasures {
 	@Rule public MyGuiceBerryRule guiceBerry = new MyGuiceBerryRule();
 
 	@Inject private JunctionFactory junctionFactory;
+	@Inject private LinkOccupancyFactory linkOccupancyFactory;
+	@Inject private OccupancyFactory occupancyFactory;
 
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
@@ -121,9 +125,7 @@ public class TestNetworkMeasures {
 	}
 
 	private LinkOccupancy linkOccupancyWithZeroOccupancy(final Link link) {
-		// TODO Auto-generated method stub
-		return null;
-
+		return linkOccupancyFactory.create(link, occupancyFactory.create(0,0));
 	}
 
 	private SimulationBuilder simulationBuilder() {

@@ -52,6 +52,15 @@ public class TrafficModule extends AbstractModule {
 		bind(DefaultNetworks.class).to(DefaultNetworksImpl.class);
 
 		install(new FactoryModuleBuilder()
+			.implement(Occupancy.class, OccupancyImpl.class)
+			.build(OccupancyFactory.class));
+
+
+		install(new FactoryModuleBuilder()
+			.implement(LinkOccupancy.class, LinkOccupancyImpl.class)
+			.build(LinkOccupancyFactory.class));
+
+		install(new FactoryModuleBuilder()
 			.implement(NetworkBuilder.class, NetworkBuilderImpl.class)
 			.build(NetworkBuilderFactory.class));
 
