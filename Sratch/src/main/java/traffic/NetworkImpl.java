@@ -10,17 +10,17 @@ import java.util.Set;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
-public class RoadNetworkImpl implements RoadNetwork {
+public class NetworkImpl implements Network {
 	private final List<Segment> segments;
 	private final Set<Junction> junctions;
 
-	@Inject public RoadNetworkImpl(
+	@Inject public NetworkImpl(
 			@Assisted final List<Segment> segments) {
 		this.segments = segments;
 		junctions = buildSetOfJunctions();
 	}
 
-	public RoadNetworkImpl(final Segment...segments) {
+	public NetworkImpl(final Segment...segments) {
 		this(asList(segments));
 	}
 

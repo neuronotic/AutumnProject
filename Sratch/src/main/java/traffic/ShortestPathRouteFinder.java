@@ -14,14 +14,14 @@ import com.google.inject.assistedinject.Assisted;
 public class ShortestPathRouteFinder implements RouteFinder {
 
 
-	private final RoadNetwork roadNetwork;
+	private final Network network;
 	private final DefaultDirectedWeightedGraph<Junction, SegmentEdge> graph;
 
 	@Inject
 	public ShortestPathRouteFinder(
-			@Assisted final RoadNetwork roadNetwork) {
-		this.roadNetwork = roadNetwork;
-		graph = convertRoadNetworkToGraph();
+			@Assisted final Network network) {
+		this.network = network;
+		graph = convertNetworkToGraph();
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class ShortestPathRouteFinder implements RouteFinder {
 		return new ItineraryImpl(segments);
 	}
 
-	private DefaultDirectedWeightedGraph<Junction, SegmentEdge> convertRoadNetworkToGraph() {
+	private DefaultDirectedWeightedGraph<Junction, SegmentEdge> convertNetworkToGraph() {
 		final DefaultDirectedWeightedGraph<Junction, SegmentEdge> graph = new DefaultDirectedWeightedGraph<Junction, SegmentEdge>(SegmentEdge.class);
 		addJunctionsToGraph(graph);
 		addSegmentsToGraph(graph);
@@ -45,14 +45,14 @@ public class ShortestPathRouteFinder implements RouteFinder {
 
 	private void addSegmentsToGraph(
 			final DefaultDirectedWeightedGraph<Junction, SegmentEdge> graph) {
-		for (final Segment segment : roadNetwork.segments()) {
+		for (final Segment segment : network.segments()) {
 			addSegmentToGraph(graph, segment);
 		}
 	}
 
 	private void addJunctionsToGraph(
 			final DefaultDirectedWeightedGraph<Junction, SegmentEdge> graph) {
-		for (final Junction junction : roadNetwork.junctions()) {
+		for (final Junction junction : network.junctions()) {
 			graph.addVertex(junction);
 		}
 	}

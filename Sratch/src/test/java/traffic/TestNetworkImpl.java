@@ -7,7 +7,7 @@ import org.jmock.Expectations;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class TestRoadNetworkImpl {
+public class TestNetworkImpl {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -17,7 +17,7 @@ public class TestRoadNetworkImpl {
 
 	@Test
 	public void stepCallsStepOnAllJunctions() throws Exception {
-		final RoadNetwork roadNetwork = createOneSegmentRoadNetworkAndConstructorExpectations();
+		final Network network = createOneSegmentNetworkAndConstructorExpectations();
 
 		context.checking(new Expectations() {
 			{
@@ -26,12 +26,12 @@ public class TestRoadNetworkImpl {
 			}
 		});
 
-		roadNetwork.step();
+		network.step();
 	}
 
 	@Test
 	public void junctionsReturnsListOfJunctionsOnNetwork() throws Exception {
-		assertThat(createOneSegmentRoadNetworkAndConstructorExpectations().junctions(), containsInAnyOrder(junction0, junction1));
+		assertThat(createOneSegmentNetworkAndConstructorExpectations().junctions(), containsInAnyOrder(junction0, junction1));
 	}
 
 	@Test
@@ -41,18 +41,16 @@ public class TestRoadNetworkImpl {
 				ignoring(segment);
 			}
 		});
-		assertThat(new RoadNetworkImpl(segment).segments(), contains(segment));
-		//assertThat(new RoadNetworkImpl(segment).route(origin, destination), contains(segment));
+		assertThat(new NetworkImpl(segment).segments(), contains(segment));
 	}
 
-	private RoadNetwork createOneSegmentRoadNetworkAndConstructorExpectations() {
+	private Network createOneSegmentNetworkAndConstructorExpectations() {
 		context.checking(new Expectations() {
 			{
 				oneOf(segment).inJunction(); will(returnValue(junction0));
 				oneOf(segment).outJunction(); will(returnValue(junction1));
 			}
 		});
-		final RoadNetwork roadNetwork = new RoadNetworkImpl(segment);
-		return roadNetwork;
+		return new NetworkImpl(segment);
 	}
 }

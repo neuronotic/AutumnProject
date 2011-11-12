@@ -3,7 +3,7 @@ package traffic;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static traffic.CellTime.*;
-import static traffic.RoadNetworkToStringStyle.*;
+import static traffic.TrafficToStringStyle.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +85,6 @@ public class JourneyHistoryBuilderImpl implements JourneyHistoryBuilder {
 
 	@Override
 	public String toString() {
-		return roadNetworkReflectionToString(this);
+		return networkReflectionToString(this);
 	}
 }

@@ -25,7 +25,7 @@ public class TestSegmentImpl {
 	public void getCellAtIndexReturnsDelgatesCallToCellChain() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(cellChainBuilder).make(with(RoadNetworkMatchers.segmentNamed("mySegment"))); will(returnValue(cellChain));
+				oneOf(cellChainBuilder).make(with(NetworkMatchers.segmentNamed("mySegment"))); will(returnValue(cellChain));
 				oneOf(cellChain).getCellAtIndex(0); will(returnValue(segmentCell0));
 				oneOf(cellChain).getCellAtIndex(1); will(returnValue(segmentCell1));
 			}
@@ -40,7 +40,7 @@ public class TestSegmentImpl {
 	public void segmentContainsCellsCorrespondingToInJunctionFollowedByCellsInCellChainFollowedByOutJunction() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(cellChainBuilder).make(with(RoadNetworkMatchers.segmentNamed("mySegment"))); will(returnValue(cellChain));
+				oneOf(cellChainBuilder).make(with(NetworkMatchers.segmentNamed("mySegment"))); will(returnValue(cellChain));
 				oneOf(cellChain).iterator(); will(returnIterator(segmentCell0, segmentCell1));
 				oneOf(cellChain).cellCount(); will(returnValue(2));
 			}
@@ -48,6 +48,6 @@ public class TestSegmentImpl {
 
 		final Segment segment = new SegmentImpl("mySegment", inJunction, cellChainBuilder, outJunction);
 		assertThat(segment.cells(), contains(inJunction, segmentCell0, segmentCell1, outJunction));
-		assertThat(segment, RoadNetworkMatchers.segmentHasLength(2));
+		assertThat(segment, NetworkMatchers.segmentHasLength(2));
 	}
 }

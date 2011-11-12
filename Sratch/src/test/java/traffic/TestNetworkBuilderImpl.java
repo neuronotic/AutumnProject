@@ -8,7 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 
-public class TestRoadNetworkBuilderImpl{
+public class TestNetworkBuilderImpl{
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -17,25 +17,25 @@ public class TestRoadNetworkBuilderImpl{
 	private final Segment segment0 = context.mock(Segment.class, "segment0");
 	private final Segment segment1 = context.mock(Segment.class, "segment1");
 	private final Segment segment2 = context.mock(Segment.class, "segment2");
-	private final RoadNetworkFactory roadNetworkFactory = context.mock(RoadNetworkFactory.class);
-	private final RoadNetwork roadNetwork = context.mock(RoadNetwork.class);
+	private final NetworkFactory networkFactory = context.mock(NetworkFactory.class);
+	private final Network network = context.mock(Network.class);
 
 	@Test
-	public void roadNetworkCreatedWithSegmentsSuppliedToBuilder() throws Exception {
+	public void networkCreatedWithSegmentsSuppliedToBuilder() throws Exception {
 
 		context.checking(new Expectations() {
 			{
 				oneOf(segmentBuilder0).make(); will(returnValue(segment0));
 				oneOf(segmentBuilder1).make(); will(returnValue(segment1));
-				oneOf(roadNetworkFactory).createRoadNetwork(asList(segment2, segment0, segment1)); will(returnValue(roadNetwork));
+				oneOf(networkFactory).createNetwork(asList(segment2, segment0, segment1)); will(returnValue(network));
 			}
 		});
 
-		final RoadNetworkBuilder roadNetworkBuilder = new RoadNetworkBuilderImpl(roadNetworkFactory)
+		final NetworkBuilder networkBuilder = new NetworkBuilderImpl(networkFactory)
 			.withSegment(segmentBuilder0)
 			.withSegment(segmentBuilder1)
 			.withSegment(segment2);
-		assertThat(roadNetworkBuilder.make(), equalTo(roadNetwork));
+		assertThat(networkBuilder.make(), equalTo(network));
 	}
 
 

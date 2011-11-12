@@ -2,6 +2,6 @@ package traffic;
 
 public interface SimulationBuilder {
 	public Simulation make();
-	public SimulationBuilder withRoadNetwork(final RoadNetwork roadNetwork);
+	public SimulationBuilder withNetwork(final Network network);
 	public SimulationBuilder withFlowGroup(FlowGroupBuilder flowGroupBuilder);
 }

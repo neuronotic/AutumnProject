@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 public class SimulationBuilderImpl implements SimulationBuilder {
 
 
-	private RoadNetwork roadNetwork;
+	private Network network;
 	private final List<FlowGroupBuilder> flowGroupBuilders = new ArrayList<FlowGroupBuilder>();
 
 	private final SimulationFactory simulationFactory;
@@ -23,12 +23,12 @@ public class SimulationBuilderImpl implements SimulationBuilder {
 		for (final FlowGroupBuilder builder : flowGroupBuilders) {
 			flowGroups.add(builder.make());
 		}
-		return simulationFactory.createSimulation(roadNetwork, flowGroups);
+		return simulationFactory.createSimulation(network, flowGroups);
 	}
 
 	@Override
-	public SimulationBuilder withRoadNetwork(final RoadNetwork roadNetwork) {
-		this.roadNetwork = roadNetwork;
+	public SimulationBuilder withNetwork(final Network network) {
+		this.network = network;
 		return this;
 	}
 

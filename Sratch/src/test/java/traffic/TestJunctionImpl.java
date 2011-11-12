@@ -2,7 +2,7 @@ package traffic;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import static traffic.RoadNetworkMatchers.*;
+import static traffic.NetworkMatchers.*;
 
 import org.junit.Rule;
 import org.junit.Test;

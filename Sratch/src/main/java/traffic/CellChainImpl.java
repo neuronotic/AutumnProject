@@ -1,6 +1,6 @@
 package traffic;
 
-import static traffic.RoadNetworkToStringStyle.*;
+import static traffic.TrafficToStringStyle.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +28,7 @@ class CellChainImpl implements CellChain {
 
 	@Override
 	public String toString() {
-		return roadNetworkReflectionToString(this);
+		return networkReflectionToString(this);
 	}
 
 	@Override

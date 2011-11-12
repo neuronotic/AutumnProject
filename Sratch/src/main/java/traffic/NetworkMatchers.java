@@ -5,7 +5,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 
-public class RoadNetworkMatchers {
+public class NetworkMatchers {
 	public static Matcher<TripOrigin> isTripOriginAt(final Junction expectedInJunction) {
 		return new TypeSafeMatcher<TripOrigin>(TripOrigin.class) {
 			@Override

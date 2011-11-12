@@ -1,6 +1,6 @@
 package traffic;
 
-import static traffic.RoadNetworkToStringStyle.*;
+import static traffic.TrafficToStringStyle.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ class SegmentImpl implements Segment {
 
 	@Override
 	public String toString() {
-		return roadNetworkReflectionToString(this);
+		return networkReflectionToString(this);
 	}
 
 	@Override

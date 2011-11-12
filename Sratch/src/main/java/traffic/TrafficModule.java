@@ -34,7 +34,6 @@ public class TrafficModule extends AbstractModule {
 		bind(NetworkOccupancyBuilder.class).to(NetworkOccupancyBuilderImpl.class);
 		bind(JunctionOccupancyBuilder.class).to(JunctionOccupancyBuilderImpl.class);
 		bind(Statistics.class).to(StatisticsImpl.class);
-		//bind(RoadNetworkBuilder.class).annotatedWith(Names.named("xNetwork4Segment")).to(XNetwork4Segment.class);
 		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
 		bind(Traffic.class).to(TrafficImpl.class);
 		bind(MyRandom.class).to(MyRandomImpl.class);
@@ -46,15 +45,15 @@ public class TrafficModule extends AbstractModule {
 		bind(SimulationBuilder.class).to(SimulationBuilderImpl.class);
 		bind(SegmentBuilder.class).to(SegmentBuilderImpl.class);
 		bind(VehicleBuilder.class).to(VehicleBuilderImpl.class);
-		bind(RoadNetworkBuilder.class).to(RoadNetworkBuilderImpl.class);
+		bind(NetworkBuilder.class).to(NetworkBuilderImpl.class);
 		bind(VehicleStateFactory.class).to(VehicleStateFactoryImpl.class);
 		bind(JourneyHistoryBuilder.class).to(JourneyHistoryBuilderImpl.class);
 		bind(TimeKeeper.class).to(TimeKeeperImpl.class);
-		bind(DefaultRoadNetworks.class).to(DefaultRoadNetworksImpl.class);
+		bind(DefaultNetworks.class).to(DefaultNetworksImpl.class);
 
 		install(new FactoryModuleBuilder()
-			.implement(RoadNetworkBuilder.class, RoadNetworkBuilderImpl.class)
-			.build(RoadNetworkBuilderFactory.class));
+			.implement(NetworkBuilder.class, NetworkBuilderImpl.class)
+			.build(NetworkBuilderFactory.class));
 
 		install(new FactoryModuleBuilder()
 			.implement(SegmentBuilder.class, SegmentBuilderImpl.class)
@@ -94,8 +93,8 @@ public class TrafficModule extends AbstractModule {
 	    	.build(VehicleStateContextFactory.class));
 
 		install(new FactoryModuleBuilder()
-		    .implement(RoadNetwork.class, RoadNetworkImpl.class)
-		    .build(RoadNetworkFactory.class));
+		    .implement(Network.class, NetworkImpl.class)
+		    .build(NetworkFactory.class));
 
 		install(new FactoryModuleBuilder()
 		    .implement(Junction.class, JunctionImpl.class)

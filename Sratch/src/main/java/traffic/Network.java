@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 
-public interface RoadNetwork {
+public interface Network {
 	List<Segment> segments();
 
 	Collection<Junction> junctions();

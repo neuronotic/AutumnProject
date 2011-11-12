@@ -25,12 +25,12 @@ public class TestShortestPathRouteFinder {
 		final Segment segment3 = context.mock(Segment.class, "segment3");
 
 		final Trip trip = context.mock(Trip.class);
-		final RoadNetwork roadNetwork = context.mock(RoadNetwork.class, "roadNetwork");
+		final Network network = context.mock(Network.class, "network");
 
 		context.checking(new Expectations() {
 			{
-				oneOf(roadNetwork).junctions(); will(returnList(junction0, junction1, junction2, junction3));
-				oneOf(roadNetwork).segments(); will(returnList(segment0, segment1, segment2, segment3));
+				oneOf(network).junctions(); will(returnList(junction0, junction1, junction2, junction3));
+				oneOf(network).segments(); will(returnList(segment0, segment1, segment2, segment3));
 
 				oneOf(trip).origin(); will(returnValue(junction0));
 				oneOf(trip).destination(); will(returnValue(junction3));
@@ -51,7 +51,7 @@ public class TestShortestPathRouteFinder {
 			}
 		});
 
-		final RouteFinder routeFinder = new ShortestPathRouteFinder(roadNetwork);
+		final RouteFinder routeFinder = new ShortestPathRouteFinder(network);
 
 		assertThat(routeFinder.calculateItinerary(trip), itineraryRouteIs(segment2, segment3, segment1));
 	}

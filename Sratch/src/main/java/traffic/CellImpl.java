@@ -25,7 +25,6 @@ class CellImpl implements Cell {
 
 	@Override
 	public String toString() {
-		//return reflectionToString(this, roadNetworkToStringStyle());
 		return name();
 	}
 

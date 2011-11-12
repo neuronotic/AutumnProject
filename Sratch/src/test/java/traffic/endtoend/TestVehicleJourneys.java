@@ -18,9 +18,9 @@ import traffic.JourneyHistory;
 import traffic.JourneyHistoryBuilder;
 import traffic.Junction;
 import traffic.JunctionFactory;
+import traffic.Network;
+import traffic.NetworkBuilder;
 import traffic.NullCell;
-import traffic.RoadNetwork;
-import traffic.RoadNetworkBuilder;
 import traffic.Segment;
 import traffic.SegmentBuilder;
 import traffic.Simulation;
@@ -52,7 +52,7 @@ public class TestVehicleJourneys {
 	@Inject private JunctionFactory junctionFactory;
 	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
 	@Inject private Provider<SegmentBuilder> segmentBuilderProvider;
-	@Inject private Provider<RoadNetworkBuilder> roadNetworkBuilderProvider;
+	@Inject private Provider<NetworkBuilder> networkBuilderProvider;
 	@Inject private Provider<JourneyHistoryBuilder> JourneyHistoryBuilderProvider;
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 	@Inject private Provider<FlowGroupBuilder> flowGroupBuilderProvider;
@@ -60,7 +60,7 @@ public class TestVehicleJourneys {
 
 	private Junction junction0, junction1, junction2, junction3;
 	private Segment segment0, segment1, segment2;
-	private RoadNetwork roadNetwork;
+	private Network network;
 	private JourneyHistory history0, history1;
 	private Vehicle vehicle0, vehicle1;
 
@@ -68,7 +68,7 @@ public class TestVehicleJourneys {
 	public void runSimAfterAddingFlowGroupFor10StepsResultsIn4JourneyHistoriesToThatPoint() throws Exception {
 		createJunctions();
 		createSegments();
-		createRoadNetwork();
+		createNetwork();
 		final Simulation sim = simulationBuilder()
 				.withFlowGroup(flowGroupBuilderProvider.get()
 						.withTemporalPattern(constantTemporalPattern)
@@ -81,11 +81,10 @@ public class TestVehicleJourneys {
 	}
 
 	@Test
-	public void newlyCreatedVehiclesRemainOffRoadNetworkUntilJunctionPullsThemIn() throws Exception {
-		//logger.info(String.format("\n============newlyCreatedVehiclesRemainOffRoadNetworkUntilJunctionPullsThemIn"));
+	public void newlyCreatedVehiclesRemainOffNetworkUntilJunctionPullsThemIn() throws Exception {
 		createJunctions();
 		createSegments();
-		createRoadNetwork();
+		createNetwork();
 
 		final Simulation sim = simulationBuilder()
 				.make();
@@ -102,10 +101,9 @@ public class TestVehicleJourneys {
 
 	@Test
 	public void VehicleManagerMaintainsLogOfJourneyHistories() throws Exception {
-		//logger.info(String.format("\n============VehicleManagerMaintainsLogOfJourneyHistories"));
 		createJunctions();
 		createSegments();
-		createRoadNetwork();
+		createNetwork();
 
 		final Simulation sim = simulationBuilder()
 				.make();
@@ -122,7 +120,7 @@ public class TestVehicleJourneys {
 		//logger.info(String.format("\n============onlyOneVehicleCanOccupyACellAtATime"));
 		createJunctions();
 		createSegments();
-		createRoadNetwork();
+		createNetwork();
 
 
 		final Simulation sim = simulationBuilder()
@@ -146,7 +144,7 @@ public class TestVehicleJourneys {
 		//logger.info(String.format("\n============tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime"));
 		createJunctions();
 		createSegments();
-		createRoadNetwork();
+		createNetwork();
 
 		final Simulation sim = simulationBuilder()
 				.make();
@@ -158,7 +156,7 @@ public class TestVehicleJourneys {
 
 	private SimulationBuilder simulationBuilder() {
 		return simulationBuilderProvider.get()
-				.withRoadNetwork(roadNetwork);
+				.withNetwork(network);
 	}
 
 	private void createVehicles() {
@@ -172,8 +170,8 @@ public class TestVehicleJourneys {
 			.make();
 	}
 
-	private void createRoadNetwork() {
-		roadNetwork = roadNetworkBuilderProvider.get()
+	private void createNetwork() {
+		network = networkBuilderProvider.get()
 			.withSegment(segment0)
 			.withSegment(segment1)
 			.withSegment(segment2)

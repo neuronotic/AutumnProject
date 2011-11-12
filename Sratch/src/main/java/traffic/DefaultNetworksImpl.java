@@ -2,20 +2,20 @@ package traffic;
 
 import com.google.inject.Inject;
 
-public class DefaultRoadNetworksImpl implements DefaultRoadNetworks {
+public class DefaultNetworksImpl implements DefaultNetworks {
 
 	private final JunctionFactory junctionFactory;
-	private final RoadNetworkBuilderFactory roadNetworkBuilderFactory;
+	private final NetworkBuilderFactory networkBuilderFactory;
 	private final SegmentBuilderFactory segmentBuilderFactory;
 
-	@Inject DefaultRoadNetworksImpl(final JunctionFactory junctionFactory, final SegmentBuilderFactory segmentBuilderFactory, final RoadNetworkBuilderFactory roadNetworkBuilderFactory) {
+	@Inject DefaultNetworksImpl(final JunctionFactory junctionFactory, final SegmentBuilderFactory segmentBuilderFactory, final NetworkBuilderFactory networkBuilderFactory) {
 		this.junctionFactory = junctionFactory;
 		this.segmentBuilderFactory = segmentBuilderFactory;
-		this.roadNetworkBuilderFactory = roadNetworkBuilderFactory;
+		this.networkBuilderFactory = networkBuilderFactory;
 	}
 
 	@Override
-	public RoadNetwork xNetwork4Segment() {
+	public Network xNetwork4Segment() {
 		Junction junction0, junction1, junction2, junction3, junction4;
 		junction0 = junctionFactory.createJunction("junction0");
 		junction1 = junctionFactory.createJunction("junction1");
@@ -25,7 +25,7 @@ public class DefaultRoadNetworksImpl implements DefaultRoadNetworks {
 
 		final int segmentLength = 5;
 
-		return roadNetworkBuilder()
+		return networkBuilder()
 			.withSegment( segment()
 				.withName("segment0")
 				.withInJunction(junction0)
@@ -53,8 +53,8 @@ public class DefaultRoadNetworksImpl implements DefaultRoadNetworks {
 			.make();
 	}
 
-	private RoadNetworkBuilder roadNetworkBuilder() {
-		return roadNetworkBuilderFactory.create();
+	private NetworkBuilder networkBuilder() {
+		return networkBuilderFactory.create();
 	}
 
 	private SegmentBuilder segment() {

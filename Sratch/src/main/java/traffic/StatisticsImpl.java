@@ -8,12 +8,12 @@ public class StatisticsImpl implements Statistics {
 	@Inject Logger logger = Logger.getAnonymousLogger();
 
 	@Override
-	public void step(final RoadNetwork roadNetwork) {
-		logger.info(String.format("LOG JUNCTION MEASURES, capacity:%s, occup:%s", networkCapacity(roadNetwork), networkOccupancy(roadNetwork) ));
-		for (final Junction junction : roadNetwork.junctions()) {
+	public void step(final Network network) {
+		logger.info(String.format("LOG JUNCTION MEASURES, capacity:%s, occup:%s", networkCapacity(network), networkOccupancy(network) ));
+		for (final Junction junction : network.junctions()) {
 			logger.info(String.format("--%s cap: %s, occu: %s, queue: %s", junction.name(), junctionCapacity(junction), junctionOccupancy(junction), junction.vehiclesWaitingToJoin()));
 		}
-		for (final Segment segment : roadNetwork.segments()) {
+		for (final Segment segment : network.segments()) {
 
 			logger.info(String.format("--%s cap:%s, occ: %s, [%s]", segment.name(), segment.cellCount(), segment.occupiedCount(), array2String(segmentOccupancyBinaryArray(segment))));
 		}
@@ -35,9 +35,9 @@ public class StatisticsImpl implements Statistics {
 		return occupancyArray;
 	}
 
-	private int networkOccupancy(final RoadNetwork roadNetwork) {
+	private int networkOccupancy(final Network network) {
 		int occupancy = 0;
-		for (final Junction junction : roadNetwork.junctions()) {
+		for (final Junction junction : network.junctions()) {
 			occupancy += junctionOccupancy(junction);
 		}
 		return occupancy;
@@ -47,9 +47,9 @@ public class StatisticsImpl implements Statistics {
 		return junction.inBoundSegmentsOccupancy() + junction.occupancy();
 	}
 
-	private int networkCapacity(final RoadNetwork roadNetwork) {
+	private int networkCapacity(final Network network) {
 		int capacity = 0;
-		for (final Junction junction : roadNetwork.junctions()) {
+		for (final Junction junction : network.junctions()) {
 			capacity += junctionCapacity(junction);
 		}
 		return capacity;

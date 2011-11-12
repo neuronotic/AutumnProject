@@ -9,7 +9,7 @@ import com.google.inject.assistedinject.Assisted;
 public class SimulationImpl implements Simulation {
 	@Inject Logger logger = Logger.getAnonymousLogger();
 
-	private final RoadNetwork roadNetwork;
+	private final Network network;
 	private final VehicleManager vehicleManager;
 	private final VehicleCreator vehicleCreator;
 
@@ -19,13 +19,13 @@ public class SimulationImpl implements Simulation {
 
 	@Inject
 	SimulationImpl(
-			@Assisted final RoadNetwork roadNetwork,
+			@Assisted final Network network,
 			@Assisted final List<FlowGroup> flowGroups,
 			final TimeKeeper timeKeeper,
 			final Statistics statistics,
 			final VehicleManager vehicleManager,
 			final VehicleCreatorFactory vehicleCreatorFactory) {
-		this.roadNetwork = roadNetwork;
+		this.network = network;
 		this.timeKeeper = timeKeeper;
 		this.statistics = statistics;
 		this.vehicleManager = vehicleManager;
@@ -34,10 +34,10 @@ public class SimulationImpl implements Simulation {
 
 	@Override
 	public void step() {
-		roadNetwork.step();
+		network.step();
 		vehicleCreator.step();
 		vehicleManager.step();
-		statistics.step(roadNetwork);
+		statistics.step(network);
 		timeKeeper.step();
 	}
 

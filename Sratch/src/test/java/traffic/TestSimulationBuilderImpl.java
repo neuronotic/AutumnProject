@@ -13,7 +13,7 @@ public class TestSimulationBuilderImpl {
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
 	private final SimulationFactory simulationFactory = context.mock(SimulationFactory.class);
-	private final RoadNetwork roadNetwork = context.mock(RoadNetwork.class);
+	private final Network network = context.mock(Network.class);
 	private final FlowGroupBuilder flowGroupBuilder0 = context.mock(FlowGroupBuilder.class, "flowGroupBuilder0");
 	private final FlowGroupBuilder flowGroupBuilder1 = context.mock(FlowGroupBuilder.class, "flowGroupBuilder1");
 	private final FlowGroup flowGroup0 = context.mock(FlowGroup.class, "flowGroup0");
@@ -29,12 +29,12 @@ public class TestSimulationBuilderImpl {
 			{
 				oneOf(flowGroupBuilder0).make(); will(returnValue(flowGroup0));
 				oneOf(flowGroupBuilder1).make(); will(returnValue(flowGroup1));
-				oneOf(simulationFactory).createSimulation(roadNetwork, asList(flowGroup0, flowGroup1)); will(returnValue(simulation));
+				oneOf(simulationFactory).createSimulation(network, asList(flowGroup0, flowGroup1)); will(returnValue(simulation));
 			}
 		});
 
 		final Simulation simulation = simulationBuilder
-			.withRoadNetwork(roadNetwork)
+			.withNetwork(network)
 			.withFlowGroup(flowGroupBuilder0)
 			.withFlowGroup(flowGroupBuilder1)
 			.make();
@@ -43,8 +43,8 @@ public class TestSimulationBuilderImpl {
 	}
 
 	@Test
-	public void withRoadNetworkReturnsInstanceItBelongsTo() throws Exception {
-		assertThat(simulationBuilder.withRoadNetwork(null), is(simulationBuilder));
+	public void withNetworkReturnsInstanceItBelongsTo() throws Exception {
+		assertThat(simulationBuilder.withNetwork(null), is(simulationBuilder));
 	}
 
 	@Test

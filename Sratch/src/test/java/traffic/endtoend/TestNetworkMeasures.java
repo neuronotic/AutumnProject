@@ -8,7 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import traffic.ConstantTemporalPattern;
-import traffic.DefaultRoadNetworks;
+import traffic.DefaultNetworks;
 import traffic.FlowBuilder;
 import traffic.FlowGroupBuilder;
 import traffic.ItineraryImpl;
@@ -19,8 +19,8 @@ import traffic.JunctionFactory;
 import traffic.JunctionOccupancyBuilder;
 import traffic.NetworkOccupancy;
 import traffic.NetworkOccupancyBuilder;
-import traffic.RoadNetwork;
-import traffic.RoadNetworkBuilder;
+import traffic.Network;
+import traffic.NetworkBuilder;
 import traffic.Segment;
 import traffic.SegmentBuilder;
 import traffic.SegmentOccupancy;
@@ -51,33 +51,33 @@ public class TestNetworkMeasures {
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
 	@Inject private Provider<SegmentBuilder> segmentBuilderProvider;
-	@Inject private Provider<RoadNetworkBuilder> roadNetworkBuilderProvider;
+	@Inject private Provider<NetworkBuilder> networkBuilderProvider;
 	@Inject private Provider<JourneyHistoryBuilder> JourneyHistoryBuilderProvider;
 	@Inject private Provider<FlowGroupBuilder> flowGroupBuilderProvider;
 	@Inject private Provider<FlowBuilder> flowBuilderProvider;
 	@Inject private Provider<NetworkOccupancyBuilder> networkOccupancyBuilderProvider;
 	@Inject private Provider<JunctionOccupancyBuilder> junctionOccupancyBuilderProvider;
 
-	@Inject DefaultRoadNetworks defaultRoadNetworks;
+	@Inject DefaultNetworks defaultNetworks;
 	private final ConstantTemporalPattern constantTemporalPattern = new ConstantTemporalPattern(1.0);
 
 	private Junction junction0, junction1, junction2, junction3;
 	private Segment segment0, segment1, segment2;
-	private RoadNetwork roadNetwork;
+	private Network network;
 	private JourneyHistory history0, history1;
 	private Vehicle vehicle0, vehicle1;
 
 	@Test
 	public void congestionOnNetworkWithFlowsDoesNotRemainZero() throws Exception {
-		final RoadNetwork roadNetwork = defaultRoadNetworks.xNetwork4Segment();
+		final Network network = defaultNetworks.xNetwork4Segment();
 
-		final Segment segment0 = roadNetwork.segments().get(0);
-		final Segment segment1 = roadNetwork.segments().get(1);
-		final Segment segment2 = roadNetwork.segments().get(2);
-		final Segment segment3 = roadNetwork.segments().get(3);
+		final Segment segment0 = network.segments().get(0);
+		final Segment segment1 = network.segments().get(1);
+		final Segment segment2 = network.segments().get(2);
+		final Segment segment3 = network.segments().get(3);
 
 		final Simulation sim = simulationBuilderProvider.get()
-			.withRoadNetwork(roadNetwork)
+			.withNetwork(network)
 			.withFlowGroup(flowGroupBuilderProvider.get()
 				.withTemporalPattern(constantTemporalPattern.withModifier(1))
 				.withFlow(flowBuilderProvider.get()
@@ -97,9 +97,9 @@ public class TestNetworkMeasures {
 
 	@Test
 	public void OccupancyOnEmptyNetworkRemainsZero() throws Exception {
-		final RoadNetwork roadNetwork = defaultRoadNetworks.xNetwork4Segment();
+		final Network network = defaultNetworks.xNetwork4Segment();
 		final Simulation sim = simulationBuilderProvider.get()
-			.withRoadNetwork(roadNetwork)
+			.withNetwork(network)
 			.make();
 
 		final NetworkOccupancy expectedInitialNetworkOccupancy = networkOccupancyWithZeroOccupancy();
@@ -139,7 +139,7 @@ public class TestNetworkMeasures {
 
 	private SimulationBuilder simulationBuilder() {
 		return simulationBuilderProvider.get()
-				.withRoadNetwork(roadNetwork);
+				.withNetwork(network);
 	}
 
 	private void createVehicles() {
@@ -153,8 +153,8 @@ public class TestNetworkMeasures {
 			.make();
 	}
 
-	private void createRoadNetwork() {
-		roadNetwork = roadNetworkBuilderProvider.get()
+	private void createNetwork() {
+		network = networkBuilderProvider.get()
 			.withSegment(segment0)
 			.withSegment(segment1)
 			.withSegment(segment2)
