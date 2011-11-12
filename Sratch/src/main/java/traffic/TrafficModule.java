@@ -31,7 +31,8 @@ public class TrafficModule extends AbstractModule {
 			         }
 			      }, new EventBusTypeListener(eventBus));
 
-
+		bind(NetworkOccupancyBuilder.class).to(NetworkOccupancyBuilderImpl.class);
+		bind(JunctionOccupancyBuilder.class).to(JunctionOccupancyBuilderImpl.class);
 		bind(Statistics.class).to(StatisticsImpl.class);
 		//bind(RoadNetworkBuilder.class).annotatedWith(Names.named("xNetwork4Segment")).to(XNetwork4Segment.class);
 		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);

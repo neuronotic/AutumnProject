@@ -33,6 +33,7 @@ class JunctionImpl implements Junction {
 	public boolean enter(final Vehicle vehicle) {
 		if (!occupied) {
 			if (vehiclesWaiting.isEmpty()) {
+				//noteFlow(vehicle.location());
 				occupied = true;
 				return true;
 			}
@@ -42,6 +43,11 @@ class JunctionImpl implements Junction {
 				return true;
 			}
 		} return false;
+	}
+
+
+	private void noteFlow(final Cell location) {
+		// TODO Auto-generated method stub
 	}
 
 	private boolean isFirstInQueue(final Vehicle vehicle) {
@@ -79,7 +85,8 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public void step() {
-
+		//JunctionOccupancy junctionOccupancy = junctionOccupancyFactory.create()
+		//eventBus.post(junctionOccupancy)
 	}
 
 	@Override

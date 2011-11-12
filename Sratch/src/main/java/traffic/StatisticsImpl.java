@@ -58,6 +58,12 @@ public class StatisticsImpl implements Statistics {
 	private int junctionCapacity(final Junction junction) {
 		return junction.inBoundSegmentsCapacity() + junction.capacity();
 	}
+
+	@Override
+	public NetworkOccupancy currentNetworkOccupancy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 
