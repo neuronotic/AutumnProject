@@ -20,18 +20,18 @@ public class VehicleMatchers {
 		};
 	}
 
-	public static Matcher<Vehicle> isLocatedAt(final Segment expectedSegment, final int expectedIndex) {
+	public static Matcher<Vehicle> isLocatedAt(final Link expectedLink, final int expectedIndex) {
 		return new TypeSafeMatcher<Vehicle>(Vehicle.class) {
 			@Override
 			public void describeTo(final Description description) {
 				description.appendValue(Vehicle.class.getSimpleName())
 					.appendText(" is located at ")
-					.appendValue(expectedSegment.getCell(expectedIndex));
+					.appendValue(expectedLink.getCell(expectedIndex));
 			}
 
 			@Override
 			protected boolean matchesSafely(final Vehicle item) {
-				return item.location().equals(expectedSegment.getCell(expectedIndex));
+				return item.location().equals(expectedLink.getCell(expectedIndex));
 			}
 		};
 	}

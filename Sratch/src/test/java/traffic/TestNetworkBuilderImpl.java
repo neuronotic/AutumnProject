@@ -12,29 +12,29 @@ public class TestNetworkBuilderImpl{
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
-	private final SegmentBuilder segmentBuilder0 = context.mock(SegmentBuilder.class, "segmentBuilder0");
-	private final SegmentBuilder segmentBuilder1 = context.mock(SegmentBuilder.class, "segmentBuilder1");
-	private final Segment segment0 = context.mock(Segment.class, "segment0");
-	private final Segment segment1 = context.mock(Segment.class, "segment1");
-	private final Segment segment2 = context.mock(Segment.class, "segment2");
+	private final LinkBuilder linkBuilder0 = context.mock(LinkBuilder.class, "linkBuilder0");
+	private final LinkBuilder linkBuilder1 = context.mock(LinkBuilder.class, "linkBuilder1");
+	private final Link link0 = context.mock(Link.class, "link0");
+	private final Link link1 = context.mock(Link.class, "link1");
+	private final Link link2 = context.mock(Link.class, "link2");
 	private final NetworkFactory networkFactory = context.mock(NetworkFactory.class);
 	private final Network network = context.mock(Network.class);
 
 	@Test
-	public void networkCreatedWithSegmentsSuppliedToBuilder() throws Exception {
+	public void networkCreatedWithLinksSuppliedToBuilder() throws Exception {
 
 		context.checking(new Expectations() {
 			{
-				oneOf(segmentBuilder0).make(); will(returnValue(segment0));
-				oneOf(segmentBuilder1).make(); will(returnValue(segment1));
-				oneOf(networkFactory).createNetwork(asList(segment2, segment0, segment1)); will(returnValue(network));
+				oneOf(linkBuilder0).make(); will(returnValue(link0));
+				oneOf(linkBuilder1).make(); will(returnValue(link1));
+				oneOf(networkFactory).createNetwork(asList(link2, link0, link1)); will(returnValue(network));
 			}
 		});
 
 		final NetworkBuilder networkBuilder = new NetworkBuilderImpl(networkFactory)
-			.withSegment(segmentBuilder0)
-			.withSegment(segmentBuilder1)
-			.withSegment(segment2);
+			.withLinkBuilder(linkBuilder0)
+			.withLinkBuilder(linkBuilder1)
+			.withLink(link2);
 		assertThat(networkBuilder.make(), equalTo(network));
 	}
 

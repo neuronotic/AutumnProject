@@ -16,17 +16,17 @@ public class TestCellImpl {
 	private final Vehicle vehicle0 = context.mock(Vehicle.class, "vehicle0");
 	private final Vehicle vehicle1 = context.mock(Vehicle.class, "vehicle1");
 
-	private final Segment segment = context.mock(Segment.class);
+	private final Link link = context.mock(Link.class);
 	private Cell cell;
 
 	@Before
 	public void setUp() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(segment).name(); will(returnValue("mySegment"));
+				oneOf(link).name(); will(returnValue("myLink"));
 			}
 		});
-		cell = new CellImpl(segment, 0);
+		cell = new CellImpl(link, 0);
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class TestCellImpl {
 	}
 
 	@Test
-	public void cellNameIsNameOfSegmentAndCellIndex() throws Exception {
-		assertThat(cell, cellNamed("mySegment[0]"));
+	public void cellNameIsNameOfLinkAndCellIndex() throws Exception {
+		assertThat(cell, cellNamed("myLink[0]"));
 	}
 }

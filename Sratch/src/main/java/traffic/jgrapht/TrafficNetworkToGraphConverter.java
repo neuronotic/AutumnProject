@@ -7,6 +7,6 @@ import traffic.Network;
 
 public interface TrafficNetworkToGraphConverter {
 
-	DefaultDirectedWeightedGraph<Junction, SegmentEdge> convert(Network network);
+	DefaultDirectedWeightedGraph<Junction, LinkEdge> convert(Network network);
 
 }

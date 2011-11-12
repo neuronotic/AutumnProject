@@ -18,11 +18,11 @@ import traffic.JourneyHistory;
 import traffic.JourneyHistoryBuilder;
 import traffic.Junction;
 import traffic.JunctionFactory;
+import traffic.Link;
+import traffic.LinkBuilder;
 import traffic.Network;
 import traffic.NetworkBuilder;
 import traffic.NullCell;
-import traffic.Segment;
-import traffic.SegmentBuilder;
 import traffic.Simulation;
 import traffic.SimulationBuilder;
 import traffic.TrafficModule;
@@ -51,7 +51,7 @@ public class TestVehicleJourneys {
 	ConstantTemporalPattern constantTemporalPattern = new ConstantTemporalPattern(1);
 	@Inject private JunctionFactory junctionFactory;
 	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
-	@Inject private Provider<SegmentBuilder> segmentBuilderProvider;
+	@Inject private Provider<LinkBuilder> linkBuilderProvider;
 	@Inject private Provider<NetworkBuilder> networkBuilderProvider;
 	@Inject private Provider<JourneyHistoryBuilder> JourneyHistoryBuilderProvider;
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
@@ -59,7 +59,7 @@ public class TestVehicleJourneys {
 	@Inject private Provider<FlowBuilder> flowBuilderProvider;
 
 	private Junction junction0, junction1, junction2, junction3;
-	private Segment segment0, segment1, segment2;
+	private Link link0, link1, link2;
 	private Network network;
 	private JourneyHistory history0, history1;
 	private Vehicle vehicle0, vehicle1;
@@ -67,13 +67,13 @@ public class TestVehicleJourneys {
 	@Test
 	public void runSimAfterAddingFlowGroupFor10StepsResultsIn4JourneyHistoriesToThatPoint() throws Exception {
 		createJunctions();
-		createSegments();
+		createLinks();
 		createNetwork();
 		final Simulation sim = simulationBuilder()
 				.withFlowGroup(flowGroupBuilderProvider.get()
 						.withTemporalPattern(constantTemporalPattern)
 						.withFlow(flowBuilderProvider.get()
-								.withItinerary(new ItineraryImpl(segment0, segment2))
+								.withItinerary(new ItineraryImpl(link0, link2))
 								.withProbability(1.0)))
 				.make();
 		sim.step(10);
@@ -83,7 +83,7 @@ public class TestVehicleJourneys {
 	@Test
 	public void newlyCreatedVehiclesRemainOffNetworkUntilJunctionPullsThemIn() throws Exception {
 		createJunctions();
-		createSegments();
+		createLinks();
 		createNetwork();
 
 		final Simulation sim = simulationBuilder()
@@ -102,7 +102,7 @@ public class TestVehicleJourneys {
 	@Test
 	public void VehicleManagerMaintainsLogOfJourneyHistories() throws Exception {
 		createJunctions();
-		createSegments();
+		createLinks();
 		createNetwork();
 
 		final Simulation sim = simulationBuilder()
@@ -119,7 +119,7 @@ public class TestVehicleJourneys {
 	public void onlyOneVehicleCanOccupyACellAtATime() throws Exception {
 		//logger.info(String.format("\n============onlyOneVehicleCanOccupyACellAtATime"));
 		createJunctions();
-		createSegments();
+		createLinks();
 		createNetwork();
 
 
@@ -132,18 +132,18 @@ public class TestVehicleJourneys {
 
 		sim.step(2);
 		assertThat(vehicle0, isLocatedAt(junction1));
-		assertThat(vehicle1, isLocatedAt(segment1, 0));
+		assertThat(vehicle1, isLocatedAt(link1, 0));
 
 		sim.step(1);
-		assertThat(vehicle0, isLocatedAt(segment2,0));
+		assertThat(vehicle0, isLocatedAt(link2,0));
 		assertThat(vehicle1, isLocatedAt(junction1));
 	}
 
 	@Test
-	public void tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime() throws Exception {
-		//logger.info(String.format("\n============tripAcrossTwoSegmentsOfYShapedNetworkWith3SegmentsTakesCorrectAmmountOfTime"));
+	public void tripAcrossTwoLinksOfYShapedNetworkWith3LinksTakesCorrectAmmountOfTime() throws Exception {
+		//logger.info(String.format("\n============tripAcrossTwoLinksOfYShapedNetworkWith3LinksTakesCorrectAmmountOfTime"));
 		createJunctions();
-		createSegments();
+		createLinks();
 		createNetwork();
 
 		final Simulation sim = simulationBuilder()
@@ -162,45 +162,45 @@ public class TestVehicleJourneys {
 	private void createVehicles() {
 		vehicle0 = vehicleBuilderProvider.get()
 			.withName("vehicle0")
-			.withItinerary(new ItineraryImpl(segment0, segment2))
+			.withItinerary(new ItineraryImpl(link0, link2))
 			.make();
 		vehicle1 = vehicleBuilderProvider.get()
 			.withName("vehicle1")
-			.withItinerary(new ItineraryImpl(segment1, segment2))
+			.withItinerary(new ItineraryImpl(link1, link2))
 			.make();
 	}
 
 	private void createNetwork() {
 		network = networkBuilderProvider.get()
-			.withSegment(segment0)
-			.withSegment(segment1)
-			.withSegment(segment2)
+			.withLink(link0)
+			.withLink(link1)
+			.withLink(link2)
 			.make();
 	}
 
-	private void createSegments() {
-		segment0 = segment()
-			.withName("segment0")
+	private void createLinks() {
+		link0 = link()
+			.withName("link0")
 			.withInJunction(junction0)
 			.withOutJunction(junction1)
 			.withLength(1)
 			.make();
-		segment1 = segment()
-			.withName("segment1")
+		link1 = link()
+			.withName("link1")
 			.withInJunction(junction3)
 			.withOutJunction(junction1)
 			.withLength(1)
 			.make();
-		segment2 = segment()
-			.withName("segment2")
+		link2 = link()
+			.withName("link2")
 			.withInJunction(junction1)
 			.withOutJunction(junction2)
 			.withLength(2)
 			.make();
 	}
 
-	private SegmentBuilder segment() {
-		return segmentBuilderProvider.get();
+	private LinkBuilder link() {
+		return linkBuilderProvider.get();
 	}
 
 	private void createJunctions() {
@@ -215,10 +215,10 @@ public class TestVehicleJourneys {
 				.withStartTime(time(0))
 				.withEndTime(time(6))
 				.withCellEntryTime(junction0, time(0))
-				.withCellEntryTime(segment0.getCell(0),time(1))
+				.withCellEntryTime(link0.getCell(0),time(1))
 				.withCellEntryTime(junction1, time(2))
-				.withCellEntryTime(segment2.getCell(0),time(3))
-				.withCellEntryTime(segment2.getCell(1),time(4))
+				.withCellEntryTime(link2.getCell(0),time(3))
+				.withCellEntryTime(link2.getCell(1),time(4))
 				.withCellEntryTime(junction2, time(5))
 				.make(vehicle0);
 
@@ -226,10 +226,10 @@ public class TestVehicleJourneys {
 				.withStartTime(time(0))
 				.withEndTime(time(7))
 				.withCellEntryTime(junction3, time(0))
-				.withCellEntryTime(segment1.getCell(0),time(1))
+				.withCellEntryTime(link1.getCell(0),time(1))
 				.withCellEntryTime(junction1, time(3))
-				.withCellEntryTime(segment2.getCell(0),time(4))
-				.withCellEntryTime(segment2.getCell(1),time(5))
+				.withCellEntryTime(link2.getCell(0),time(4))
+				.withCellEntryTime(link2.getCell(1),time(5))
 				.withCellEntryTime(junction2, time(6))
 				.make(vehicle1);
 	}

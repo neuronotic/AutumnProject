@@ -15,7 +15,7 @@ public class TestCellChainBuilderImpl {
 	private final CellFactory cellFactory = context.mock(CellFactory.class);
 	private final CellChainFactory cellChainFactory = context.mock(CellChainFactory.class);
 
-	private final Segment segment = context.mock(Segment.class);
+	private final Link link = context.mock(Link.class);
 
 	private final Cell cell0 = context.mock(Cell.class, "cell0");
 	private final Cell cell1 = context.mock(Cell.class, "cell1");
@@ -27,15 +27,15 @@ public class TestCellChainBuilderImpl {
 	public void cellChainHasSpecifiedNumberOfCellsCreated() {
 		context.checking(new Expectations() {
 			{
-				oneOf(cellFactory).createCell(segment, 0); will(returnValue(cell0));
-				oneOf(cellFactory).createCell(segment, 1); will(returnValue(cell1));
-				oneOf(cellFactory).createCell(segment, 2); will(returnValue(cell2));
+				oneOf(cellFactory).createCell(link, 0); will(returnValue(cell0));
+				oneOf(cellFactory).createCell(link, 1); will(returnValue(cell1));
+				oneOf(cellFactory).createCell(link, 2); will(returnValue(cell2));
 
 				oneOf(cellChainFactory).createCellChain(asList(cell0, cell1, cell2)); will(returnValue(cellChain));
 			}
 		});
 
-		assertThat(new CellChainBuilderImpl(cellChainFactory, cellFactory).cellChainOfLength(3).make(segment),
+		assertThat(new CellChainBuilderImpl(cellChainFactory, cellFactory).cellChainOfLength(3).make(link),
 				equalTo(cellChain));
 	}
 }

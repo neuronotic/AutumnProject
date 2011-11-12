@@ -8,8 +8,8 @@ import com.google.inject.Inject;
 public class NetworkBuilderImpl implements NetworkBuilder {
 
 	private final NetworkFactory networkFactory;
-	private final List<SegmentBuilder> segmentBuilders = new ArrayList<SegmentBuilder>();
-	private final List<Segment> segments = new ArrayList<Segment>();
+	private final List<LinkBuilder> linkBuilders = new ArrayList<LinkBuilder>();
+	private final List<Link> links = new ArrayList<Link>();
 
 	@Inject public NetworkBuilderImpl(final NetworkFactory networkFactory) {
 		this.networkFactory = networkFactory;
@@ -17,22 +17,22 @@ public class NetworkBuilderImpl implements NetworkBuilder {
 
 	@Override
 	public Network make() {
-		final List<Segment> segmentsToMakeNetworkWith = new ArrayList<Segment>(segments);
-		for (final SegmentBuilder builder : segmentBuilders) {
-			segmentsToMakeNetworkWith.add(builder.make());
+		final List<Link> linksToMakeNetworkWith = new ArrayList<Link>(links);
+		for (final LinkBuilder builder : linkBuilders) {
+			linksToMakeNetworkWith.add(builder.make());
 		}
-		return networkFactory.createNetwork(segmentsToMakeNetworkWith);
+		return networkFactory.createNetwork(linksToMakeNetworkWith);
 	}
 
 	@Override
-	public NetworkBuilder withSegment(final SegmentBuilder segmentBuilder) {
-		segmentBuilders.add(segmentBuilder);
+	public NetworkBuilder withLinkBuilder(final LinkBuilder linkBuilder) {
+		linkBuilders.add(linkBuilder);
 		return this;
 	}
 
 	@Override
-	public NetworkBuilder withSegment(final Segment segment) {
-		segments.add(segment);
+	public NetworkBuilder withLink(final Link link) {
+		links.add(link);
 		return this;
 	}
 

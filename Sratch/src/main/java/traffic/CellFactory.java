@@ -1,5 +1,5 @@
 package traffic;
 
 public interface CellFactory {
-	Cell createCell(Segment segment, int index);
+	Cell createCell(Link link, int index);
 }

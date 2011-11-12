@@ -9,11 +9,11 @@ public interface Junction extends Cell {
 
 	void step();
 
-	void addIncomingSegment(Segment segment);
-	void addOutgoingSegment(Segment segment);
+	void addIncomingLinks(Link link);
+	void addOutgoingLink(Link link);
 
-	int inBoundSegmentsOccupancy();
-	int inBoundSegmentsCapacity();
+	int inBoundLinksOccupancy();
+	int inBoundLinksCapacity();
 	int occupancy();
 	int capacity();
 	Object vehiclesWaitingToJoin();

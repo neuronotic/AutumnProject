@@ -15,8 +15,8 @@ class JunctionImpl implements Junction {
 	private final String name;
 	private boolean occupied = false;
 	private final LinkedList<Vehicle> vehiclesWaiting = new LinkedList<Vehicle>();
-	private final List<Segment> incomingSegments = new ArrayList<Segment>();
-	private final List<Segment> outgoingSegments = new ArrayList<Segment>();
+	private final List<Link> incomingLinks = new ArrayList<Link>();
+	private final List<Link> outgoingLinks = new ArrayList<Link>();
 	private final MyEventBus eventBus;
 
 	private final JunctionMeasuresMessageFactory messageFactory;
@@ -90,20 +90,20 @@ class JunctionImpl implements Junction {
 	}
 
 	@Override
-	public void addIncomingSegment(final Segment segment) {
-		incomingSegments.add(segment);
+	public void addIncomingLinks(final Link link) {
+		incomingLinks.add(link);
 	}
 
 	@Override
-	public void addOutgoingSegment(final Segment segment) {
-		outgoingSegments.add(segment);
+	public void addOutgoingLink(final Link link) {
+		outgoingLinks.add(link);
 	}
 
 	@Override
-	public int inBoundSegmentsOccupancy() {
+	public int inBoundLinksOccupancy() {
 		int occupiedCount = 0;
-		for (final Segment segment : incomingSegments) {
-			occupiedCount += segment.occupiedCount();
+		for (final Link link : incomingLinks) {
+			occupiedCount += link.occupiedCount();
 		}
 		return occupiedCount;
 	}
@@ -119,10 +119,10 @@ class JunctionImpl implements Junction {
 	}
 
 	@Override
-	public int inBoundSegmentsCapacity() {
+	public int inBoundLinksCapacity() {
 		int cellCount = 0;
-		for (final Segment segment : incomingSegments) {
-			cellCount += segment.cellCount();
+		for (final Link link : incomingLinks) {
+			cellCount += link.cellCount();
 		}
 		return cellCount;
 	}

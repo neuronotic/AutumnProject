@@ -11,13 +11,13 @@ public class TestNetworkImpl {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
-	private final Segment segment = context.mock(Segment.class);
+	private final Link link = context.mock(Link.class);
 	private final Junction junction0 = context.mock(Junction.class, "junction0");
 	private final Junction junction1 = context.mock(Junction.class, "junction1");
 
 	@Test
 	public void stepCallsStepOnAllJunctions() throws Exception {
-		final Network network = createOneSegmentNetworkAndConstructorExpectations();
+		final Network network = createOneLinkNetworkAndConstructorExpectations();
 
 		context.checking(new Expectations() {
 			{
@@ -31,26 +31,26 @@ public class TestNetworkImpl {
 
 	@Test
 	public void junctionsReturnsListOfJunctionsOnNetwork() throws Exception {
-		assertThat(createOneSegmentNetworkAndConstructorExpectations().junctions(), containsInAnyOrder(junction0, junction1));
+		assertThat(createOneLinkNetworkAndConstructorExpectations().junctions(), containsInAnyOrder(junction0, junction1));
 	}
 
 	@Test
-	public void segmentsReturnsListOfSegmentsOnNetwork() throws Exception {
+	public void linksReturnsListOfLinksOnNetwork() throws Exception {
 		context.checking(new Expectations() {
 			{
-				ignoring(segment);
+				ignoring(link);
 			}
 		});
-		assertThat(new NetworkImpl(segment).segments(), contains(segment));
+		assertThat(new NetworkImpl(link).links(), contains(link));
 	}
 
-	private Network createOneSegmentNetworkAndConstructorExpectations() {
+	private Network createOneLinkNetworkAndConstructorExpectations() {
 		context.checking(new Expectations() {
 			{
-				oneOf(segment).inJunction(); will(returnValue(junction0));
-				oneOf(segment).outJunction(); will(returnValue(junction1));
+				oneOf(link).inJunction(); will(returnValue(junction0));
+				oneOf(link).outJunction(); will(returnValue(junction1));
 			}
 		});
-		return new NetworkImpl(segment);
+		return new NetworkImpl(link);
 	}
 }

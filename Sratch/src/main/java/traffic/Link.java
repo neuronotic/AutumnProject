@@ -2,7 +2,7 @@ package traffic;
 
 import java.util.List;
 
-public interface Segment {
+public interface Link {
 	Junction inJunction();
 	Junction outJunction();
 	CellChain cellChain();

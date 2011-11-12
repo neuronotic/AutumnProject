@@ -6,36 +6,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItineraryImpl implements Itinerary {
-	private final List<Segment> segments;
+	private final List<Link> links;
 
-	public ItineraryImpl(final Segment...segments) {
-		this(asList(segments));
+	public ItineraryImpl(final Link...links) {
+		this(asList(links));
 	}
 
-	public ItineraryImpl(final List<Segment> segments) {
-		this.segments = segments;
+	public ItineraryImpl(final List<Link> links) {
+		this.links = links;
 	}
 
 	@Override
-	public List<Segment> route() {
-		return segments;
+	public List<Link> route() {
+		return links;
 	}
 
 	@Override
 	public List<Cell> cells() {
 		final List<Cell> result = new ArrayList<Cell>();
-		for (final Segment segment : segments) {
+		for (final Link link : links) {
 			if (!result.isEmpty()) {
 				result.remove(result.size() - 1);
 			}
-			result.addAll(segment.cells());
+			result.addAll(link.cells());
 		}
 		return result;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Itinerary %s", segments);
+		return String.format("Itinerary %s", links);
 	}
 
 }

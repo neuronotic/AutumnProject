@@ -6,16 +6,16 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 
 	private final JunctionFactory junctionFactory;
 	private final NetworkBuilderFactory networkBuilderFactory;
-	private final SegmentBuilderFactory segmentBuilderFactory;
+	private final LinkBuilderFactory linkBuilderFactory;
 
-	@Inject DefaultNetworksImpl(final JunctionFactory junctionFactory, final SegmentBuilderFactory segmentBuilderFactory, final NetworkBuilderFactory networkBuilderFactory) {
+	@Inject DefaultNetworksImpl(final JunctionFactory junctionFactory, final LinkBuilderFactory linkBuilderFactory, final NetworkBuilderFactory networkBuilderFactory) {
 		this.junctionFactory = junctionFactory;
-		this.segmentBuilderFactory = segmentBuilderFactory;
+		this.linkBuilderFactory = linkBuilderFactory;
 		this.networkBuilderFactory = networkBuilderFactory;
 	}
 
 	@Override
-	public Network xNetwork4Segment() {
+	public Network xNetwork4Link() {
 		Junction junction0, junction1, junction2, junction3, junction4;
 		junction0 = junctionFactory.createJunction("junction0");
 		junction1 = junctionFactory.createJunction("junction1");
@@ -23,32 +23,32 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 		junction3 = junctionFactory.createJunction("junction3");
 		junction4 = junctionFactory.createJunction("junction4");
 
-		final int segmentLength = 5;
+		final int linkLength = 5;
 
 		return networkBuilder()
-			.withSegment( segment()
-				.withName("segment0")
+			.withLink( link()
+				.withName("link0")
 				.withInJunction(junction0)
 				.withOutJunction(junction1)
-				.withLength(segmentLength)
+				.withLength(linkLength)
 				.make())
-			.withSegment( segment()
-				.withName("segment1")
+			.withLink( link()
+				.withName("link1")
 				.withInJunction(junction1)
 				.withOutJunction(junction2)
-				.withLength(segmentLength)
+				.withLength(linkLength)
 				.make())
-			.withSegment( segment()
-				.withName("segment2")
+			.withLink( link()
+				.withName("link2")
 				.withInJunction(junction3)
 				.withOutJunction(junction1)
-				.withLength(segmentLength)
+				.withLength(linkLength)
 				.make())
-			.withSegment( segment()
-				.withName("segment3")
+			.withLink( link()
+				.withName("link3")
 				.withInJunction(junction1)
 				.withOutJunction(junction4)
-				.withLength(segmentLength)
+				.withLength(linkLength)
 				.make())
 			.make();
 	}
@@ -57,7 +57,7 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 		return networkBuilderFactory.create();
 	}
 
-	private SegmentBuilder segment() {
-		return segmentBuilderFactory.create();
+	private LinkBuilder link() {
+		return linkBuilderFactory.create();
 	}
 }

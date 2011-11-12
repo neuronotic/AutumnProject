@@ -36,19 +36,19 @@ public class NetworkMatchers {
 		};
 	}
 
-	public static Matcher<Segment> isSegment(
+	public static Matcher<Link> isLink(
 			final String expectedName,
 			final Junction expectedInJunction,
 			final CellChain cellChain,
 			final Junction expectedOutJunction) {
-		return new TypeSafeMatcher<Segment>() {
+		return new TypeSafeMatcher<Link>() {
 			@Override
 			public void describeTo(final Description description) {
-				description.appendText("segment ").appendValue(expectedName).appendText(" between ").appendValue(expectedInJunction).appendText(" and ").appendValue(expectedOutJunction).appendText(" connected by cell chain ").appendValue(cellChain);
+				description.appendText("Link ").appendValue(expectedName).appendText(" between ").appendValue(expectedInJunction).appendText(" and ").appendValue(expectedOutJunction).appendText(" connected by cell chain ").appendValue(cellChain);
 			}
 
 			@Override
-			protected boolean matchesSafely(final Segment item) {
+			protected boolean matchesSafely(final Link item) {
 				return item.inJunction().equals(expectedInJunction) && item.outJunction().equals(expectedOutJunction) && item.name().equals(expectedName);
 			}
 		};
@@ -82,52 +82,35 @@ public class NetworkMatchers {
 		};
 	}
 
-	public static Matcher<Segment> segmentHasCellChain(
+	public static Matcher<Link> linkHasCellChain(
 			final CellChain expectedCellChain) {
-		return new TypeSafeMatcher<Segment>() {
+		return new TypeSafeMatcher<Link>() {
 			@Override
 			public void describeTo(final Description description) {
-				description.appendText("Segment Cell Chain ").appendValue(expectedCellChain);
+				description.appendText("Link Cell Chain ").appendValue(expectedCellChain);
 			}
 
 			@Override
-			protected boolean matchesSafely(final Segment item) {
+			protected boolean matchesSafely(final Link item) {
 				return item.cellChain().equals(expectedCellChain);
 			}
 		};
 	}
 
-	public static Matcher<Segment> segmentNamed(final String expectedName) {
-		return new TypeSafeMatcher<Segment>() {
+	public static Matcher<Link> linkNamed(final String expectedName) {
+		return new TypeSafeMatcher<Link>() {
 
 			@Override
 			public void describeTo(final Description description) {
-				description.appendText("segment with name ").appendValue(expectedName);
+				description.appendText("Link with name ").appendValue(expectedName);
 			}
 
 			@Override
-			protected boolean matchesSafely(final Segment item) {
+			protected boolean matchesSafely(final Link item) {
 				return item.name().equals(expectedName);
 			}
 		};
 	}
-
-//	public static Object cellOccupantIs(final Vehicle expectedVehicle) {
-//		return new TypeSafeMatcher<Cell>(Cell.class) {
-//
-//			@Override
-//			public void describeTo(final Description description) {
-//				description.appendText("Cell occupant is ").appendValue(expectedVehicle);
-//			}
-//
-//			@Override
-//			protected boolean matchesSafely(final Cell item) {
-//				return item.occupant().equals(expectedVehicle);
-//			}
-//
-//		};
-//	}
-
 
 	public static Matcher<Cell> cellNamed(final String expectedName) {
 		return new TypeSafeMatcher<Cell>(Cell.class) {
@@ -155,26 +138,26 @@ public class NetworkMatchers {
 		};
 	}
 
-	public static Matcher<Segment> segmentHasLength(final int expectedLength) {
-		return new TypeSafeMatcher<Segment>(Segment.class) {
+	public static Matcher<Link> linkHasLength(final int expectedLength) {
+		return new TypeSafeMatcher<Link>(Link.class) {
 
 			@Override
 			public void describeTo(final Description description) {
-				description.appendText("Segment with length ").appendValue(expectedLength);
+				description.appendText("Link with length ").appendValue(expectedLength);
 			}
 
 			@Override
-			protected void describeMismatchSafely(final Segment item,
+			protected void describeMismatchSafely(final Link item,
 					final Description mismatchDescription) {
 				if (item != null) {
-					mismatchDescription.appendText("Segment with length ").appendValue(item.length());
+					mismatchDescription.appendText("Link with length ").appendValue(item.length());
 				} else {
 					super.describeMismatchSafely(item, mismatchDescription);
 				}
 			}
 
 			@Override
-			protected boolean matchesSafely(final Segment item) {
+			protected boolean matchesSafely(final Link item) {
 				return item.length() == expectedLength;
 			}
 

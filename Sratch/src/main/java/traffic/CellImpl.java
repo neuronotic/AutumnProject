@@ -9,9 +9,9 @@ class CellImpl implements Cell {
 	private boolean occupied = false;
 
 	@Inject CellImpl(
-			@Assisted final Segment segment,
+			@Assisted final Link link,
 			@Assisted final int index) {
-		name = String.format("%s[%s]", segment.name(), index);
+		name = String.format("%s[%s]", link.name(), index);
 	}
 
 	@Override

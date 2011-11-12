@@ -1,5 +1,5 @@
 package traffic;
 
 public interface DefaultNetworks {
-	public Network xNetwork4Segment();
+	public Network xNetwork4Link();
 }

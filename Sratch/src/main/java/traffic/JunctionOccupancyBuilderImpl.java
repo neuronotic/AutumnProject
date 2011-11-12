@@ -17,8 +17,8 @@ public class JunctionOccupancyBuilderImpl implements JunctionOccupancyBuilder {
 	}
 
 	@Override
-	public JunctionOccupancyBuilder withIncomingSegmentOccupancy(
-			final SegmentOccupancy segmentOccupancy) {
+	public JunctionOccupancyBuilder withIncomingLinkOccupancy(
+			final LinkOccupancy linkOccupancy) {
 		// TODO Auto-generated method stub
 		return null;
 

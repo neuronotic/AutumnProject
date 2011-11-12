@@ -13,43 +13,43 @@ public class TestItineraryImpl {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
-	private final Segment segment0 = context.mock(Segment.class, "segment0");
-	private final Segment segment1 = context.mock(Segment.class, "segment1");
+	private final Link link0 = context.mock(Link.class, "link0");
+	private final Link link1 = context.mock(Link.class, "link1");
 
 	private final Junction junctionCell0 = context.mock(Junction.class, "junctionCell0");
 	private final Junction junctionCell1 = context.mock(Junction.class, "junctionCell1");
 	private final Junction junctionCell2 = context.mock(Junction.class, "junctionCell2");
 
-	private final Cell segmentCell0 = context.mock(Cell.class, "segmentCell0");
-	private final Cell segmentCell1 = context.mock(Cell.class, "segmentCell1");
-	private final Cell segmentCell2 = context.mock(Cell.class, "segmentCell2");
+	private final Cell linkCell0 = context.mock(Cell.class, "linkCell0");
+	private final Cell linkCell1 = context.mock(Cell.class, "linkCell1");
+	private final Cell linkCell2 = context.mock(Cell.class, "linkCell2");
 
 	@Test
-	public void routeReturnsListOfSegmentsItineraryWasCreatedWith() throws Exception {
-		final Itinerary itinerary = new ItineraryImpl(segment0, segment1);
-		assertThat(itinerary, itineraryRouteIs(segment0, segment1));
-		assertThat(itinerary.route(), contains(segment0, segment1));
+	public void routeReturnsListOfLinksItineraryWasCreatedWith() throws Exception {
+		final Itinerary itinerary = new ItineraryImpl(link0, link1);
+		assertThat(itinerary, itineraryRouteIs(link0, link1));
+		assertThat(itinerary.route(), contains(link0, link1));
 	}
 
 
 	@Test
-	public void itineraryContainsCellsFromRouteJunctionsAndSegmentsInOrderForMultipleSegments() throws Exception {
+	public void itineraryContainsCellsFromRouteJunctionsAndLinksInOrderForMultipleLinks() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(segment0).cells(); will(returnList(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
-				oneOf(segment1).cells(); will(returnList(junctionCell1, segmentCell2, junctionCell2));
+				oneOf(link0).cells(); will(returnList(junctionCell0, linkCell0, linkCell1, junctionCell1));
+				oneOf(link1).cells(); will(returnList(junctionCell1, linkCell2, junctionCell2));
 			}
 		});
-		assertThat(new ItineraryImpl(segment0, segment1).cells(), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1, segmentCell2, junctionCell2));
+		assertThat(new ItineraryImpl(link0, link1).cells(), contains(junctionCell0, linkCell0, linkCell1, junctionCell1, linkCell2, junctionCell2));
 	}
 
 	@Test
-	public void itineraryContainsCellsFromRouteJunctionsAndSegmentsInOrder() throws Exception {
+	public void itineraryContainsCellsFromRouteJunctionsAndLinksInOrder() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(segment0).cells(); will(returnList(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
+				oneOf(link0).cells(); will(returnList(junctionCell0, linkCell0, linkCell1, junctionCell1));
 			}
 		});
-		assertThat(new ItineraryImpl(segment0).cells(), contains(junctionCell0, segmentCell0, segmentCell1, junctionCell1));
+		assertThat(new ItineraryImpl(link0).cells(), contains(junctionCell0, linkCell0, linkCell1, junctionCell1));
 	}
 }

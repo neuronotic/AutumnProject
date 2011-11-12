@@ -11,22 +11,22 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 public class NetworkImpl implements Network {
-	private final List<Segment> segments;
+	private final List<Link> links;
 	private final Set<Junction> junctions;
 
 	@Inject public NetworkImpl(
-			@Assisted final List<Segment> segments) {
-		this.segments = segments;
+			@Assisted final List<Link> links) {
+		this.links = links;
 		junctions = buildSetOfJunctions();
 	}
 
-	public NetworkImpl(final Segment...segments) {
-		this(asList(segments));
+	public NetworkImpl(final Link...links) {
+		this(asList(links));
 	}
 
 	@Override
-	public List<Segment> segments() {
-		return segments;
+	public List<Link> links() {
+		return links;
 	}
 
 	@Override
@@ -36,9 +36,9 @@ public class NetworkImpl implements Network {
 
 	private Set<Junction> buildSetOfJunctions() {
 		final Set<Junction> junctions = new HashSet<Junction>();
-		for (final Segment segment : segments) {
-			junctions.add(segment.inJunction());
-			junctions.add(segment.outJunction());
+		for (final Link link : links) {
+			junctions.add(link.inJunction());
+			junctions.add(link.outJunction());
 		}
 		return junctions;
 	}

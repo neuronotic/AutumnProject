@@ -13,9 +13,9 @@ public class StatisticsImpl implements Statistics {
 		for (final Junction junction : network.junctions()) {
 			logger.info(String.format("--%s cap: %s, occu: %s, queue: %s", junction.name(), junctionCapacity(junction), junctionOccupancy(junction), junction.vehiclesWaitingToJoin()));
 		}
-		for (final Segment segment : network.segments()) {
+		for (final Link link : network.links()) {
 
-			logger.info(String.format("--%s cap:%s, occ: %s, [%s]", segment.name(), segment.cellCount(), segment.occupiedCount(), array2String(segmentOccupancyBinaryArray(segment))));
+			logger.info(String.format("--%s cap:%s, occ: %s, [%s]", link.name(), link.cellCount(), link.occupiedCount(), array2String(linktOccupancyBinaryArray(link))));
 		}
 	}
 
@@ -27,10 +27,10 @@ public class StatisticsImpl implements Statistics {
 		return str.toString();
 	}
 
-	private int[] segmentOccupancyBinaryArray(final Segment segment) {
-		final int[] occupancyArray = new int[segment.cellCount()];
-		for (int i=0; i<segment.cellCount(); i++) {
-			occupancyArray[i] = segment.cellChain().getCellAtIndex(i).isOccupied() ? 1 : 0;
+	private int[] linktOccupancyBinaryArray(final Link link) {
+		final int[] occupancyArray = new int[link.cellCount()];
+		for (int i=0; i<link.cellCount(); i++) {
+			occupancyArray[i] = link.cellChain().getCellAtIndex(i).isOccupied() ? 1 : 0;
 		}
 		return occupancyArray;
 	}
@@ -44,7 +44,7 @@ public class StatisticsImpl implements Statistics {
 	}
 
 	private int junctionOccupancy(final Junction junction) {
-		return junction.inBoundSegmentsOccupancy() + junction.occupancy();
+		return junction.inBoundLinksOccupancy() + junction.occupancy();
 	}
 
 	private int networkCapacity(final Network network) {
@@ -56,7 +56,7 @@ public class StatisticsImpl implements Statistics {
 	}
 
 	private int junctionCapacity(final Junction junction) {
-		return junction.inBoundSegmentsCapacity() + junction.capacity();
+		return junction.inBoundLinksCapacity() + junction.capacity();
 	}
 
 	@Override

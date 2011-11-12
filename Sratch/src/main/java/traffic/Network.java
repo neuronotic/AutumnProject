@@ -5,7 +5,7 @@ import java.util.List;
 
 
 public interface Network {
-	List<Segment> segments();
+	List<Link> links();
 
 	Collection<Junction> junctions();
 

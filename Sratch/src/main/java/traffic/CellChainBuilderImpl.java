@@ -24,10 +24,10 @@ class CellChainBuilderImpl implements CellChainBuilder {
 	}
 
 	@Override
-	public CellChain make(final Segment segment) {
+	public CellChain make(final Link link) {
 		final List<Cell> cells = new ArrayList<Cell>();
 		for (int i = 0; i < cellCount; i++) {
-			cells.add(cellFactory.createCell(segment, i));
+			cells.add(cellFactory.createCell(link, i));
 		}
 		return cellChainFactory.createCellChain(cells);
 	}
