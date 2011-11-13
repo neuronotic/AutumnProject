@@ -4,12 +4,23 @@ import java.util.logging.Logger;
 
 import com.google.inject.Inject;
 
-public class StatisticsImpl implements Statistics {
+public class StatisticsManagerImpl implements StatisticsManager {
 	@Inject Logger logger = Logger.getAnonymousLogger();
+
+	NetworkOccupancy networkOccupancy;
+
+	@Override
+	public NetworkOccupancy currentNetworkOccupancy() {
+
+
+		return null;
+	}
 
 	@Override
 	public void step(final Network network) {
-		logger.info(String.format("LOG JUNCTION MEASURES, capacity:%s, occup:%s", networkCapacity(network), networkOccupancy(network) ));
+
+
+/*		logger.info(String.format("LOG JUNCTION MEASURES, capacity:%s, occup:%s", networkCapacity(network), networkOccupancy(network) ));
 		for (final Junction junction : network.junctions()) {
 			logger.info(String.format("--%s cap: %s, occu: %s, queue: %s", junction.name(), junctionCapacity(junction), junctionOccupancy(junction), junction.vehiclesWaitingToJoin()));
 		}
@@ -17,6 +28,7 @@ public class StatisticsImpl implements Statistics {
 
 			logger.info(String.format("--%s cap:%s, occ: %s, [%s]", link.name(), link.cellCount(), link.occupiedCount(), array2String(linktOccupancyBinaryArray(link))));
 		}
+*/
 	}
 
 	private String array2String(final int[] array) {
@@ -59,11 +71,6 @@ public class StatisticsImpl implements Statistics {
 		return junction.inBoundLinksCapacity() + junction.capacity();
 	}
 
-	@Override
-	public NetworkOccupancy currentNetworkOccupancy() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
 
 

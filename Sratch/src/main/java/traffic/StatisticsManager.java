@@ -1,7 +1,7 @@
 package traffic;
 
 
-public interface Statistics {
+public interface StatisticsManager {
 	void step(Network network);
 
 	NetworkOccupancy currentNetworkOccupancy();

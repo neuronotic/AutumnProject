@@ -33,7 +33,7 @@ public class TrafficModule extends AbstractModule {
 
 		bind(NetworkOccupancyBuilder.class).to(NetworkOccupancyBuilderImpl.class);
 		bind(JunctionOccupancyBuilder.class).to(JunctionOccupancyBuilderImpl.class);
-		bind(Statistics.class).to(StatisticsImpl.class);
+		bind(StatisticsManager.class).to(StatisticsManagerImpl.class);
 		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
 		bind(Traffic.class).to(TrafficImpl.class);
 		bind(MyRandom.class).to(MyRandomImpl.class);
@@ -52,9 +52,22 @@ public class TrafficModule extends AbstractModule {
 		bind(DefaultNetworks.class).to(DefaultNetworksImpl.class);
 
 		install(new FactoryModuleBuilder()
+			.implement(StatisticsManager.class, StatisticsManagerImpl.class)
+			.build(StatisticsManagerFactory.class));
+
+
+		install(new FactoryModuleBuilder()
+			.implement(NetworkOccupancy.class, NetworkOccupancyImpl.class)
+			.build(NetworkOccupancyFactory.class));
+
+
+		install(new FactoryModuleBuilder()
+			.implement(JunctionOccupancy.class, JunctionOccupancyImpl.class)
+			.build(JunctionOccupancyFactory.class));
+
+		install(new FactoryModuleBuilder()
 			.implement(Occupancy.class, OccupancyImpl.class)
 			.build(OccupancyFactory.class));
-
 
 		install(new FactoryModuleBuilder()
 			.implement(LinkOccupancy.class, LinkOccupancyImpl.class)

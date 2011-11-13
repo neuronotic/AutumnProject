@@ -15,19 +15,19 @@ public class SimulationImpl implements Simulation {
 
 	private final TimeKeeper timeKeeper;
 
-	private final Statistics statistics;
+	private final StatisticsManager statisticsManager;
 
 	@Inject
 	SimulationImpl(
 			@Assisted final Network network,
 			@Assisted final List<FlowGroup> flowGroups,
 			final TimeKeeper timeKeeper,
-			final Statistics statistics,
+			final StatisticsManagerFactory statisticsFactory,
 			final VehicleManager vehicleManager,
 			final VehicleCreatorFactory vehicleCreatorFactory) {
 		this.network = network;
 		this.timeKeeper = timeKeeper;
-		this.statistics = statistics;
+		statisticsManager = statisticsFactory.create(network);
 		this.vehicleManager = vehicleManager;
 		vehicleCreator = vehicleCreatorFactory.create(flowGroups);
 	}
@@ -37,7 +37,7 @@ public class SimulationImpl implements Simulation {
 		network.step();
 		vehicleCreator.step();
 		vehicleManager.step();
-		statistics.step(network);
+		statisticsManager.step(network);
 		timeKeeper.step();
 	}
 
@@ -54,7 +54,7 @@ public class SimulationImpl implements Simulation {
 	}
 
 	@Override
-	public Statistics statistics() {
-		return statistics;
+	public StatisticsManager statistics() {
+		return statisticsManager;
 	}
 }

@@ -1,27 +1,44 @@
 package traffic;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.inject.Inject;
+
 public class JunctionOccupancyBuilderImpl implements JunctionOccupancyBuilder {
 
-	@Override
-	public JunctionOccupancyBuilder withJunction(final Junction junction) {
-		// TODO Auto-generated method stub
-		return null;
+	private final JunctionOccupancyFactory junctionOccupancyFactory;
+	private Junction junction;
+	private Occupancy occupancy;
+	private final List<LinkOccupancy> incomingLinkOccupancies = new ArrayList<LinkOccupancy>();
 
+	@Inject public JunctionOccupancyBuilderImpl(
+			final JunctionOccupancyFactory junctionOccupancyFactory) {
+				this.junctionOccupancyFactory = junctionOccupancyFactory;
 	}
 
 	@Override
-	public JunctionOccupancyBuilder withOccupancy(final int i) {
-		// TODO Auto-generated method stub
-		return null;
+	public JunctionOccupancy make() {
+		return junctionOccupancyFactory.create(junction, occupancy, incomingLinkOccupancies);
+	}
 
+	@Override
+	public JunctionOccupancyBuilder withJunction(final Junction junction) {
+		this.junction = junction;
+		return this;
+	}
+
+	@Override
+	public JunctionOccupancyBuilder withOccupancy(final Occupancy occupancy) {
+		this.occupancy = occupancy;
+		return this;
 	}
 
 	@Override
 	public JunctionOccupancyBuilder withIncomingLinkOccupancy(
-			final LinkOccupancy linkOccupancy) {
-		// TODO Auto-generated method stub
-		return null;
-
+			final LinkOccupancy incomingLinkOccupancy) {
+		incomingLinkOccupancies.add(incomingLinkOccupancy);
+		return this;
 	}
 
 }

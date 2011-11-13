@@ -22,7 +22,8 @@ public class TestSimulationImpl {
 	private final VehicleCreatorFactory vehicleCreationManagerFactory = context.mock(VehicleCreatorFactory.class);
 	private final JourneyHistory journeyHistory0 = context.mock(JourneyHistory.class, "journeyHistory0");
 	private final VehicleCreator vehicleCreator = context.mock(VehicleCreator.class);
-	private final Statistics statistics = context.mock(Statistics.class);
+	private final StatisticsManagerFactory statisticsManagerFactory = context.mock(StatisticsManagerFactory.class);
+	private final StatisticsManager statisticsManager = context.mock(StatisticsManager.class);
 	//private final JourneyHistory journeyHistory1 = context.mock(JourneyHistory.class, "journeyHistory1");
 
 	private final Simulation simulation = simulation();
@@ -48,24 +49,20 @@ public class TestSimulationImpl {
 				oneOf(network).step(); inSequence(steppingOrder);
 				oneOf(vehicleCreator).step(); inSequence(steppingOrder);
 				oneOf(vehicleManager).step(); inSequence(steppingOrder);
-				oneOf(statistics).step(network); inSequence(steppingOrder);
+				oneOf(statisticsManager).step(network); inSequence(steppingOrder);
 			}
 		});
 		simulation.step();
 	}
 
-	@Test
-	public void statisticsProvidesObjectSuppliedUponInstantiation() throws Exception {
-		assertThat(simulation.statistics(), is(statistics));
-	}
-
 	private SimulationImpl simulation() {
 		context.checking(new Expectations() {
 			{
+				oneOf(statisticsManagerFactory).create(network); will(returnValue(statisticsManager));
 				oneOf(vehicleCreationManagerFactory).create(asList(flowGroup0, flowGroup1)); will(returnValue(vehicleCreator));
 			}
 		});
-		return new SimulationImpl(network, asList(flowGroup0, flowGroup1), timeKeeper, statistics, vehicleManager, vehicleCreationManagerFactory);
+		return new SimulationImpl(network, asList(flowGroup0, flowGroup1), timeKeeper, statisticsManagerFactory, vehicleManager, vehicleCreationManagerFactory);
 	}
 
 }
