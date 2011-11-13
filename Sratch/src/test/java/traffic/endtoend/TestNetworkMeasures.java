@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.*;
 import org.junit.Rule;
 import org.junit.Test;
 
+import traffic.CellFluxFactory;
 import traffic.ConstantTemporalPattern;
 import traffic.DefaultNetworks;
 import traffic.FlowBuilder;
@@ -16,10 +17,13 @@ import traffic.JunctionFactory;
 import traffic.JunctionOccupancyBuilder;
 import traffic.Link;
 import traffic.LinkBuilder;
+import traffic.LinkFluxFactory;
 import traffic.LinkOccupancy;
 import traffic.LinkOccupancyFactory;
 import traffic.Network;
 import traffic.NetworkBuilder;
+import traffic.NetworkFlux;
+import traffic.NetworkFluxBuilder;
 import traffic.NetworkOccupancy;
 import traffic.NetworkOccupancyBuilder;
 import traffic.Occupancy;
@@ -47,7 +51,9 @@ public class TestNetworkMeasures {
 	@Inject private JunctionFactory junctionFactory;
 	@Inject private LinkOccupancyFactory linkOccupancyFactory;
 	@Inject private OccupancyFactory occupancyFactory;
-
+	@Inject private LinkFluxFactory linkFluxFactory;
+	@Inject private CellFluxFactory fluxFactory;
+	@Inject private Provider<NetworkFluxBuilder> networkFluxBuilderProvider;
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 	@Inject private Provider<LinkBuilder> linkBuilderProvider;
 	@Inject private Provider<NetworkBuilder> networkBuilderProvider;
@@ -61,18 +67,28 @@ public class TestNetworkMeasures {
 
 	private Junction junction0, junction1;
 	private Link link0;
-	private Network network;
+
+	//messages are sent. each step an empty builder is (copied?)used. then the messages just modify it.
+	//have builder take another builder as constructor?
 
 	@Test
-	public void congestionOnNetworkWithFlowsDoesNotRemainZero() throws Exception {
-		final Simulation sim = simulationBuilder()
-			.withFlowGroup(flowGroupBuilderProvider.get()
-				.withTemporalPattern(constantTemporalPattern.withModifier(1))
-				.withFlow(flowBuilderProvider.get()
-					.withItinerary(new ItineraryImpl(link0))
-					.withProbability(1.0))
-					)
+	public void fluxOnEmptyNetworkRemains0() throws Exception {
+		final Simulation sim = simulationWithFlowGroup();
+		assertThat(sim.statistics().currentNetworkFlux(), notNullValue());
+		assertThat(sim.statistics().currentNetworkFlux(), equalTo(zeroNetworkFlux()));
+		sim.step(10);
+		assertThat(sim.statistics().currentNetworkFlux(), equalTo(zeroNetworkFlux()));
+	}
+
+	private NetworkFlux zeroNetworkFlux() {
+		return networkFluxBuilderProvider.get()
+			.withLinkFlux(linkFluxFactory.create(link0, fluxFactory.create(link0.headCell(), 0)))
 			.make();
+	}
+
+	@Test
+	public void OccupancyOnNetworkWithFlowsDoesNotRemainZero() throws Exception {
+		final Simulation sim = simulationWithFlowGroup();
 		final NetworkOccupancy expectedInitialNetworkOccupancy = networkOccupancyWithZeroOccupancy();
 		assertThat(sim.statistics().currentNetworkOccupancy(), equalTo(expectedInitialNetworkOccupancy));
 		sim.step(1);
@@ -83,14 +99,23 @@ public class TestNetworkMeasures {
 	public void OccupancyOnEmptyNetworkRemainsZero() throws Exception {
 		final Simulation sim = simulationBuilder()
 			.make();
-
 		final NetworkOccupancy expectedInitialNetworkOccupancy = networkOccupancyWithZeroOccupancy();
-
 		assertThat(sim.statistics().currentNetworkOccupancy(), equalTo(expectedInitialNetworkOccupancy));
 		sim.step(1);
 		assertThat(sim.statistics().currentNetworkOccupancy(), equalTo(expectedInitialNetworkOccupancy));
 	}
 
+	private Simulation simulationWithFlowGroup() {
+		final Simulation sim = simulationBuilder()
+			.withFlowGroup(flowGroupBuilderProvider.get()
+				.withTemporalPattern(constantTemporalPattern.withModifier(1))
+				.withFlow(flowBuilderProvider.get()
+					.withItinerary(new ItineraryImpl(link0))
+					.withProbability(1.0))
+					)
+			.make();
+		return sim;
+	}
 
 	private NetworkOccupancy networkOccupancyWithZeroOccupancy() {
 		return networkOccupancyBuilderProvider.get()

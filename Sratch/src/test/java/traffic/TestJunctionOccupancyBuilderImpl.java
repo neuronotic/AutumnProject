@@ -1,11 +1,8 @@
 package traffic;
 
-import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import static traffic.util.MyCollectionsProcessing.*;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -45,10 +42,6 @@ public class TestJunctionOccupancyBuilderImpl {
 		assertThat(junctionOccupancyBuilder.withIncomingLinkOccupancy(null), is(junctionOccupancyBuilder));
 		assertThat(junctionOccupancyBuilder.withJunction(null), is(junctionOccupancyBuilder));
 		assertThat(junctionOccupancyBuilder.withOccupancy(occupancy), is(junctionOccupancyBuilder));
-	}
-
-	private Set<LinkOccupancy> asSet(final LinkOccupancy...occupancies) {
-		return new HashSet<LinkOccupancy>(asList(occupancies));
 	}
 
 }

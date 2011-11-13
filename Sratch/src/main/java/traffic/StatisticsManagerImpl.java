@@ -21,6 +21,11 @@ public class StatisticsManagerImpl implements StatisticsManager {
 	}
 
 	@Override
+	public NetworkFlux currentNetworkFlux() {
+		return network.flux();
+	}
+
+	@Override
 	public void step(final Network network) {
 
 
@@ -50,8 +55,6 @@ public class StatisticsManagerImpl implements StatisticsManager {
 		}
 		return occupancyArray;
 	}
-
-
 }
 
 

@@ -7,8 +7,9 @@ public interface Link {
 	Junction outJunction();
 	CellChain cellChain();
 	List<Cell> cells();
-	String name();
+	Cell headCell();
 
+	String name();
 	int length();
 	Cell getCell(int index);
 

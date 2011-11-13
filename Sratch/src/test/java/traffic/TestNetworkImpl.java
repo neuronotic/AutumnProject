@@ -3,9 +3,7 @@ package traffic;
 import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import static traffic.util.MyCollectionsProcessing.*;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -78,9 +76,5 @@ public class TestNetworkImpl {
 			}
 		});
 		return new NetworkImpl(networkOccupancyFactory, asList(link));
-	}
-
-	private Set<JunctionOccupancy> asSet(final JunctionOccupancy...occupancies) {
-		return new HashSet<JunctionOccupancy>(asList(occupancies));
 	}
 }

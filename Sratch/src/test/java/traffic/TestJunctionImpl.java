@@ -1,12 +1,9 @@
 package traffic;
 
-import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static traffic.NetworkMatchers.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import static traffic.util.MyCollectionsProcessing.*;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -81,9 +78,5 @@ public class TestJunctionImpl {
 	@Test
 	public void junctionIsCreatedWithGivenName() {
 		assertThat(junction, isJunctionCalled("myJunction"));
-	}
-
-	private Set<LinkOccupancy> asSet(final LinkOccupancy...occupancies) {
-		return new HashSet<LinkOccupancy>(asList(occupancies));
 	}
 }

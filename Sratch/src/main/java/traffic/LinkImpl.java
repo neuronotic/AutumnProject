@@ -97,4 +97,11 @@ class LinkImpl implements Link {
 		final Occupancy occupancy = occupancyFactory.create(occupiedCount(), cellCount());
 		return linkOccupancyFactory.create(this, occupancy);
 	}
+
+	@Override
+	public Cell headCell() {
+		// TODO Auto-generated method stub
+		return null;
+
+	}
 }

@@ -12,4 +12,6 @@ public interface Network {
 	void step();
 
 	NetworkOccupancy occupancy();
+
+	NetworkFlux flux();
 }
