@@ -33,7 +33,6 @@ public class TrafficModule extends AbstractModule {
 
 		bind(NetworkOccupancyBuilder.class).to(NetworkOccupancyBuilderImpl.class);
 		bind(JunctionOccupancyBuilder.class).to(JunctionOccupancyBuilderImpl.class);
-		bind(StatisticsManager.class).to(StatisticsManagerImpl.class);
 		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
 		bind(Traffic.class).to(TrafficImpl.class);
 		bind(MyRandom.class).to(MyRandomImpl.class);

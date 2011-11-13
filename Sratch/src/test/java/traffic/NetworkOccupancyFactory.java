@@ -1,9 +1,9 @@
 package traffic;
 
-import java.util.List;
+import java.util.Set;
 
 public interface NetworkOccupancyFactory {
 
-	NetworkOccupancy create(List<JunctionOccupancy> junctionOccupancies);
+	NetworkOccupancy create(Set<JunctionOccupancy> junctionOccupancies);
 
 }

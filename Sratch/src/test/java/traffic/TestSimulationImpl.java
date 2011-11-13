@@ -14,6 +14,7 @@ public class TestSimulationImpl {
 	//TODO: merge VM and VC
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
+
 	private final TimeKeeper timeKeeper = context.mock(TimeKeeper.class);
 	private final Network network = context.mock(Network.class);
 	private final FlowGroup flowGroup0 = context.mock(FlowGroup.class, "flowGroup0");

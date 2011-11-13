@@ -14,4 +14,6 @@ public interface Link {
 
 	int cellCount();
 	int occupiedCount();
+
+	LinkOccupancy occupancy();
 }

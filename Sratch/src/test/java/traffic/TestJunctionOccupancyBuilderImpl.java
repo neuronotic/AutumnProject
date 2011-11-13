@@ -4,6 +4,9 @@ import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jmock.Expectations;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,7 +28,7 @@ public class TestJunctionOccupancyBuilderImpl {
 	public void makeUtilisesSuppliedDependenciesWhenCallingFactoryToCreate() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(junctionOccupancyFactory).create(junction, occupancy, asList(linkOccupancy0, linkOccupancy1));
+				oneOf(junctionOccupancyFactory).create(junction, occupancy, asSet(linkOccupancy0, linkOccupancy1));
 					will(returnValue(junctionOccupancy));
 			}
 		});
@@ -43,4 +46,9 @@ public class TestJunctionOccupancyBuilderImpl {
 		assertThat(junctionOccupancyBuilder.withJunction(null), is(junctionOccupancyBuilder));
 		assertThat(junctionOccupancyBuilder.withOccupancy(occupancy), is(junctionOccupancyBuilder));
 	}
+
+	private Set<LinkOccupancy> asSet(final LinkOccupancy...occupancies) {
+		return new HashSet<LinkOccupancy>(asList(occupancies));
+	}
+
 }

@@ -13,12 +13,18 @@ class LinkImpl implements Link {
 	private final Junction inJunction;
 	private final CellChain cellChain;
 	private final Junction outJunction;
+	private final OccupancyFactory occupancyFactory;
+	private final LinkOccupancyFactory linkOccupancyFactory;
 
 	@Inject LinkImpl(
+			final LinkOccupancyFactory linkOccupancyFactory,
+			final OccupancyFactory occupancyFactory,
 			@Assisted final String name,
 			@Assisted("inJunction") final Junction inJunction,
 			@Assisted final CellChainBuilder cellChainBuilder,
 			@Assisted("outJunction") final Junction outJunction) {
+		this.linkOccupancyFactory = linkOccupancyFactory;
+		this.occupancyFactory = occupancyFactory;
 		this.name = name;
 		this.inJunction = inJunction;
 		cellChain = cellChainBuilder.make(this);
@@ -84,5 +90,11 @@ class LinkImpl implements Link {
 			occupiedCount += cell.isOccupied() ? 1 : 0;
 		}
 		return occupiedCount;
+	}
+
+	@Override
+	public LinkOccupancy occupancy() {
+		final Occupancy occupancy = occupancyFactory.create(occupiedCount(), cellCount());
+		return linkOccupancyFactory.create(this, occupancy);
 	}
 }

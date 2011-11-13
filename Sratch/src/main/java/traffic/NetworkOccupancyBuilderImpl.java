@@ -1,7 +1,9 @@
 package traffic;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.inject.Inject;
 
@@ -25,7 +27,7 @@ public class NetworkOccupancyBuilderImpl implements NetworkOccupancyBuilder {
 
 	@Override
 	public NetworkOccupancy make() {
-		final List<JunctionOccupancy> junctionOccupancies = new ArrayList<JunctionOccupancy>();
+		final Set<JunctionOccupancy> junctionOccupancies = new HashSet<JunctionOccupancy>();
 		for (final JunctionOccupancyBuilder builder : junctionOccupancyBuilders) {
 			junctionOccupancies.add(builder.make());
 		}

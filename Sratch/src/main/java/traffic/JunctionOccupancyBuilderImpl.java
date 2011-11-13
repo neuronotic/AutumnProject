@@ -1,7 +1,7 @@
 package traffic;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.inject.Inject;
 
@@ -10,7 +10,7 @@ public class JunctionOccupancyBuilderImpl implements JunctionOccupancyBuilder {
 	private final JunctionOccupancyFactory junctionOccupancyFactory;
 	private Junction junction;
 	private Occupancy occupancy;
-	private final List<LinkOccupancy> incomingLinkOccupancies = new ArrayList<LinkOccupancy>();
+	private final Set<LinkOccupancy> incomingLinkOccupancies = new HashSet<LinkOccupancy>();
 
 	@Inject public JunctionOccupancyBuilderImpl(
 			final JunctionOccupancyFactory junctionOccupancyFactory) {

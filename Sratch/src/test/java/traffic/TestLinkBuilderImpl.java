@@ -27,7 +27,7 @@ public class TestLinkBuilderImpl {
 				oneOf(linkFactory).createLink(linkName, inJunction, cellChainBuilder, outJunction); will(returnValue(link));
 				oneOf(cellChainBuilder).cellChainOfLength(linkLength); will(returnValue(cellChainBuilder));
 				oneOf(inJunction).addOutgoingLink(link);
-				oneOf(outJunction).addIncomingLinks(link);
+				oneOf(outJunction).addIncomingLink(link);
 			}
 		});
 

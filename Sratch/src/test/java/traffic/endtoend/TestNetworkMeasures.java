@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static traffic.SimulationTime.*;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -74,7 +73,6 @@ public class TestNetworkMeasures {
 	private Vehicle vehicle0, vehicle1;
 
 	@Test
-	@Ignore
 	public void congestionOnNetworkWithFlowsDoesNotRemainZero() throws Exception {
 		final Simulation sim = simulationBuilderProvider.get()
 			.withNetwork(createNetwork())
@@ -110,16 +108,16 @@ public class TestNetworkMeasures {
 	private NetworkOccupancy networkOccupancyWithZeroOccupancy() {
 		return networkOccupancyBuilderProvider.get()
 			.withJunctionOccupancy(junctionOccupancyBuilder(junction0)
-				.withOccupancy(occupancy(0,0)))
+				.withOccupancy(occupancy(0,1)))
 			.withJunctionOccupancy(junctionOccupancyBuilder(junction3)
-				.withOccupancy(occupancy(0,0)))
+				.withOccupancy(occupancy(0,1)))
 			.withJunctionOccupancy(junctionOccupancyBuilder(junction1)
-				.withOccupancy(occupancy(0,0))
+				.withOccupancy(occupancy(0,1))
 				.withIncomingLinkOccupancy(linkOccupancy(link0, 0, 1))
-				.withIncomingLinkOccupancy(linkOccupancy(link2, 0, 1)))
-			.withJunctionOccupancy(junctionOccupancyBuilder(junction2)
-				.withOccupancy(occupancy(0,0))
 				.withIncomingLinkOccupancy(linkOccupancy(link1, 0, 1)))
+			.withJunctionOccupancy(junctionOccupancyBuilder(junction2)
+				.withOccupancy(occupancy(0,1))
+				.withIncomingLinkOccupancy(linkOccupancy(link2, 0, 2)))
 			.make();
 	}
 

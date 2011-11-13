@@ -4,6 +4,9 @@ import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jmock.Expectations;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,7 +35,7 @@ public class TestNetworkOccupancyBuilderImpl {
 			{
 				oneOf(junctionOccupancyBuilder0).make(); will(returnValue(junctionOccupancy0));
 				oneOf(junctionOccupancyBuilder1).make(); will(returnValue(junctionOccupancy1));
-				oneOf(networkOccupancyFactory).create(asList(junctionOccupancy0, junctionOccupancy1));
+				oneOf(networkOccupancyFactory).create(asSet(junctionOccupancy0, junctionOccupancy1));
 					will(returnValue(networkOccupancy));
 			}
 		});
@@ -45,5 +48,9 @@ public class TestNetworkOccupancyBuilderImpl {
 	@Test
 	public void withMethodsReturnInstanceCalledUpon() throws Exception {
 		assertThat(networkOccupancyBuilder.withJunctionOccupancy(null), is(networkOccupancyBuilder));
+	}
+
+	private Set<JunctionOccupancy> asSet(final JunctionOccupancy...occupancies) {
+		return new HashSet<JunctionOccupancy>(asList(occupancies));
 	}
 }

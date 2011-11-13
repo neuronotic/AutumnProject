@@ -20,7 +20,7 @@ public class LinkBuilderImpl implements LinkBuilder {
 	@Override
 	public Link make() {
 		final Link link = linkFactory.createLink(linkName, inJunction, cellChainBuilder, outJunction);
-		outJunction.addIncomingLinks(link);
+		outJunction.addIncomingLink(link);
 		inJunction.addOutgoingLink(link);
 		return link;
 	}

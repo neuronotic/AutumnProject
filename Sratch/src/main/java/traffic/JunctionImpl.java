@@ -1,8 +1,10 @@
 package traffic;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import com.google.inject.Inject;
@@ -17,14 +19,16 @@ class JunctionImpl implements Junction {
 	private final LinkedList<Vehicle> vehiclesWaiting = new LinkedList<Vehicle>();
 	private final List<Link> incomingLinks = new ArrayList<Link>();
 	private final List<Link> outgoingLinks = new ArrayList<Link>();
-	private final MyEventBus eventBus;
 
-	private final JunctionMeasuresMessageFactory messageFactory;
+	private final JunctionOccupancyFactory junctionOccupancyFactory;
+
+	private final OccupancyFactory occupancyFactory;
+
 
 	@Inject
-	JunctionImpl(final MyEventBus eventBus,  final JunctionMeasuresMessageFactory messageFactory, @Assisted final String name) {
-		this.eventBus = eventBus;
-		this.messageFactory = messageFactory;
+	JunctionImpl(final JunctionOccupancyFactory junctionOccupancyFactory, final OccupancyFactory occupancyFactory, @Assisted final String name) {
+		this.junctionOccupancyFactory = junctionOccupancyFactory;
+		this.occupancyFactory = occupancyFactory;
 		this.name = name;
 	}
 
@@ -90,7 +94,7 @@ class JunctionImpl implements Junction {
 	}
 
 	@Override
-	public void addIncomingLinks(final Link link) {
+	public void addIncomingLink(final Link link) {
 		incomingLinks.add(link);
 	}
 
@@ -100,36 +104,19 @@ class JunctionImpl implements Junction {
 	}
 
 	@Override
-	public int inBoundLinksOccupancy() {
-		int occupiedCount = 0;
-		for (final Link link : incomingLinks) {
-			occupiedCount += link.occupiedCount();
-		}
-		return occupiedCount;
-	}
-
-	@Override
-	public int occupancy() {
-		return occupied ? 1 : 0;
-	}
-
-	@Override
-	public int capacity() {
-		return 1;
-	}
-
-	@Override
-	public int inBoundLinksCapacity() {
-		int cellCount = 0;
-		for (final Link link : incomingLinks) {
-			cellCount += link.cellCount();
-		}
-		return cellCount;
-	}
-
-	@Override
 	public Object vehiclesWaitingToJoin() {
 		return vehiclesWaiting.size();
 	}
+
+	@Override
+	public JunctionOccupancy occupancy() {
+		final Occupancy occupancy = occupancyFactory.create(isOccupied() ? 1 : 0, 1);
+		final Set<LinkOccupancy> linkOccupancies = new HashSet<LinkOccupancy>();
+		for (final Link link : incomingLinks) {
+			linkOccupancies.add(link.occupancy());
+		}
+		return junctionOccupancyFactory.create(this, occupancy, linkOccupancies);
+	}
+
 
 }

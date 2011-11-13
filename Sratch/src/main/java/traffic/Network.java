@@ -10,4 +10,6 @@ public interface Network {
 	Collection<Junction> junctions();
 
 	void step();
+
+	NetworkOccupancy occupancy();
 }

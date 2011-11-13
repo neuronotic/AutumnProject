@@ -1,7 +1,11 @@
 package traffic;
 
+import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -14,6 +18,28 @@ public class TestNetworkImpl {
 	private final Link link = context.mock(Link.class);
 	private final Junction junction0 = context.mock(Junction.class, "junction0");
 	private final Junction junction1 = context.mock(Junction.class, "junction1");
+	private final JunctionOccupancy junctionOccupancy0 =
+			context.mock(JunctionOccupancy.class, "junctionOccupancy0");
+	private final JunctionOccupancy junctionOccupancy1 =
+			context.mock(JunctionOccupancy.class, "junctionOccupancy1");
+	private final NetworkOccupancy networkOccupancy = context.mock(NetworkOccupancy.class);
+	private final NetworkOccupancyFactory networkOccupancyFactory
+		= context.mock(NetworkOccupancyFactory.class);
+
+	@Test
+	public void occupancyCallsFactoryToCreate() throws Exception {
+		final Network network = createOneLinkNetworkAndConstructorExpectations();
+		context.checking(new Expectations() {
+			{
+				oneOf(junction0).occupancy(); will(returnValue(junctionOccupancy0));
+				oneOf(junction1).occupancy(); will(returnValue(junctionOccupancy1));
+				oneOf(networkOccupancyFactory).create(asSet(junctionOccupancy0, junctionOccupancy1));
+					will(returnValue(networkOccupancy));
+			}
+
+		});
+		assertThat(network.occupancy(), is(networkOccupancy));
+	}
 
 	@Test
 	public void stepCallsStepOnAllJunctions() throws Exception {
@@ -41,7 +67,7 @@ public class TestNetworkImpl {
 				ignoring(link);
 			}
 		});
-		assertThat(new NetworkImpl(link).links(), contains(link));
+		assertThat(new NetworkImpl(networkOccupancyFactory, asList(link)).links(), contains(link));
 	}
 
 	private Network createOneLinkNetworkAndConstructorExpectations() {
@@ -51,6 +77,10 @@ public class TestNetworkImpl {
 				oneOf(link).outJunction(); will(returnValue(junction1));
 			}
 		});
-		return new NetworkImpl(link);
+		return new NetworkImpl(networkOccupancyFactory, asList(link));
+	}
+
+	private Set<JunctionOccupancy> asSet(final JunctionOccupancy...occupancies) {
+		return new HashSet<JunctionOccupancy>(asList(occupancies));
 	}
 }

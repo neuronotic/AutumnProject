@@ -3,17 +3,21 @@ package traffic;
 import java.util.logging.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 
 public class StatisticsManagerImpl implements StatisticsManager {
 	@Inject Logger logger = Logger.getAnonymousLogger();
 
-	NetworkOccupancy networkOccupancy;
+
+	private final Network network;
+
+	@Inject StatisticsManagerImpl(@Assisted final Network network) {
+		this.network = network;
+	}
 
 	@Override
 	public NetworkOccupancy currentNetworkOccupancy() {
-
-
-		return null;
+		return network.occupancy();
 	}
 
 	@Override
@@ -47,29 +51,6 @@ public class StatisticsManagerImpl implements StatisticsManager {
 		return occupancyArray;
 	}
 
-	private int networkOccupancy(final Network network) {
-		int occupancy = 0;
-		for (final Junction junction : network.junctions()) {
-			occupancy += junctionOccupancy(junction);
-		}
-		return occupancy;
-	}
-
-	private int junctionOccupancy(final Junction junction) {
-		return junction.inBoundLinksOccupancy() + junction.occupancy();
-	}
-
-	private int networkCapacity(final Network network) {
-		int capacity = 0;
-		for (final Junction junction : network.junctions()) {
-			capacity += junctionCapacity(junction);
-		}
-		return capacity;
-	}
-
-	private int junctionCapacity(final Junction junction) {
-		return junction.inBoundLinksCapacity() + junction.capacity();
-	}
 
 }
 

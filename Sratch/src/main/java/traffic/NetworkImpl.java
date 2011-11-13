@@ -1,7 +1,5 @@
 package traffic;
 
-import static java.util.Arrays.*;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -13,15 +11,14 @@ import com.google.inject.assistedinject.Assisted;
 public class NetworkImpl implements Network {
 	private final List<Link> links;
 	private final Set<Junction> junctions;
+	private final NetworkOccupancyFactory networkOccupancyFactory;
 
 	@Inject public NetworkImpl(
+			final NetworkOccupancyFactory networkOccupancyFactory,
 			@Assisted final List<Link> links) {
+		this.networkOccupancyFactory = networkOccupancyFactory;
 		this.links = links;
 		junctions = buildSetOfJunctions();
-	}
-
-	public NetworkImpl(final Link...links) {
-		this(asList(links));
 	}
 
 	@Override
@@ -48,6 +45,15 @@ public class NetworkImpl implements Network {
 		for (final Junction junction : junctions) {
 			junction.step();
 		}
+	}
+
+	@Override
+	public NetworkOccupancy occupancy() {
+		final Set<JunctionOccupancy> junctionOccupancies = new HashSet<JunctionOccupancy>();
+		for (final Junction junction : junctions) {
+			junctionOccupancies.add(junction.occupancy());
+		}
+		return networkOccupancyFactory.create(junctionOccupancies);
 	}
 
 }
