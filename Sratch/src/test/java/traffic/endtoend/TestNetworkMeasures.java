@@ -2,7 +2,6 @@ package traffic.endtoend;
 
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import static traffic.SimulationTime.*;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,8 +11,6 @@ import traffic.DefaultNetworks;
 import traffic.FlowBuilder;
 import traffic.FlowGroupBuilder;
 import traffic.ItineraryImpl;
-import traffic.JourneyHistory;
-import traffic.JourneyHistoryBuilder;
 import traffic.Junction;
 import traffic.JunctionFactory;
 import traffic.JunctionOccupancyBuilder;
@@ -30,8 +27,6 @@ import traffic.OccupancyFactory;
 import traffic.Simulation;
 import traffic.SimulationBuilder;
 import traffic.TrafficModule;
-import traffic.Vehicle;
-import traffic.VehicleBuilder;
 
 import com.google.guiceberry.GuiceBerryModule;
 import com.google.inject.AbstractModule;
@@ -54,10 +49,8 @@ public class TestNetworkMeasures {
 	@Inject private OccupancyFactory occupancyFactory;
 
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
-	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
 	@Inject private Provider<LinkBuilder> linkBuilderProvider;
 	@Inject private Provider<NetworkBuilder> networkBuilderProvider;
-	@Inject private Provider<JourneyHistoryBuilder> JourneyHistoryBuilderProvider;
 	@Inject private Provider<FlowGroupBuilder> flowGroupBuilderProvider;
 	@Inject private Provider<FlowBuilder> flowBuilderProvider;
 	@Inject private Provider<NetworkOccupancyBuilder> networkOccupancyBuilderProvider;
@@ -66,24 +59,19 @@ public class TestNetworkMeasures {
 	@Inject DefaultNetworks defaultNetworks;
 	private final ConstantTemporalPattern constantTemporalPattern = new ConstantTemporalPattern(1.0);
 
-	private Junction junction0, junction1, junction2, junction3;
-	private Link link0, link1, link2;
+	private Junction junction0, junction1;
+	private Link link0;
 	private Network network;
-	private JourneyHistory history0, history1;
-	private Vehicle vehicle0, vehicle1;
 
 	@Test
 	public void congestionOnNetworkWithFlowsDoesNotRemainZero() throws Exception {
-		final Simulation sim = simulationBuilderProvider.get()
-			.withNetwork(createNetwork())
+		final Simulation sim = simulationBuilder()
 			.withFlowGroup(flowGroupBuilderProvider.get()
 				.withTemporalPattern(constantTemporalPattern.withModifier(1))
 				.withFlow(flowBuilderProvider.get()
-					.withItinerary(new ItineraryImpl(link0, link1))
+					.withItinerary(new ItineraryImpl(link0))
 					.withProbability(1.0))
-				.withFlow(flowBuilderProvider.get()
-					.withItinerary(new ItineraryImpl(link2, link1))
-					.withProbability(1.0)) )
+					)
 			.make();
 		final NetworkOccupancy expectedInitialNetworkOccupancy = networkOccupancyWithZeroOccupancy();
 		assertThat(sim.statistics().currentNetworkOccupancy(), equalTo(expectedInitialNetworkOccupancy));
@@ -93,8 +81,7 @@ public class TestNetworkMeasures {
 
 	@Test
 	public void OccupancyOnEmptyNetworkRemainsZero() throws Exception {
-		final Simulation sim = simulationBuilderProvider.get()
-			.withNetwork(createNetwork())
+		final Simulation sim = simulationBuilder()
 			.make();
 
 		final NetworkOccupancy expectedInitialNetworkOccupancy = networkOccupancyWithZeroOccupancy();
@@ -109,15 +96,9 @@ public class TestNetworkMeasures {
 		return networkOccupancyBuilderProvider.get()
 			.withJunctionOccupancy(junctionOccupancyBuilder(junction0)
 				.withOccupancy(occupancy(0,1)))
-			.withJunctionOccupancy(junctionOccupancyBuilder(junction3)
-				.withOccupancy(occupancy(0,1)))
 			.withJunctionOccupancy(junctionOccupancyBuilder(junction1)
 				.withOccupancy(occupancy(0,1))
-				.withIncomingLinkOccupancy(linkOccupancy(link0, 0, 1))
-				.withIncomingLinkOccupancy(linkOccupancy(link1, 0, 1)))
-			.withJunctionOccupancy(junctionOccupancyBuilder(junction2)
-				.withOccupancy(occupancy(0,1))
-				.withIncomingLinkOccupancy(linkOccupancy(link2, 0, 2)))
+				.withIncomingLinkOccupancy(linkOccupancy(link0, 0, link0.cellCount())))
 			.make();
 	}
 
@@ -137,18 +118,7 @@ public class TestNetworkMeasures {
 
 	private SimulationBuilder simulationBuilder() {
 		return simulationBuilderProvider.get()
-				.withNetwork(network);
-	}
-
-	private void createVehicles() {
-		vehicle0 = vehicleBuilderProvider.get()
-			.withName("vehicle0")
-			.withItinerary(new ItineraryImpl(link0, link2))
-			.make();
-		vehicle1 = vehicleBuilderProvider.get()
-			.withName("vehicle1")
-			.withItinerary(new ItineraryImpl(link1, link2))
-			.make();
+				.withNetwork(createNetwork());
 	}
 
 	private Network createNetwork() {
@@ -156,8 +126,6 @@ public class TestNetworkMeasures {
 		createLinks();
 		return networkBuilderProvider.get()
 			.withLink(link0)
-			.withLink(link1)
-			.withLink(link2)
 			.make();
 	}
 
@@ -166,19 +134,7 @@ public class TestNetworkMeasures {
 			.withName("link0")
 			.withInJunction(junction0)
 			.withOutJunction(junction1)
-			.withLength(1)
-			.make();
-		link1 = link()
-			.withName("link1")
-			.withInJunction(junction3)
-			.withOutJunction(junction1)
-			.withLength(1)
-			.make();
-		link2 = link()
-			.withName("link2")
-			.withInJunction(junction1)
-			.withOutJunction(junction2)
-			.withLength(2)
+			.withLength(3)
 			.make();
 	}
 
@@ -189,32 +145,6 @@ public class TestNetworkMeasures {
 	private void createJunctions() {
 		junction0 = junctionFactory.createJunction("junction0");
 		junction1 = junctionFactory.createJunction("junction1");
-		junction2 = junctionFactory.createJunction("junction2");
-		junction3 = junctionFactory.createJunction("junction3");
-	}
-
-	private void createJourneyHistories() {
-		history0 = JourneyHistoryBuilderProvider.get()
-				.withStartTime(time(0))
-				.withEndTime(time(6))
-				.withCellEntryTime(junction0, time(0))
-				.withCellEntryTime(link0.getCell(0),time(1))
-				.withCellEntryTime(junction1, time(2))
-				.withCellEntryTime(link2.getCell(0),time(3))
-				.withCellEntryTime(link2.getCell(1),time(4))
-				.withCellEntryTime(junction2, time(5))
-				.make(vehicle0);
-
-		history1 = JourneyHistoryBuilderProvider.get()
-				.withStartTime(time(0))
-				.withEndTime(time(7))
-				.withCellEntryTime(junction3, time(0))
-				.withCellEntryTime(link1.getCell(0),time(1))
-				.withCellEntryTime(junction1, time(3))
-				.withCellEntryTime(link2.getCell(0),time(4))
-				.withCellEntryTime(link2.getCell(1),time(5))
-				.withCellEntryTime(junction2, time(6))
-				.make(vehicle1);
 	}
 
 }
