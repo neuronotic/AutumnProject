@@ -50,13 +50,13 @@ public class TestSimulationImpl {
 				oneOf(network).step(); inSequence(steppingOrder);
 				oneOf(vehicleCreator).step(); inSequence(steppingOrder);
 				oneOf(vehicleManager).step(); inSequence(steppingOrder);
-				oneOf(statisticsManager).step(network); inSequence(steppingOrder);
+				oneOf(statisticsManager).step(); inSequence(steppingOrder);
 			}
 		});
 		simulation.step();
 	}
 
-	private SimulationImpl simulation() {
+	private Simulation simulation() {
 		context.checking(new Expectations() {
 			{
 				oneOf(statisticsManagerFactory).create(network); will(returnValue(statisticsManager));

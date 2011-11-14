@@ -35,4 +35,9 @@ class CellChainImpl implements CellChain {
 	public Cell getCellAtIndex(final int index) {
 		return cells.get(index);
 	}
+
+	@Override
+	public Cell lastCell() {
+		return cells.get(cells.size() - 1);
+	}
 }

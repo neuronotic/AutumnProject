@@ -7,10 +7,12 @@ class CellImpl implements Cell {
 
 	private final String name;
 	private boolean occupied = false;
+	private final Link link;
 
 	@Inject CellImpl(
 			@Assisted final Link link,
 			@Assisted final int index) {
+		this.link = link;
 		name = String.format("%s[%s]", link.name(), index);
 	}
 
@@ -21,6 +23,10 @@ class CellImpl implements Cell {
 		}
 		occupied = true;
 		return true;
+	}
+
+	public Link link() {
+		return link;
 	}
 
 	@Override

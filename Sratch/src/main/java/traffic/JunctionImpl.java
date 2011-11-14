@@ -24,9 +24,16 @@ class JunctionImpl implements Junction {
 
 	private final OccupancyFactory occupancyFactory;
 
+	private final MyEventBus eventBus;
+
 
 	@Inject
-	JunctionImpl(final JunctionOccupancyFactory junctionOccupancyFactory, final OccupancyFactory occupancyFactory, @Assisted final String name) {
+	JunctionImpl(
+			final MyEventBus eventBus,
+			final JunctionOccupancyFactory junctionOccupancyFactory,
+			final OccupancyFactory occupancyFactory,
+			@Assisted final String name) {
+		this.eventBus = eventBus;
 		this.junctionOccupancyFactory = junctionOccupancyFactory;
 		this.occupancyFactory = occupancyFactory;
 		this.name = name;
@@ -36,22 +43,18 @@ class JunctionImpl implements Junction {
 	@Override
 	public boolean enter(final Vehicle vehicle) {
 		if (!occupied) {
-			if (vehiclesWaiting.isEmpty()) {
-				//noteFlow(vehicle.location());
+			if (vehiclesWaiting.isEmpty() || !inQueue(vehicle)) {
+				//final Link link = ((CellImpl) vehicle.location()).link();
+				//eventBus.post(new LinkFluxMessageImpl(link, new LinkFluxImpl(link, 1)));
 				occupied = true;
 				return true;
 			}
-			if (!inQueue(vehicle) || inQueue(vehicle) && isFirstInQueue(vehicle)) {
+			if (inQueue(vehicle) && isFirstInQueue(vehicle)) {
 				occupied = true;
 				vehiclesWaiting.pop();
 				return true;
 			}
 		} return false;
-	}
-
-
-	private void noteFlow(final Cell location) {
-		// TODO Auto-generated method stub
 	}
 
 	private boolean isFirstInQueue(final Vehicle vehicle) {

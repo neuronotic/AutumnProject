@@ -1,8 +1,8 @@
 package traffic;
 
+import static com.google.common.collect.Sets.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import static traffic.util.MyCollectionsProcessing.*;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -32,7 +32,7 @@ public class TestNetworkOccupancyBuilderImpl {
 			{
 				oneOf(junctionOccupancyBuilder0).make(); will(returnValue(junctionOccupancy0));
 				oneOf(junctionOccupancyBuilder1).make(); will(returnValue(junctionOccupancy1));
-				oneOf(networkOccupancyFactory).create(asSet(junctionOccupancy0, junctionOccupancy1));
+				oneOf(networkOccupancyFactory).create(newHashSet(junctionOccupancy0, junctionOccupancy1));
 					will(returnValue(networkOccupancy));
 			}
 		});

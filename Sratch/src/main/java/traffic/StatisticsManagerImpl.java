@@ -10,9 +10,17 @@ public class StatisticsManagerImpl implements StatisticsManager {
 
 
 	private final Network network;
+	private final NetworkOccupancyTimeSeries networkOccupancy;
 
-	@Inject StatisticsManagerImpl(@Assisted final Network network) {
+	private final FluxReceiver fluxReceiver;
+
+	@Inject StatisticsManagerImpl(
+			@Assisted final Network network,
+			final NetworkOccupancyTimeSeries networkOccupancy,
+			final FluxReceiverFactory fluxReceiverFactory) {
 		this.network = network;
+		this.networkOccupancy = networkOccupancy;
+		fluxReceiver = fluxReceiverFactory.create(network);
 	}
 
 	@Override
@@ -22,38 +30,13 @@ public class StatisticsManagerImpl implements StatisticsManager {
 
 	@Override
 	public NetworkFlux currentNetworkFlux() {
-		return network.flux();
+		return fluxReceiver.currentNetworkFlux();
 	}
 
 	@Override
-	public void step(final Network network) {
-
-
-/*		logger.info(String.format("LOG JUNCTION MEASURES, capacity:%s, occup:%s", networkCapacity(network), networkOccupancy(network) ));
-		for (final Junction junction : network.junctions()) {
-			logger.info(String.format("--%s cap: %s, occu: %s, queue: %s", junction.name(), junctionCapacity(junction), junctionOccupancy(junction), junction.vehiclesWaitingToJoin()));
-		}
-		for (final Link link : network.links()) {
-
-			logger.info(String.format("--%s cap:%s, occ: %s, [%s]", link.name(), link.cellCount(), link.occupiedCount(), array2String(linktOccupancyBinaryArray(link))));
-		}
-*/
-	}
-
-	private String array2String(final int[] array) {
-		final StringBuffer str = new StringBuffer(array.length);
-		for (final int i : array) {
-			str.append(i);
-		}
-		return str.toString();
-	}
-
-	private int[] linktOccupancyBinaryArray(final Link link) {
-		final int[] occupancyArray = new int[link.cellCount()];
-		for (int i=0; i<link.cellCount(); i++) {
-			occupancyArray[i] = link.cellChain().getCellAtIndex(i).isOccupied() ? 1 : 0;
-		}
-		return occupancyArray;
+	public void step() {
+		fluxReceiver.step();
+		networkOccupancy.addStepData(currentNetworkFlux());
 	}
 }
 

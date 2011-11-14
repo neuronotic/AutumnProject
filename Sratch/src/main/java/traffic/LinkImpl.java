@@ -100,8 +100,6 @@ class LinkImpl implements Link {
 
 	@Override
 	public Cell headCell() {
-		// TODO Auto-generated method stub
-		return null;
-
+		return cellChain.lastCell();
 	}
 }

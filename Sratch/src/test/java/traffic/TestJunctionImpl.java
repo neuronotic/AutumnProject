@@ -1,9 +1,9 @@
 package traffic;
 
+import static com.google.common.collect.Sets.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static traffic.NetworkMatchers.*;
-import static traffic.util.MyCollectionsProcessing.*;
 
 import org.jmock.Expectations;
 import org.junit.Rule;
@@ -24,8 +24,9 @@ public class TestJunctionImpl {
 	private final JunctionOccupancy junctionOccupancy = context.mock(JunctionOccupancy.class);
 	private final Occupancy occupancy = context.mock(Occupancy.class);
 	private final OccupancyFactory occupancyFactory = context.mock(OccupancyFactory.class);
+	private final MyEventBus eventBus = context.mock(MyEventBus.class);
 
-	private final Junction junction = new JunctionImpl(junctionOccupancyFactory, occupancyFactory, "myJunction");
+	private final Junction junction = new JunctionImpl(eventBus, junctionOccupancyFactory, occupancyFactory, "myJunction");
 
 	@Test
 	public void occupancyOnUnoccupiedJunctionConstructsOccupancyObjectForJunctionGathersOccupancyForIncomingLinksAndUsesFactoryToCreateJunctionOccupancy() throws Exception {
@@ -36,7 +37,7 @@ public class TestJunctionImpl {
 				oneOf(link0).occupancy(); will(returnValue(linkOccupancy0));
 				oneOf(link1).occupancy(); will(returnValue(linkOccupancy1));
 				oneOf(occupancyFactory).create(0,1); will(returnValue(occupancy));
-				oneOf(junctionOccupancyFactory).create(junction, occupancy, asSet(linkOccupancy0, linkOccupancy1));
+				oneOf(junctionOccupancyFactory).create(junction, occupancy, newHashSet(linkOccupancy0, linkOccupancy1));
 					will(returnValue(junctionOccupancy));
 			}
 		});

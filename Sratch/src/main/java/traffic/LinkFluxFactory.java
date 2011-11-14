@@ -2,6 +2,6 @@ package traffic;
 
 public interface LinkFluxFactory {
 
-	LinkFlux create(Link link, CellFlux cellFlux);
+	LinkFlux create(Link link, int flux);
 
 }
