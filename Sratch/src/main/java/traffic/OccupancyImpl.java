@@ -38,4 +38,14 @@ public class OccupancyImpl implements Occupancy {
 	public String toString() {
 		return String.format("%s/%s", occupancy, capacity);
 	}
+
+	@Override
+	public int occupancy() {
+		return occupancy;
+	}
+
+	@Override
+	public int capacity() {
+		return capacity;
+	}
 }

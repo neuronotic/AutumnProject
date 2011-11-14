@@ -1,15 +1,17 @@
 package traffic;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
 public class NetworkImpl implements Network {
-	private final List<Link> links;
+	private final Map<String, Link> linksMap;
 	private final Set<Junction> junctions;
 	private final NetworkOccupancyFactory networkOccupancyFactory;
 
@@ -17,13 +19,21 @@ public class NetworkImpl implements Network {
 			final NetworkOccupancyFactory networkOccupancyFactory,
 			@Assisted final List<Link> links) {
 		this.networkOccupancyFactory = networkOccupancyFactory;
-		this.links = links;
+		linksMap = buildLinksMap(links);
 		junctions = buildSetOfJunctions();
 	}
 
+	private Map<String, Link> buildLinksMap(final List<Link> links) {
+		final Map<String, Link> linksMap = new HashMap<String, Link>();
+		for (final Link link : links) {
+			linksMap.put(link.name(), link);
+		}
+		return linksMap;
+	}
+
 	@Override
-	public List<Link> links() {
-		return links;
+	public Collection<Link> links() {
+		return linksMap.values();
 	}
 
 	@Override
@@ -31,9 +41,14 @@ public class NetworkImpl implements Network {
 		return junctions;
 	}
 
+	@Override
+	public Link linkNamed(final String name) {
+		return linksMap.get(name);
+	}
+
 	private Set<Junction> buildSetOfJunctions() {
 		final Set<Junction> junctions = new HashSet<Junction>();
-		for (final Link link : links) {
+		for (final Link link : linksMap.values()) {
 			junctions.add(link.inJunction());
 			junctions.add(link.outJunction());
 		}

@@ -49,11 +49,6 @@ public class SimulationImpl implements Simulation {
 	}
 
 	@Override
-	public List<JourneyHistory> getEndedJourneyHistories() {
-		return vehicleManager.getEndedJourneyHistories();
-	}
-
-	@Override
 	public StatisticsManager statistics() {
 		return statisticsManager;
 	}

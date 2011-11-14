@@ -1,5 +1,6 @@
 package traffic;
 
+import java.util.Collection;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -46,6 +47,34 @@ public class JunctionOccupancyImpl implements JunctionOccupancy {
 	@Override
 	public String toString() {
 		return String.format("<%s, %s (%s)>", junction.name(), occupancy, incomingLinkOccupancies);
+	}
+
+	@Override
+	public Junction junction() {
+		return junction;
+	}
+
+	@Override
+	public int totalOccupancy() {
+		int totalOccupancy = occupancy.occupancy();
+		for (final LinkOccupancy linkOccupancy : incomingLinkOccupancies) {
+			totalOccupancy += linkOccupancy.occupancy();
+		}
+		return totalOccupancy;
+	}
+
+	@Override
+	public int totalCapacity() {
+		int totalCapacity = occupancy.capacity();
+		for (final LinkOccupancy linkOccupancy : incomingLinkOccupancies) {
+			totalCapacity += linkOccupancy.capacity();
+		}
+		return totalCapacity;
+	}
+
+	@Override
+	public Collection<LinkOccupancy> incomingLinkOccupancies() {
+		return incomingLinkOccupancies;
 	}
 
 }

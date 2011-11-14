@@ -71,6 +71,7 @@ public class TestNetworkImpl {
 	private Network createOneLinkNetworkAndConstructorExpectations() {
 		context.checking(new Expectations() {
 			{
+				allowing(link).name(); will(returnValue("link"));
 				oneOf(link).inJunction(); will(returnValue(junction0));
 				oneOf(link).outJunction(); will(returnValue(junction1));
 			}

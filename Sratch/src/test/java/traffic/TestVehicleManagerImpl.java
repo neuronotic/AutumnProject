@@ -1,8 +1,5 @@
 package traffic;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
-
 import org.jmock.Expectations;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,23 +36,10 @@ public class TestVehicleManagerImpl {
 	}
 
 	@Test
-	public void journeyEndedStoresJourneyHistory() throws Exception {
-		context.checking(new Expectations() {
-			{
-				oneOf(journeyEndedMessage).journeyHistory(); will(returnValue(journeyHistory));
-				oneOf(journeyEndedMessage).vehicle();
-			}
-		});
-		vehicleManager.journeyEnded(journeyEndedMessage);
-		assertThat(vehicleManager.getEndedJourneyHistories(), contains(journeyHistory));
-	}
-
-	@Test
 	public void journeyEndedResultsInVehicleNoLongerBeingStepped() throws Exception {
 		setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle0();
 		context.checking(new Expectations() {
 			{
-				oneOf(journeyEndedMessage).journeyHistory();
 				oneOf(journeyEndedMessage).vehicle(); will(returnValue(vehicle0));
 			}
 		});

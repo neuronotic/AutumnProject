@@ -38,4 +38,19 @@ public class LinkOccupancyImpl implements LinkOccupancy {
 	public String toString() {
 		return String.format("%s with %s", link.name(), occupancy);
 	}
+
+	@Override
+	public int capacity() {
+		return occupancy.capacity();
+	}
+
+	@Override
+	public int occupancy() {
+		return occupancy.occupancy();
+	}
+
+	@Override
+	public Link link() {
+		return link;
+	}
 }

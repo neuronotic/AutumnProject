@@ -1,7 +1,10 @@
 package traffic;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
@@ -10,16 +13,17 @@ public class StatisticsManagerImpl implements StatisticsManager {
 
 
 	private final Network network;
-	private final NetworkOccupancyTimeSeries networkOccupancy;
+	private final NetworkOccupancyTimeSeries networkOccupancyTimeSeries;
+	private final List<JourneyHistory> endedJourneyHistories = new ArrayList<JourneyHistory>();
 
 	private final FluxReceiver fluxReceiver;
 
 	@Inject StatisticsManagerImpl(
 			@Assisted final Network network,
-			final NetworkOccupancyTimeSeries networkOccupancy,
+			final NetworkOccupancyTimeSeries networkOccupancyTimeSeries,
 			final FluxReceiverFactory fluxReceiverFactory) {
 		this.network = network;
-		this.networkOccupancy = networkOccupancy;
+		this.networkOccupancyTimeSeries = networkOccupancyTimeSeries;
 		fluxReceiver = fluxReceiverFactory.create(network);
 	}
 
@@ -36,8 +40,26 @@ public class StatisticsManagerImpl implements StatisticsManager {
 	@Override
 	public void step() {
 		fluxReceiver.step();
-		networkOccupancy.addStepData(currentNetworkFlux());
+		networkOccupancyTimeSeries.addStepData(currentNetworkOccupancy());
 	}
+
+	@Override
+	public NetworkOccupancyTimeSeries networkOccupancy() {
+		return networkOccupancyTimeSeries;
+	}
+
+	@Override
+	public List<JourneyHistory> getEndedJourneyHistories() {
+		return endedJourneyHistories;
+	}
+
+	@Subscribe
+	@Override
+	public void receiveJourneyHistoryForEndedJourney(final JourneyEndedMessage journeyEndedMessage) {
+		//logger.info(String.format(" received journey history for %s", journeyEndedMessage.vehicle()));
+		endedJourneyHistories.add(journeyEndedMessage.journeyHistory());
+	}
+
 }
 
 

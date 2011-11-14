@@ -21,7 +21,7 @@ public class TimeKeeperImpl implements TimeKeeper {
 	@Override
 	public void step() {
 		currentTime += 1;
-		logger.info(String.format("\n\nSIMULATIONStep to time %d", currentTime));
+		//logger.info(String.format("\n\nSIMULATIONStep to time %d", currentTime));
 	}
 
 }

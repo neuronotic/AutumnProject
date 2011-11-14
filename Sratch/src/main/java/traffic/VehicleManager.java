@@ -9,7 +9,6 @@ public interface VehicleManager {
 	void step();
 
 	void step(int i);
-	List<JourneyHistory> getEndedJourneyHistories();
 	void journeyEnded(JourneyEndedMessage journeyEndedMessage);
 	void journeyStarted(JourneyStartedMessage journeyStartedMessage);
 }

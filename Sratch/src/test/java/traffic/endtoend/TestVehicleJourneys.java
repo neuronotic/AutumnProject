@@ -77,7 +77,7 @@ public class TestVehicleJourneys {
 								.withProbability(1.0)))
 				.make();
 		sim.step(10);
-		assertThat(sim.getEndedJourneyHistories().size(), equalTo(4));
+		assertThat(sim.statistics().getEndedJourneyHistories().size(), equalTo(4));
 	}
 
 	@Test
@@ -110,8 +110,8 @@ public class TestVehicleJourneys {
 		createVehicles();
 		sim.step(8);
 		createJourneyHistories();
-		assertThat(sim.getEndedJourneyHistories().size(), is(2));
-		assertThat(sim.getEndedJourneyHistories(), containsInAnyOrder(history0, history1));
+		assertThat(sim.statistics().getEndedJourneyHistories().size(), is(2));
+		assertThat(sim.statistics().getEndedJourneyHistories(), containsInAnyOrder(history0, history1));
 	}
 
 

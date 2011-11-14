@@ -11,7 +11,6 @@ class VehicleManagerImpl implements VehicleManager {
 	@Inject Logger logger = Logger.getAnonymousLogger();
 
 	private final List<Vehicle> vehicles = new ArrayList<Vehicle>();
-	private final List<JourneyHistory> endedJourneyHistories = new ArrayList<JourneyHistory>();
 
 	@Inject
 	public VehicleManagerImpl() {
@@ -36,16 +35,9 @@ class VehicleManagerImpl implements VehicleManager {
 		return vehicles;
 	}
 
-	@Override
-	public List<JourneyHistory> getEndedJourneyHistories() {
-		return endedJourneyHistories;
-	}
-
 	@Subscribe
 	@Override
 	public void journeyEnded(final JourneyEndedMessage journeyEndedMessage) {
-		//logger.info(String.format(" JOURNEYENDED at time %s for %s", timeKeeper.currentTime(), journeyEndedMessage.vehicle()));
-		endedJourneyHistories.add(journeyEndedMessage.journeyHistory());
 		vehicles.remove(journeyEndedMessage.vehicle());
 	}
 

@@ -92,8 +92,6 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public void step() {
-		//JunctionOccupancy junctionOccupancy = junctionOccupancyFactory.create()
-		//eventBus.post(junctionOccupancy)
 	}
 
 	@Override
@@ -114,6 +112,7 @@ class JunctionImpl implements Junction {
 	@Override
 	public JunctionOccupancy occupancy() {
 		final Occupancy occupancy = occupancyFactory.create(isOccupied() ? 1 : 0, 1);
+
 		final Set<LinkOccupancy> linkOccupancies = new HashSet<LinkOccupancy>();
 		for (final Link link : incomingLinks) {
 			linkOccupancies.add(link.occupancy());

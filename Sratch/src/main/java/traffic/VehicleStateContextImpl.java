@@ -61,7 +61,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	}
 
 	private void leaveCurrentLocationAndUpdateTo(final Vehicle vehicle, final Cell cell) {
-		logger.info(String.format("---changeLocation of %s to %s", vehicle, cell));
+		//logger.info(String.format("---changeLocation of %s to %s", vehicle, cell));
 		leaveCurrentLocation();
 		currentLocation = cell;
 	}

@@ -1,8 +1,6 @@
 package traffic;
 
 import static java.util.Arrays.*;
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
 
 import org.jmock.Expectations;
 import org.jmock.Sequence;
@@ -28,17 +26,6 @@ public class TestSimulationImpl {
 	//private final JourneyHistory journeyHistory1 = context.mock(JourneyHistory.class, "journeyHistory1");
 
 	private final Simulation simulation = simulation();
-
-	@Test
-	public void getEndedJourneyHistoriesDelegatesToVehicleManager() throws Exception {
-		//TODO: maybe split up functionality eventually so that something else receives the history, while VM just removes vehicles as a result of message?
-		context.checking(new Expectations() {
-			{
-				oneOf(vehicleManager).getEndedJourneyHistories(); will(returnValue(asList(journeyHistory0)));
-			}
-		});
-		assertThat(simulation.getEndedJourneyHistories(), contains(journeyHistory0));
-	}
 
 	@Test
 	public void vehicleManagerNetworkAndStatisticsAreSteppedInOrderWithEachSimulationStep() throws Exception {
