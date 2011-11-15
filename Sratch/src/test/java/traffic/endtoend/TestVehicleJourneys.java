@@ -17,7 +17,7 @@ import traffic.ItineraryImpl;
 import traffic.JourneyHistory;
 import traffic.JourneyHistoryBuilder;
 import traffic.Junction;
-import traffic.JunctionFactory;
+import traffic.JunctionBuilder;
 import traffic.Link;
 import traffic.LinkBuilder;
 import traffic.Network;
@@ -49,9 +49,9 @@ public class TestVehicleJourneys {
 	@Rule public MyGuiceBerryRule guiceBerry = new MyGuiceBerryRule();
 
 	ConstantTemporalPattern constantTemporalPattern = new ConstantTemporalPattern(1);
-	@Inject private JunctionFactory junctionFactory;
 	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
 	@Inject private Provider<LinkBuilder> linkBuilderProvider;
+	@Inject private Provider<JunctionBuilder> junctionBuilderProvider;
 	@Inject private Provider<NetworkBuilder> networkBuilderProvider;
 	@Inject private Provider<JourneyHistoryBuilder> JourneyHistoryBuilderProvider;
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
@@ -204,10 +204,10 @@ public class TestVehicleJourneys {
 	}
 
 	private void createJunctions() {
-		junction0 = junctionFactory.createJunction("junction0");
-		junction1 = junctionFactory.createJunction("junction1");
-		junction2 = junctionFactory.createJunction("junction2");
-		junction3 = junctionFactory.createJunction("junction3");
+		junction0 = junctionBuilderProvider.get().withName("junction0").make();
+		junction1 = junctionBuilderProvider.get().withName("junction1").make();
+		junction2 = junctionBuilderProvider.get().withName("junction2").make();
+		junction3 = junctionBuilderProvider.get().withName("junction3").make();
 	}
 
 	private void createJourneyHistories() {

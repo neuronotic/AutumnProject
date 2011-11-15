@@ -12,7 +12,7 @@ public class PeriodicDutyCycleBuilder implements JunctionControllerStrategyBuild
 	@Override
 	public JunctionControllerStrategyBuilder withPeriod(final SimulationTime period) {
 		// TODO Auto-generated method stub
-		return null;
+		return this;
 
 	}
 

@@ -25,8 +25,9 @@ public class TestJunctionImpl {
 	private final Occupancy occupancy = context.mock(Occupancy.class);
 	private final OccupancyFactory occupancyFactory = context.mock(OccupancyFactory.class);
 	private final MyEventBus eventBus = context.mock(MyEventBus.class);
+	private final JunctionControllerStrategyBuilder junctionControllerStrategyBuilder = context.mock(JunctionControllerStrategyBuilder.class);
 
-	private final Junction junction = new JunctionImpl(eventBus, junctionOccupancyFactory, occupancyFactory, "myJunction");
+	private final Junction junction = new JunctionImpl(eventBus, junctionOccupancyFactory, occupancyFactory, "myJunction", junctionControllerStrategyBuilder);
 
 	@Test
 	public void occupancyOnUnoccupiedJunctionConstructsOccupancyObjectForJunctionGathersOccupancyForIncomingLinksAndUsesFactoryToCreateJunctionOccupancy() throws Exception {

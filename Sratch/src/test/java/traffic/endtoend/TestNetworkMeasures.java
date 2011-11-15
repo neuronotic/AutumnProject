@@ -11,7 +11,7 @@ import traffic.FlowBuilder;
 import traffic.FlowGroupBuilder;
 import traffic.ItineraryImpl;
 import traffic.Junction;
-import traffic.JunctionFactory;
+import traffic.JunctionBuilder;
 import traffic.JunctionOccupancyBuilder;
 import traffic.Link;
 import traffic.LinkBuilder;
@@ -45,10 +45,10 @@ public class TestNetworkMeasures {
 	};
 	@Rule public MyGuiceBerryRule guiceBerry = new MyGuiceBerryRule();
 
-	@Inject private JunctionFactory junctionFactory;
 	@Inject private LinkOccupancyFactory linkOccupancyFactory;
 	@Inject private OccupancyFactory occupancyFactory;
 	@Inject private LinkFluxFactory linkFluxFactory;
+	@Inject private Provider<JunctionBuilder> junctionBuilderProvider;
 	@Inject private Provider<NetworkFluxBuilder> networkFluxBuilderProvider;
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 	@Inject private Provider<LinkBuilder> linkBuilderProvider;
@@ -162,8 +162,8 @@ public class TestNetworkMeasures {
 	}
 
 	private void createJunctions() {
-		junction0 = junctionFactory.createJunction("junction0");
-		junction1 = junctionFactory.createJunction("junction1");
+		junction0 = junctionBuilderProvider.get().withName("junction0").make();
+		junction1 = junctionBuilderProvider.get().withName("junction1").make();
 	}
 
 }

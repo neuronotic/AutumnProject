@@ -4,12 +4,12 @@ import com.google.inject.Inject;
 
 public class DefaultNetworksImpl implements DefaultNetworks {
 
-	private final JunctionFactory junctionFactory;
+	private final JunctionBuilder junctionBuilder;
 	private final NetworkBuilderFactory networkBuilderFactory;
 	private final LinkBuilderFactory linkBuilderFactory;
 
-	@Inject DefaultNetworksImpl(final JunctionFactory junctionFactory, final LinkBuilderFactory linkBuilderFactory, final NetworkBuilderFactory networkBuilderFactory) {
-		this.junctionFactory = junctionFactory;
+	@Inject DefaultNetworksImpl(final JunctionBuilder junctionBuilder, final LinkBuilderFactory linkBuilderFactory, final NetworkBuilderFactory networkBuilderFactory) {
+		this.junctionBuilder = junctionBuilder;
 		this.linkBuilderFactory = linkBuilderFactory;
 		this.networkBuilderFactory = networkBuilderFactory;
 	}
@@ -24,11 +24,11 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 	@Override
 	public Network xNetwork4Link() {
 		Junction junction0, junction1, junction2, junction3, junction4;
-		junction0 = junctionFactory.createJunction("junction0");
-		junction1 = junctionFactory.createJunction("junction1");
-		junction2 = junctionFactory.createJunction("junction2");
-		junction3 = junctionFactory.createJunction("junction3");
-		junction4 = junctionFactory.createJunction("junction4");
+		junction0 = junctionBuilder.withName("junction0").make();
+		junction1 = junctionBuilder.withName("junction1").make();
+		junction2 = junctionBuilder.withName("junction2").make();
+		junction3 = junctionBuilder.withName("junction3").make();
+		junction4 = junctionBuilder.withName("junction4").make();
 
 		final int linkLength = 5;
 

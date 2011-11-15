@@ -32,7 +32,8 @@ class JunctionImpl implements Junction {
 			final MyEventBus eventBus,
 			final JunctionOccupancyFactory junctionOccupancyFactory,
 			final OccupancyFactory occupancyFactory,
-			@Assisted final String name) {
+			@Assisted final String name,
+			@Assisted final JunctionControllerStrategyBuilder junctionControllerStrategyBuilder) {
 		this.eventBus = eventBus;
 		this.junctionOccupancyFactory = junctionOccupancyFactory;
 		this.occupancyFactory = occupancyFactory;

@@ -32,6 +32,6 @@ public class JunctionBuilderImpl implements JunctionBuilder {
 
 	@Override
 	public Junction make() {
-		return junctionFactory.createJunction(name);
+		return junctionFactory.createJunction(name, junctionControllerStrategyBuilder);
 	}
 }
