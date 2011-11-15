@@ -3,7 +3,9 @@ package traffic;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -16,6 +18,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
+import org.jfree.ui.RefineryUtilities;
 
 public class MyGraphing extends ApplicationFrame {
 
@@ -23,11 +26,46 @@ public class MyGraphing extends ApplicationFrame {
 	MyGraphing(final String title, final Network network, final NetworkOccupancyTimeSeries networkOccupancyTimeSeries) {
 		super(title);
 		final XYSeriesCollection dataset = createLinkCongestionDataSeries(network.links(), networkOccupancyTimeSeries);
-		final JFreeChart chart = createChart(dataset);
+		final JFreeChart chart = createChartWithRange1("Congestion on links", "time", "congestion", dataset);
 	    final ChartPanel chartPanel = new ChartPanel(chart);
 	    chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 	    setContentPane(chartPanel);
+	    pack();
+		RefineryUtilities.positionFrameRandomly(this);
+        setVisible(true);
+	}
 
+	public MyGraphing(final String title, final List<JourneyHistory> journeyHistories) {
+		super(title);
+		final XYSeriesCollection dataset = createJourneyTimeDataSeries(journeyHistories);
+		final JFreeChart chart = createChart("Journey durations", "end time", "duration", dataset);
+	    final ChartPanel chartPanel = new ChartPanel(chart);
+	    chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+	    setContentPane(chartPanel);
+	    pack();
+		RefineryUtilities.centerFrameOnScreen(this);
+        setVisible(true);
+	}
+
+	private XYSeriesCollection createJourneyTimeDataSeries(
+			final List<JourneyHistory> journeyHistories) {
+		final XYSeriesCollection dataset = new XYSeriesCollection();
+		XYSeries series;
+		String name;
+		int duration, endTime;
+		final Map<String, XYSeries> seriesMap = new HashMap<String, XYSeries>();
+		for (final JourneyHistory history : journeyHistories) {
+			name = history.flow().name();
+			if (! seriesMap.containsKey(name)) {
+				series = new XYSeries(name);
+				seriesMap.put(name, series);
+				dataset.addSeries(series);
+			}
+			duration = history.journeyDuration().value();
+			endTime = history.endTime().value();
+			seriesMap.get(name).add(endTime, duration);
+		}
+		return dataset;
 	}
 
 	private XYSeriesCollection createLinkCongestionDataSeries(final Collection<Link> links,
@@ -85,15 +123,18 @@ public class MyGraphing extends ApplicationFrame {
 	}
 
 
-	private JFreeChart createChart(final XYDataset dataset) {
+
+	private JFreeChart createChartWithRange1(final String title, final String xAxisLabel, final String yAxisLabel, final XYDataset dataset) {
+		final JFreeChart chart = createChart(title, xAxisLabel, yAxisLabel, dataset);
+		chart.getXYPlot().getRangeAxis().setRange(0.0, 1.0);
+		return chart;
+	}
+
+	private JFreeChart createChart(final String title, final String xAxisLabel, final String yAxisLabel, final XYDataset dataset) {
 
         // create the chart...
         final JFreeChart chart = ChartFactory.createXYLineChart(
-            "Congestion on X network",      // chart title
-            "time",                      // x axis label
-            "congestion",                      // y axis label
-            dataset,                  // data
-            PlotOrientation.VERTICAL,
+            title, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL,
             true,                     // include legend
             true,                     // tooltips
             false                     // urls

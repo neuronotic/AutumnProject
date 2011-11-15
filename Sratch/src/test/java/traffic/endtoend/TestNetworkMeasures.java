@@ -7,7 +7,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import traffic.ConstantTemporalPattern;
-import traffic.DefaultNetworks;
 import traffic.FlowBuilder;
 import traffic.FlowGroupBuilder;
 import traffic.ItineraryImpl;
@@ -59,7 +58,6 @@ public class TestNetworkMeasures {
 	@Inject private Provider<NetworkOccupancyBuilder> networkOccupancyBuilderProvider;
 	@Inject private Provider<JunctionOccupancyBuilder> junctionOccupancyBuilderProvider;
 
-	@Inject DefaultNetworks defaultNetworks;
 	private final ConstantTemporalPattern constantTemporalPattern = new ConstantTemporalPattern(1.0);
 
 	private Junction junction0, junction1;

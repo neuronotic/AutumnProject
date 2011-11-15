@@ -6,4 +6,6 @@ public interface Flow {
 
 	Itinerary itinerary();
 
+	String name();
+
 }

@@ -34,15 +34,16 @@ public class VehicleCreatorImpl implements VehicleCreator {
 			for (final Flow flow : flows) {
 				probability = flow.probability() * temporalProbabilityModifier;
 				if (random.bernoulli(probability)) {
-					vehicles.add(createVehicle(flow.itinerary()));
+					vehicles.add(createVehicle(flow.itinerary(), flow));
 				}
 			}
 		}
 		return vehicles;
 	}
 
-	private Vehicle createVehicle(final Itinerary itinerary) {
+	private Vehicle createVehicle(final Itinerary itinerary, final Flow flow) {
 		final Vehicle vehicle = vehicleBuilder
+			.withFlow(flow)
 			.withName(vehicleName())
 			.withItinerary(itinerary)
 			.make();

@@ -10,13 +10,16 @@ class VehicleImpl implements Vehicle {
 	private final String name;
 	private final VehicleStateContext stateContext;
 	private VehicleJourneyState journeyState;
+	private final Flow flow;
 
 	@Inject VehicleImpl(
 			@Assisted final String name,
+			@Assisted final Flow flow,
 			@Assisted final VehicleStateContext vehicleStateContext,
 			@Assisted final VehicleJourneyState journeyState
 			) {
 		this.name = name;
+		this.flow = flow;
 		stateContext = vehicleStateContext;
 		this.journeyState = journeyState;
 		//logger.info(String.format("CREATED %s", this));
@@ -46,6 +49,11 @@ class VehicleImpl implements Vehicle {
 	@Override
 	public String toString() {
 		return String.format("%s located at %s", name(), location());
+	}
+
+	@Override
+	public Flow flow() {
+		return flow;
 	}
 
 }

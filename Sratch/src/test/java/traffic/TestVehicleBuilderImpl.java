@@ -24,8 +24,10 @@ public class TestVehicleBuilderImpl {
 	private final Vehicle vehicle = context.mock(Vehicle.class);
 	private final Itinerary itinerary = context.mock(Itinerary.class);
 	private final Cell cell0 = context.mock(Cell.class);
+	private final Flow flow = context.mock(Flow.class);
+	private final Flow nullFlow = context.mock(Flow.class, "nullFlow");
 
-	private final VehicleBuilder vehicleBuilder = new VehicleBuilderImpl(eventBus, journeyStartedMessageFactory, vehicleFactory, vehicleStateContextFactory, vehicleStateFactory);
+	private final VehicleBuilder vehicleBuilder = new VehicleBuilderImpl(eventBus, nullFlow, journeyStartedMessageFactory, vehicleFactory, vehicleStateContextFactory, vehicleStateFactory);
 
 	@Test
 	public void makeCallsVehicleFactoryWithMadeStateContext() throws Exception {
@@ -39,12 +41,13 @@ public class TestVehicleBuilderImpl {
 				oneOf(vehicleStateContextFactory).createStateContext(asList(cell0)); will(returnValue(vehicleStateContext));
 				oneOf(vehicleStateFactory).duringJourneyState(); will(returnValue(initialState));
 				//oneOf(vehicleStateFactory).preJourneyState(); will(returnValue(initialState));
-				oneOf(vehicleFactory).createVehicle(vehicleName, vehicleStateContext, initialState); will(returnValue(vehicle));
+				oneOf(vehicleFactory).createVehicle(vehicleName, flow, vehicleStateContext, initialState); will(returnValue(vehicle));
 			}
 		});
 
 		final Vehicle createdVehicle = vehicleBuilder
 			.withName(vehicleName)
+			.withFlow(flow)
 			.withItinerary(itinerary)
 			.make();
 

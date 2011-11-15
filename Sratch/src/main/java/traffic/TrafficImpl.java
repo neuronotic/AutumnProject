@@ -1,14 +1,9 @@
 package traffic;
 
-import java.util.List;
-
-import org.jfree.ui.RefineryUtilities;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 public class TrafficImpl implements Traffic {
-	private final VehicleManager vehicleManager = null;
 	private final SimulationBuilder simulationBuilder;
 	private final DefaultNetworks defaultNetworks;
 
@@ -34,20 +29,16 @@ public class TrafficImpl implements Traffic {
 				.withTemporalPattern(constantTemporalPattern.withModifier(1))
 				.withFlow(flowBuilderProvider.get()
 						.withItinerary(new ItineraryImpl(network.linkNamed("link0"), network.linkNamed("link1")))
-						.withProbability(0.2))
+						.withProbability(0.5))
 				.withFlow(flowBuilderProvider.get()
 						.withItinerary(new ItineraryImpl(network.linkNamed("link2"), network.linkNamed("link3")))
-						.withProbability(0.0)) )
+						.withProbability(0.5)) )
 			.make();
 
-		sim.step(50);
-		final NetworkOccupancyTimeSeries networkOccupancyTimeSeries = sim.statistics().networkOccupancy();
-		final List<JourneyHistory> journeyHistories = sim.statistics().getEndedJourneyHistories();
+		sim.step(1250);
 
-		final MyGraphing graph = new MyGraphing("graphhhh", network, networkOccupancyTimeSeries);
-		graph.pack();
-		RefineryUtilities.centerFrameOnScreen(graph);
-        graph.setVisible(true);
+		new MyGraphing("congestion", network, sim.statistics().networkOccupancy());
+		new MyGraphing("jounrey times", sim.statistics().getEndedJourneyHistories());
 
 	}
 

@@ -18,7 +18,8 @@ public class TestVehicleImpl {
 	private final VehicleStateContext stateContext = context.mock(VehicleStateContext.class);
 	private final VehicleJourneyState state0 = context.mock(VehicleJourneyState.class, "state0");
 	private final VehicleJourneyState state1 = context.mock(VehicleJourneyState.class, "state1");
-	final Vehicle vehicle = new VehicleImpl("myVehicle", stateContext, state0);
+	private final Flow flow = context.mock(Flow.class);
+	final Vehicle vehicle = new VehicleImpl("myVehicle", flow, stateContext, state0);
 
 	@Test
 	public void stepCausesCurrentStateToChangeToReturnedStateInDelegationToPreviousCurrentState() throws Exception {

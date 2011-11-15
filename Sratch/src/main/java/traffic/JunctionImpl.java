@@ -44,8 +44,6 @@ class JunctionImpl implements Junction {
 	public boolean enter(final Vehicle vehicle) {
 		if (!occupied) {
 			if (vehiclesWaiting.isEmpty() || !inQueue(vehicle)) {
-				//final Link link = ((CellImpl) vehicle.location()).link();
-				//eventBus.post(new LinkFluxMessageImpl(link, new LinkFluxImpl(link, 1)));
 				occupied = true;
 				return true;
 			}

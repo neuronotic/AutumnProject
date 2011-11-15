@@ -24,4 +24,13 @@ public class FlowImpl implements Flow {
 		return itinerary;
 	}
 
+	@Override
+	public String name() {
+		final StringBuffer nameBuffer = new StringBuffer();
+		for (final Link link : itinerary.route()) {
+			nameBuffer.append(link.name());
+		}
+		return nameBuffer.toString();
+	}
+
 }

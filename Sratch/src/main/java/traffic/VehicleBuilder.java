@@ -8,4 +8,6 @@ public interface VehicleBuilder {
 
 	VehicleBuilder withItinerary(Itinerary itinerary);
 
+	VehicleBuilder withFlow(Flow flow);
+
 }

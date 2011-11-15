@@ -10,6 +10,10 @@ public class SimulationTime {
 		this.time = time;
 	}
 
+	public int value() {
+		return time;
+	}
+
 	@Override
 	public boolean equals(final Object that) {
 		if (that != null && that.getClass().equals(this.getClass())) {

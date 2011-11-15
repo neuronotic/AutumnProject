@@ -54,4 +54,19 @@ public class JourneyHistoryImpl implements JourneyHistory {
 	public String toString() {
 		return String.format("Journey history for %s, with startTime %s and finishTime %s and cellTimes %s", vehicle.name(), startTime, endTime, cellEntryTimes);
 	}
+
+	@Override
+	public Flow flow() {
+		return vehicle.flow();
+	}
+
+	@Override
+	public SimulationTime journeyDuration() {
+		return endTime.differenceBetween(startTime);
+	}
+
+	@Override
+	public SimulationTime endTime() {
+		return endTime;
+	}
 }

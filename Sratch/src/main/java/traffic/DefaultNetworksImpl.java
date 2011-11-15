@@ -15,6 +15,13 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 	}
 
 	@Override
+	public Network reverseE() {
+		// TODO Auto-generated method stub
+		return null;
+
+	}
+
+	@Override
 	public Network xNetwork4Link() {
 		Junction junction0, junction1, junction2, junction3, junction4;
 		junction0 = junctionFactory.createJunction("junction0");
@@ -60,4 +67,5 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 	private LinkBuilder link() {
 		return linkBuilderFactory.create();
 	}
+
 }

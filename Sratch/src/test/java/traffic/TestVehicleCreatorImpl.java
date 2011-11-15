@@ -57,8 +57,10 @@ public class TestVehicleCreatorImpl {
 				oneOf(flow2).probability();
 				oneOf(vehicleBuilder).withItinerary(itinerary0); will(returnValue(vehicleBuilder));
 				oneOf(vehicleBuilder).withName("vehicle0"); will(returnValue(vehicleBuilder));
+				oneOf(vehicleBuilder).withFlow(flow0); will(returnValue(vehicleBuilder));
 				oneOf(vehicleBuilder).withItinerary(itinerary2); will(returnValue(vehicleBuilder));
 				oneOf(vehicleBuilder).withName("vehicle1"); will(returnValue(vehicleBuilder));
+				oneOf(vehicleBuilder).withFlow(flow2); will(returnValue(vehicleBuilder));
 				ignoring(itinerary0);
 				ignoring(itinerary2);
 				exactly(2).of(vehicleBuilder).make(); will(onConsecutiveCalls(returnValue(vehicle0), returnValue(vehicle1)));

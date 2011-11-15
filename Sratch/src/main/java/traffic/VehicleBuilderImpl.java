@@ -1,6 +1,7 @@
 package traffic;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 public class VehicleBuilderImpl implements VehicleBuilder {
 
@@ -11,14 +12,17 @@ public class VehicleBuilderImpl implements VehicleBuilder {
 	private final VehicleStateContextFactory vehicleStateContextFactory;
 	private final MyEventBus eventBus;
 	private final JourneyStartedMessageFactory journeyStartedMessageFactory;
+	private Flow flow;
 
 	@Inject public VehicleBuilderImpl(
 			final MyEventBus eventBus,
+			@Named("null") final Flow flow,
 			final JourneyStartedMessageFactory journeyStartedMessageFactory,
 			final VehicleFactory vehicleFactory,
 			final VehicleStateContextFactory vehicleStateContextFactory,
 			final VehicleStateFactory vehicleStateFactory) {
 				this.eventBus = eventBus;
+				this.flow = flow;
 				this.journeyStartedMessageFactory = journeyStartedMessageFactory;
 				this.vehicleFactory = vehicleFactory;
 				this.vehicleStateContextFactory = vehicleStateContextFactory;
@@ -29,6 +33,7 @@ public class VehicleBuilderImpl implements VehicleBuilder {
 	public Vehicle make() {
 		final Vehicle vehicle = vehicleFactory.createVehicle(
 				vehicleName,
+				flow,
 				vehicleStateContextFactory.createStateContext(itinerary.cells()),
 				vehicleStateFactory.duringJourneyState());//.preJourneyState());
 		eventBus.post(journeyStartedMessageFactory.create(vehicle));
@@ -44,6 +49,12 @@ public class VehicleBuilderImpl implements VehicleBuilder {
 	@Override
 	public VehicleBuilder withItinerary(final Itinerary itinerary) {
 		this.itinerary = itinerary;
+		return this;
+	}
+
+	@Override
+	public VehicleBuilder withFlow(final Flow flow) {
+		this.flow = flow;
 		return this;
 	}
 }

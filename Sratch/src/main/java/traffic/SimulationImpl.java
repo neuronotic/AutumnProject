@@ -52,4 +52,9 @@ public class SimulationImpl implements Simulation {
 	public StatisticsManager statistics() {
 		return statisticsManager;
 	}
+
+	@Override
+	public SimulationTime time() {
+		return timeKeeper.currentTime();
+	}
 }
