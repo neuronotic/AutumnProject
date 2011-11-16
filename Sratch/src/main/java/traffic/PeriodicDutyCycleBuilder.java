@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 
 public class PeriodicDutyCycleBuilder implements JunctionControllerStrategyBuilder {
 
-
 	private SimulationTime period;
 	private final PeriodicDutyCycleFactory periodicDutyCycleFactory;
 
@@ -22,6 +21,5 @@ public class PeriodicDutyCycleBuilder implements JunctionControllerStrategyBuild
 		this.period = period;
 		return this;
 	}
-
 
 }
