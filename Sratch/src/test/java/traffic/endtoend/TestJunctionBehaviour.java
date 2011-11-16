@@ -65,7 +65,7 @@ public class TestJunctionBehaviour {
 						.withItinerary(new ItineraryImpl(link0))
 						.withProbability(1.0)))
 				.make();
-		sim.step(2);
+		sim.step(3);
 		final SimulationTime lastTimeBeforeNoArrivals = sim.time();
 		assertThat(sim, hasJourneyHistoryCount(0));
 		sim.step(dutyCyclePeriod);
@@ -96,7 +96,7 @@ public class TestJunctionBehaviour {
 			.withName("link0")
 			.withInJunction(junction0)
 			.withOutJunction(junction1)
-			.withLength(0)
+			.withLength(1)
 			.make();
 	}
 

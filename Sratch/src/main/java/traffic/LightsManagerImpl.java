@@ -20,4 +20,11 @@ public class LightsManagerImpl implements LightsManager {
 		links.put(link, lightsFactory.create());
 	}
 
+	@Override
+	public boolean isGreen(final Link link) {
+		// TODO Auto-generated method stub
+		return true;
+
+	}
+
 }

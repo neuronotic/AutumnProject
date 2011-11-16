@@ -39,6 +39,7 @@ public class LinkBuilderImpl implements LinkBuilder {
 
 	@Override
 	public LinkBuilder withLength(final int linkLength) {
+		assert linkLength > 0;
 		cellChainBuilder = cellChainBuilder.cellChainOfLength(linkLength);
 		return this;
 	}

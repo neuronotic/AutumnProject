@@ -1,19 +1,5 @@
 
 
-HACKAGE:
-
-- ConstantTemporalPattern
-- MyRandom
-- VehicleCreator
-
-preexisting:
-- ShortestPathRouteFinder : creates new ItineraryImpl rather than building it/factorying.
--vehicleBuilder /Vehicle
-- vehicleStateContext
-
-Misc:
-- need to refactor vehicleBuilder to take itinerary rather than route blah blah.
-
 ---------------
 
 still have to randomise order of vehicles update
@@ -40,3 +26,7 @@ http://code.google.com/p/google-guice/wiki/BindingResolution
 - TestVehicleImpl.stepMovesVehicleAlongItinerary: doesn't work with isLocatedAt  assertion....why? 
 - TestVehicleBuilderImpl etc seems overly complicated?
 
+
+[REFACTORING/Hackage to fix:]
+- Junction requires knowledge of the link that a vehicle is coming from. Made complicated by some vehicles entering the junction from the 'carpark' queue. Current method a complicated tangle.
+- link's currently need at least length 1. This is so that link from which vehicle is entering junction can be known. Maybe as vehicle leaves a junction, currentLink set to the link it is doing so via?

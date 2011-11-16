@@ -45,7 +45,7 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public boolean enter(final Vehicle vehicle) {
-		if (!occupied) {
+		if (!occupied && lightsGreenForVehicle(vehicle)) {
 			if (vehiclesWaiting.isEmpty() || !inQueue(vehicle)) {
 				occupied = true;
 				return true;
@@ -56,6 +56,14 @@ class JunctionImpl implements Junction {
 				return true;
 			}
 		} return false;
+	}
+
+	private boolean lightsGreenForVehicle(final Vehicle vehicle) {
+		//TODO: this is a hack!
+		if (incomingLinks.isEmpty() || vehicle.location() instanceof NullCell || vehicle.location() instanceof JunctionImpl) {
+			return true;
+		}
+		return lightsManager.isGreen(((CellImpl)vehicle.location()).link());
 	}
 
 	private boolean isFirstInQueue(final Vehicle vehicle) {
