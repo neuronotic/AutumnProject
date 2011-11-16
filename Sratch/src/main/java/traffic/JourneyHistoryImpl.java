@@ -52,7 +52,7 @@ public class JourneyHistoryImpl implements JourneyHistory {
 
 	@Override
 	public String toString() {
-		return String.format("Journey history for %s, with startTime %s and finishTime %s and cellTimes %s", vehicle.name(), startTime, endTime, cellEntryTimes);
+		return String.format("Journey hisitem.statistics().getEndedJourneyHistories().size() ==  expectedcount;tory for %s, with startTime %s and finishTime %s and cellTimes %s", vehicle.name(), startTime, endTime, cellEntryTimes);
 	}
 
 	@Override
@@ -68,5 +68,10 @@ public class JourneyHistoryImpl implements JourneyHistory {
 	@Override
 	public SimulationTime endTime() {
 		return endTime;
+	}
+
+	@Override
+	public Vehicle vehicle() {
+		return vehicle;
 	}
 }

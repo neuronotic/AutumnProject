@@ -163,4 +163,18 @@ public class NetworkMatchers {
 
 		};
 	}
+
+	public static Matcher<Junction> junctionNamed(final String expectedName) {
+		return new TypeSafeMatcher<Junction>() {
+
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("Junction with name ").appendValue(expectedName);
+			}
+			@Override
+			protected boolean matchesSafely(final Junction item) {
+				return item.name().equals(expectedName);
+			}
+		};
+	}
 }

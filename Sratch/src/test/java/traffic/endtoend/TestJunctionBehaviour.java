@@ -1,5 +1,7 @@
 package traffic.endtoend;
 
+import static org.hamcrest.MatcherAssert.*;
+import static traffic.SimulationMatchers.*;
 import static traffic.SimulationTime.*;
 
 import org.junit.Rule;
@@ -19,6 +21,7 @@ import traffic.NetworkBuilder;
 import traffic.PeriodicDutyCycleBuilder;
 import traffic.Simulation;
 import traffic.SimulationBuilder;
+import traffic.SimulationMatchers;
 import traffic.SimulationTime;
 import traffic.TrafficModule;
 
@@ -50,9 +53,11 @@ public class TestJunctionBehaviour {
 
 	private Junction junction0, junction1;
 	private Link link0;
+	private int dutyCyclePeriod;
 
 	@Test
 	public void journeysAcrossJunctionWith() throws Exception {
+		dutyCyclePeriod = 3;
 		final Simulation sim = simulationBuilder()
 				.withFlowGroup(flowGroupBuilderProvider.get()
 					.withTemporalPattern(constantTemporalPattern.withModifier(1))
@@ -62,6 +67,15 @@ public class TestJunctionBehaviour {
 				.make();
 		sim.step(2);
 		final SimulationTime lastTimeBeforeNoArrivals = sim.time();
+		assertThat(sim, hasJourneyHistoryCount(0));
+		sim.step(dutyCyclePeriod);
+		assertThat(sim, hasJourneyHistoryCount(dutyCyclePeriod));
+		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction0, dutyCyclePeriod));
+		sim.step(dutyCyclePeriod);
+		assertThat(sim, hasJourneyHistoryCount(dutyCyclePeriod));
+		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction0, dutyCyclePeriod));
+
+
 	}
 
 	private SimulationBuilder simulationBuilder() {
@@ -98,7 +112,7 @@ public class TestJunctionBehaviour {
 		junction1 = junctionBuilderProvider.get()
 			.withName("junction1")
 			.withJunctionControllerStrategy( periodicDutyCycleBuilderProvider.get()
-				.withPeriod(time(3)))
+				.withPeriod(time(dutyCyclePeriod)))
 			.make();
 	}
 }

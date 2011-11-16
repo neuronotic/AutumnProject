@@ -38,4 +38,10 @@ public class ItineraryImpl implements Itinerary {
 		return String.format("Itinerary %s", links);
 	}
 
+	@Override
+	public Junction originJunction() {
+		assert links.size()>0;
+		return links.get(0).inJunction();
+	}
+
 }

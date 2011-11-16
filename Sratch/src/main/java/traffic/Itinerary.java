@@ -6,4 +6,6 @@ public interface Itinerary {
 	List<Link> route();
 
 	List<Cell> cells();
+
+	Junction originJunction();
 }
