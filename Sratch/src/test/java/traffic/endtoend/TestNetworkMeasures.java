@@ -58,8 +58,6 @@ public class TestNetworkMeasures {
 	@Inject private Provider<NetworkOccupancyBuilder> networkOccupancyBuilderProvider;
 	@Inject private Provider<JunctionOccupancyBuilder> junctionOccupancyBuilderProvider;
 
-	private final ConstantTemporalPattern constantTemporalPattern = new ConstantTemporalPattern(1.0);
-
 	private Junction junction0, junction1;
 	private Link link0;
 
@@ -102,7 +100,7 @@ public class TestNetworkMeasures {
 	private Simulation simulationWithFlowGroup() {
 		final Simulation sim = simulationBuilder()
 			.withFlowGroup(flowGroupBuilderProvider.get()
-				.withTemporalPattern(constantTemporalPattern.withModifier(1))
+				.withTemporalPattern(new ConstantTemporalPattern(1))
 				.withFlow(flowBuilderProvider.get()
 					.withItinerary(new ItineraryImpl(link0))
 					.withProbability(1.0))

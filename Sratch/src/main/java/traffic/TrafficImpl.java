@@ -26,16 +26,16 @@ public class TrafficImpl implements Traffic {
 		final Simulation sim = simulationBuilder
 			.withNetwork(network)
 			.withFlowGroup(flowGroupBuilderProvider.get()
-				.withTemporalPattern(constantTemporalPattern.withModifier(1))
+				.withTemporalPattern(new ConstantTemporalPattern(1))
 				.withFlow(flowBuilderProvider.get()
 						.withItinerary(new ItineraryImpl(network.linkNamed("link0"), network.linkNamed("link1")))
-						.withProbability(0.5))
+						.withProbability(0.80))
 				.withFlow(flowBuilderProvider.get()
-						.withItinerary(new ItineraryImpl(network.linkNamed("link2"), network.linkNamed("link3")))
-						.withProbability(0.5)) )
+						.withItinerary(new ItineraryImpl(network.linkNamed("link2"), network.linkNamed("link1")))
+						.withProbability(0.05)) )
 			.make();
 
-		sim.step(1250);
+		sim.step(200);
 
 		new MyGraphing("congestion", network, sim.statistics().networkOccupancy());
 		new MyGraphing("jounrey times", sim.statistics().getEndedJourneyHistories());

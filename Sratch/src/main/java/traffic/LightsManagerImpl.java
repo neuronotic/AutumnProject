@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 
 public class LightsManagerImpl implements LightsManager {
 
-	Map<Link, Lights> links = new HashMap<Link, Lights>();
+	Map<Link, Lights> linkLights = new HashMap<Link, Lights>();
 	private final LightsFactory lightsFactory;
 
 	@Inject LightsManagerImpl(final LightsFactory lightsFactory) {
@@ -17,14 +17,29 @@ public class LightsManagerImpl implements LightsManager {
 
 	@Override
 	public void addIncomingLink(final Link link) {
-		links.put(link, lightsFactory.create());
+		linkLights.put(link, lightsFactory.create());
 	}
 
 	@Override
 	public boolean isGreen(final Link link) {
-		// TODO Auto-generated method stub
-		return true;
+		return linkLights.get(link).areGreen();
+	}
 
+	@Override
+	public void setRed(final Link link) {
+		linkLights.get(link).setRed();
+	}
+
+	@Override
+	public void setGreen(final Link link) {
+		linkLights.get(link).setGreen();
+	}
+
+	@Override
+	public void setAllRed() {
+		for (final Link link : linkLights.keySet()) {
+			setRed(link);
+		}
 	}
 
 }

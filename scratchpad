@@ -30,3 +30,6 @@ http://code.google.com/p/google-guice/wiki/BindingResolution
 [REFACTORING/Hackage to fix:]
 - Junction requires knowledge of the link that a vehicle is coming from. Made complicated by some vehicles entering the junction from the 'carpark' queue. Current method a complicated tangle.
 - link's currently need at least length 1. This is so that link from which vehicle is entering junction can be known. Maybe as vehicle leaves a junction, currentLink set to the link it is doing so via?
+- how to treat queue of new vehicles at a junction? like a link? possibly. refactor it into a new type of link? that will simplify the junction logic too.
+- junction is lazyily constructed with incomingLinks. This causes initialisation difficulties for things like lights, controller etc...
+- different types of flow? eg not just probabilistic, but constant, periodic, - actually this could be achieved by temporal pattern. So add temporal patterns other than constant: masked (with aperiod the length of mask?) + sinusoidal (with period, phase).

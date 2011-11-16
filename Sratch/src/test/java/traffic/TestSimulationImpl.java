@@ -46,6 +46,7 @@ public class TestSimulationImpl {
 	private Simulation simulation() {
 		context.checking(new Expectations() {
 			{
+				allowing(timeKeeper).currentTime();
 				oneOf(statisticsManagerFactory).create(network); will(returnValue(statisticsManager));
 				oneOf(vehicleCreationManagerFactory).create(asList(flowGroup0, flowGroup1)); will(returnValue(vehicleCreator));
 			}

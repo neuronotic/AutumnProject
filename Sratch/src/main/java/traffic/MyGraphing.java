@@ -1,6 +1,7 @@
 package traffic;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
@@ -21,18 +23,25 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 public class MyGraphing extends ApplicationFrame {
-
+	String historyLocation = "/home/daz/output/history.jpg";
+	String congestionLocation = "/home/daz/output/congestion.jpg";
 
 	MyGraphing(final String title, final Network network, final NetworkOccupancyTimeSeries networkOccupancyTimeSeries) {
 		super(title);
 		final XYSeriesCollection dataset = createLinkCongestionDataSeries(network.links(), networkOccupancyTimeSeries);
 		final JFreeChart chart = createChartWithRange1("Congestion on links", "time", "congestion", dataset);
+
 	    final ChartPanel chartPanel = new ChartPanel(chart);
 	    chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 	    setContentPane(chartPanel);
 	    pack();
 		RefineryUtilities.positionFrameRandomly(this);
         setVisible(true);
+        try {
+        	ChartUtilities.saveChartAsJPEG(new File(congestionLocation), chart, 1024, 768);
+        } catch (final Exception e) {
+        	System.out.println("error making chart");
+        }
 	}
 
 	public MyGraphing(final String title, final List<JourneyHistory> journeyHistories) {
@@ -45,6 +54,11 @@ public class MyGraphing extends ApplicationFrame {
 	    pack();
 		RefineryUtilities.centerFrameOnScreen(this);
         setVisible(true);
+        try {
+        	ChartUtilities.saveChartAsJPEG(new File(historyLocation), chart, 1024, 768);
+        } catch (final Exception e) {
+        	System.out.println("error making chart");
+        }
 	}
 
 	private XYSeriesCollection createJourneyTimeDataSeries(
@@ -154,8 +168,10 @@ public class MyGraphing extends ApplicationFrame {
         plot.setRangeGridlinePaint(Color.white);
 
         final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesLinesVisible(0, false);
-        renderer.setSeriesShapesVisible(1, false);
+      //  renderer.setSeriesLinesVisible(0, false);
+       // renderer.setSeriesShapesVisible(1, false);
+//        renderer.setSeriesShapesVisible(2, false);
+//        renderer.setSeriesShapesVisible(3, false);
         plot.setRenderer(renderer);
 
         // change the auto tick unit selection to integer units only...

@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 
 public class FlowBuilderImpl implements FlowBuilder {
 
-	private double probability;
+	private double probability = 1.0;
 	private Itinerary itinerary;
 	private final FlowFactory flowFactory;
 

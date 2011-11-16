@@ -55,7 +55,8 @@ public class TrafficModule extends AbstractModule {
 		bind(DefaultNetworks.class).to(DefaultNetworksImpl.class);
 		bind(NetworkFluxBuilder.class).to(NetworkFluxBuilderImpl.class);
 		bind(NetworkOccupancyTimeSeries.class).to(NetworkOccupancyTimeSeriesImpl.class);
-		bind(JunctionControllerStrategyBuilder.class).to(PeriodicDutyCycleBuilder.class);
+		bind(JunctionControllerStrategyBuilder.class).annotatedWith(Names.named("PeriodicDutyCycleBuilder")).to(PeriodicDutyCycleBuilder.class);
+		bind(JunctionControllerStrategyBuilder.class).annotatedWith(Names.named("EquisaturationBuilder")).to(EquisaturationBuilder.class);
 		bind(LightsManager.class).to(LightsManagerImpl.class);
 
 		install(new FactoryModuleBuilder()
@@ -65,6 +66,11 @@ public class TrafficModule extends AbstractModule {
 		install(new FactoryModuleBuilder()
 			.implement(JunctionControllerStrategy.class, PeriodicDutyCycle.class)
 			.build(PeriodicDutyCycleFactory.class));
+
+		install(new FactoryModuleBuilder()
+			.implement(JunctionControllerStrategy.class, Equisaturation.class)
+			.build(EquisaturationFactory.class));
+
 
 		install(new FactoryModuleBuilder()
 			.implement(NetworkFluxBuilder.class, NetworkFluxBuilderImpl.class)

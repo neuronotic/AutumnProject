@@ -6,4 +6,9 @@ public interface LightsManager {
 
 	boolean isGreen(Link link);
 
+	void setRed(Link link);
+	void setGreen(Link link);
+
+	void setAllRed();
+
 }
