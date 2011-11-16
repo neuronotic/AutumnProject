@@ -23,7 +23,7 @@ class JunctionImpl implements Junction {
 	private final JunctionOccupancyFactory junctionOccupancyFactory;
 	private final JunctionControllerStrategy junctionController;
 	private final OccupancyFactory occupancyFactory;
-
+	private final LightsManager lightsManager;
 	private final MyEventBus eventBus;
 
 
@@ -32,6 +32,7 @@ class JunctionImpl implements Junction {
 			final MyEventBus eventBus,
 			final JunctionOccupancyFactory junctionOccupancyFactory,
 			final OccupancyFactory occupancyFactory,
+			final LightsManager lightsManager,
 			@Assisted final String name,
 			@Assisted final JunctionControllerStrategyBuilder junctionControllerStrategyBuilder) {
 		this.eventBus = eventBus;
@@ -39,8 +40,8 @@ class JunctionImpl implements Junction {
 		this.occupancyFactory = occupancyFactory;
 		this.name = name;
 		junctionController = junctionControllerStrategyBuilder.make(this);
+		this.lightsManager = lightsManager;
 	}
-
 
 	@Override
 	public boolean enter(final Vehicle vehicle) {
@@ -92,12 +93,14 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public void step() {
-		junctionController.step();
+		junctionController.step(lightsManager);
 	}
 
 	@Override
 	public void addIncomingLink(final Link link) {
 		incomingLinks.add(link);
+		lightsManager.addIncomingLink(link);
+		junctionController.addIncomingLink(link);
 	}
 
 	@Override

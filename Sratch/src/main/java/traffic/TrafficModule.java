@@ -57,6 +57,7 @@ public class TrafficModule extends AbstractModule {
 		bind(NetworkOccupancyTimeSeries.class).to(NetworkOccupancyTimeSeriesImpl.class);
 
 		bind(JunctionControllerStrategyBuilder.class).to(PeriodicDutyCycleBuilder.class);
+		bind(LightsManager.class).to(LightsManagerImpl.class);
 
 		install(new FactoryModuleBuilder()
 			.implement(JunctionControllerStrategy.class, PeriodicDutyCycle.class)

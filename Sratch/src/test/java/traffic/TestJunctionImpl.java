@@ -27,6 +27,8 @@ public class TestJunctionImpl {
 	private final MyEventBus eventBus = context.mock(MyEventBus.class);
 	private final JunctionControllerStrategyBuilder junctionControllerStrategyBuilder = context.mock(JunctionControllerStrategyBuilder.class);
 	private final JunctionControllerStrategy junctionController = context.mock(JunctionControllerStrategy.class);
+	private final LightsManager lightsManager = context.mock(LightsManager.class);
+
 	private final Junction junction = junction();
 
 	private JunctionImpl junction() {
@@ -35,13 +37,23 @@ public class TestJunctionImpl {
 				oneOf(junctionControllerStrategyBuilder).make(with(NetworkMatchers.junctionNamed("myJunction"))); will(returnValue(junctionController));
 			}
 		});
-		return new JunctionImpl(eventBus, junctionOccupancyFactory, occupancyFactory, "myJunction", junctionControllerStrategyBuilder);
+		return new JunctionImpl(eventBus, junctionOccupancyFactory, occupancyFactory, lightsManager, "myJunction", junctionControllerStrategyBuilder);
+	}
+
+	private void addIncomingLinkAndSetupExpectations(final Link link) {
+		context.checking(new Expectations() {
+			{
+				oneOf(lightsManager).addIncomingLink(link);
+				oneOf(junctionController).addIncomingLink(link);
+			}
+		});
+		junction.addIncomingLink(link);
 	}
 
 	@Test
 	public void occupancyOnUnoccupiedJunctionConstructsOccupancyObjectForJunctionGathersOccupancyForIncomingLinksAndUsesFactoryToCreateJunctionOccupancy() throws Exception {
-		junction.addIncomingLink(link0);
-		junction.addIncomingLink(link1);
+		addIncomingLinkAndSetupExpectations(link0);
+		addIncomingLinkAndSetupExpectations(link1);
 		context.checking(new Expectations() {
 			{
 				oneOf(link0).occupancy(); will(returnValue(linkOccupancy0));
@@ -95,7 +107,7 @@ public class TestJunctionImpl {
 	public void stepDelegatesToController() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(junctionController).step();
+				oneOf(junctionController).step(lightsManager);
 			}
 		});
 		junction.step();
