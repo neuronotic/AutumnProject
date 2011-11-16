@@ -12,7 +12,7 @@ public class JunctionBuilderImpl implements JunctionBuilder {
 
 	@Inject public JunctionBuilderImpl(
 			final JunctionFactory junctionFactory,
-			@Named("default") final JunctionControllerStrategyBuilder nullJunctionControllerStrategyBuilder) {
+			@Named("defaultJunctionControllerStrategyBuilder") final JunctionControllerStrategyBuilder nullJunctionControllerStrategyBuilder) {
 		this.junctionFactory = junctionFactory;
 		junctionControllerStrategyBuilder = nullJunctionControllerStrategyBuilder;
 	}

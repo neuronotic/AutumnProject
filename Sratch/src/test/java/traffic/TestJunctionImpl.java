@@ -90,4 +90,14 @@ public class TestJunctionImpl {
 	public void junctionIsCreatedWithGivenName() {
 		assertThat(junction, isJunctionCalled("myJunction"));
 	}
+
+	@Test
+	public void stepDelegatesToController() throws Exception {
+		context.checking(new Expectations() {
+			{
+				oneOf(junctionController).step();
+			}
+		});
+		junction.step();
+	}
 }

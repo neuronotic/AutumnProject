@@ -35,7 +35,8 @@ public class TrafficModule extends AbstractModule {
 		bind(JunctionOccupancyBuilder.class).to(JunctionOccupancyBuilderImpl.class);
 		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
 		bind(Flow.class).annotatedWith(Names.named("null")).to(NullFlow.class);
-		bind(JunctionControllerStrategyBuilder.class).annotatedWith(Names.named("default")).to(NullJunctionControllerStrategyBuilder.class);
+		bind(JunctionControllerStrategyBuilder.class).annotatedWith(Names.named("defaultJunctionControllerStrategyBuilder")).to(NullJunctionControllerStrategyBuilder.class);
+		bind(JunctionControllerStrategy.class).annotatedWith(Names.named("nullJunctionControllerStrategy")).to(NullJunctionControllerStrategy.class);
 		bind(Traffic.class).to(TrafficImpl.class);
 		bind(MyRandom.class).to(MyRandomImpl.class);
 		//bind(Itinerary.class).to(ItineraryImpl.class);
@@ -56,6 +57,10 @@ public class TrafficModule extends AbstractModule {
 		bind(NetworkOccupancyTimeSeries.class).to(NetworkOccupancyTimeSeriesImpl.class);
 
 		bind(JunctionControllerStrategyBuilder.class).to(PeriodicDutyCycleBuilder.class);
+
+		install(new FactoryModuleBuilder()
+			.implement(JunctionControllerStrategy.class, PeriodicDutyCycle.class)
+			.build(PeriodicDutyCycleFactory.class));
 
 		install(new FactoryModuleBuilder()
 			.implement(NetworkFluxBuilder.class, NetworkFluxBuilderImpl.class)

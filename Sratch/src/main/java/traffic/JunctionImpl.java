@@ -92,6 +92,7 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public void step() {
+		junctionController.step();
 	}
 
 	@Override
