@@ -52,4 +52,13 @@ public class LightsManagerImpl implements LightsManager {
 		return Collections.unmodifiableList(links);
 	}
 
+	@Override
+	public String toString() {
+		final StringBuffer lightsStateString = new StringBuffer("(");
+		for (final Link link : linksInOrderAdded()) {
+			lightsStateString.append(String.format("%s:%s, ", link.name(), isGreen(link)));
+		}
+		lightsStateString.append(")");
+		return lightsStateString.toString();
+	}
 }

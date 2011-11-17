@@ -17,4 +17,5 @@ public interface Link {
 	int occupiedCount();
 
 	LinkOccupancy occupancy();
+	double congestion();
 }

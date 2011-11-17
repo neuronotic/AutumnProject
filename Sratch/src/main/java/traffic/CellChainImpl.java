@@ -40,4 +40,13 @@ class CellChainImpl implements CellChain {
 	public Cell lastCell() {
 		return cells.get(cells.size() - 1);
 	}
+
+	@Override
+	public int occupancy() {
+		int occupiedCount = 0;
+		for (final Cell cell : cells) {
+			occupiedCount += cell.isOccupied() ? 1 : 0;
+		}
+		return occupiedCount;
+	}
 }

@@ -16,9 +16,4 @@ public class PeriodicDutyCycleStrategy implements JunctionControllerStrategy {
 		currentGreenIndex++;
 	}
 
-	@Override
-	public void addIncomingLink(final Link link) {
-		// TODO Auto-generated method stub
-	}
-
 }

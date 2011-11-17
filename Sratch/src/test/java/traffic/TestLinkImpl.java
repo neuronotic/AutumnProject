@@ -24,19 +24,29 @@ public class TestLinkImpl {
 	private final LinkOccupancy linkOccupancy = context.mock(LinkOccupancy.class);
 	private final LinkOccupancyFactory linkOccupancyFactory = context.mock(LinkOccupancyFactory.class);
 	private final OccupancyFactory occupancyFactory = context.mock(OccupancyFactory.class);
-	private final Occupancy occupancy= context.mock(Occupancy.class);
+	private final Occupancy occupancyMeasure = context.mock(Occupancy.class);
+
+	private final int occupancy = 2;
+	private final int capacity = 5;
 
 	private final Link link = linkWithConstructorExpectations();
 
 	@Test
+	public void congestionReturnsValueOfOccupancyDividedByCapacity() throws Exception {
+		defineExpectationsForOccupancyOnCellChain();
+		defineExpectationsForCapacityOnCellChain();
+		assertThat(link.congestion(), is(0.4));
+	}
+
+	@Test
 	public void occupancyReturnsLinkOccupancyObject() throws Exception {
-		occupiedCountExpectations();
+		defineExpectationsForOccupancyOnCellChain();
+		defineExpectationsForCapacityOnCellChain();
+
 		context.checking(new Expectations() {
 			{
-				oneOf(linkCell0).isOccupied(); will(returnValue(true));
-				oneOf(linkCell1).isOccupied(); will(returnValue(false));
-				oneOf(occupancyFactory).create(1, 2); will(returnValue(occupancy));
-				oneOf(linkOccupancyFactory).create(link, occupancy); will(returnValue(linkOccupancy));
+				oneOf(occupancyFactory).create(occupancy, capacity); will(returnValue(occupancyMeasure));
+				oneOf(linkOccupancyFactory).create(link, occupancyMeasure); will(returnValue(linkOccupancy));
 			}
 		});
 		assertThat(link.occupancy(), is(linkOccupancy));
@@ -56,20 +66,23 @@ public class TestLinkImpl {
 	}
 
 	@Test
-	public void linkContainsCellsCorrespondingToInJunctionFollowedByCellsInCellChainFollowedByOutJunction() throws Exception {
-		occupiedCountExpectations();
-
-		assertThat(link.cells(), contains(inJunction, linkCell0, linkCell1, outJunction));
-		assertThat(link, NetworkMatchers.linkHasLength(2));
-	}
-
-	private void occupiedCountExpectations() {
+	public void linkHasLength2() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(cellChain).iterator(); will(returnIterator(linkCell0, linkCell1));
 				oneOf(cellChain).cellCount(); will(returnValue(2));
 			}
 		});
+		assertThat(link, NetworkMatchers.linkHasLength(2));
+	}
+
+	@Test
+	public void linkContainsCellsCorrespondingToInJunctionFollowedByCellsInCellChainFollowedByOutJunction() throws Exception {
+		context.checking(new Expectations() {
+			{
+				oneOf(cellChain).iterator(); will(returnIterator(linkCell0, linkCell1));
+			}
+		});
+		assertThat(link.cells(), contains(inJunction, linkCell0, linkCell1, outJunction));
 	}
 
 	private LinkImpl linkWithConstructorExpectations() {
@@ -79,6 +92,23 @@ public class TestLinkImpl {
 			}
 		});
 		return new LinkImpl(linkOccupancyFactory, occupancyFactory, "myLink", inJunction, cellChainBuilder, outJunction);
+	}
+
+
+	private void defineExpectationsForOccupancyOnCellChain() {
+		context.checking(new Expectations() {
+			{
+				oneOf(cellChain).occupancy(); will(returnValue(occupancy));
+			}
+		});
+	}
+
+	private void defineExpectationsForCapacityOnCellChain() {
+		context.checking(new Expectations() {
+			{
+				oneOf(cellChain).cellCount(); will(returnValue(capacity));
+			}
+		});
 	}
 
 }

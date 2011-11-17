@@ -85,11 +85,7 @@ class LinkImpl implements Link {
 
 	@Override
 	public int occupiedCount() {
-		int occupiedCount = 0;
-		for (final Cell cell : cellChain) {
-			occupiedCount += cell.isOccupied() ? 1 : 0;
-		}
-		return occupiedCount;
+		return cellChain.occupancy();
 	}
 
 	@Override
@@ -101,5 +97,10 @@ class LinkImpl implements Link {
 	@Override
 	public Cell headCell() {
 		return cellChain.lastCell();
+	}
+
+	@Override
+	public double congestion() {
+		return occupiedCount() / (double) cellCount();
 	}
 }

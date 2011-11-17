@@ -33,3 +33,6 @@ http://code.google.com/p/google-guice/wiki/BindingResolution
 - how to treat queue of new vehicles at a junction? like a link? possibly. refactor it into a new type of link? that will simplify the junction logic too.
 - junction is lazyily constructed with incomingLinks. This causes initialisation difficulties for things like lights, controller etc...
 - different types of flow? eg not just probabilistic, but constant, periodic, - actually this could be achieved by temporal pattern. So add temporal patterns other than constant: masked (with aperiod the length of mask?) + sinusoidal (with period, phase).
+- introduce something like a calculator for measures such as congestion? How to do this for different things - like LinkCongestionCalculator, JunctionCongestionCalculator?
+- in TestLinkImpl, tests for getting measures is convoluted. probably because smelly impl.
+

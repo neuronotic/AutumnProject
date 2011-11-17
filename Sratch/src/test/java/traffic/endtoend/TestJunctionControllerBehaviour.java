@@ -1,5 +1,6 @@
 package traffic.endtoend;
 
+import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static traffic.SimulationTime.*;
 
@@ -17,6 +18,7 @@ import traffic.JunctionController;
 import traffic.JunctionControllerImpl;
 import traffic.Link;
 import traffic.LinkBuilder;
+import traffic.MaskedBinaryTemporalPattern;
 import traffic.Network;
 import traffic.NetworkBuilder;
 import traffic.PeriodicDutyCycleStrategy;
@@ -52,28 +54,29 @@ public class TestJunctionControllerBehaviour {
 	@Inject private TimeKeeper timeKeeper;
 	private Junction junction0, junction1, junction2;
 	private Link link0, link1;
-	private int dutyCyclePeriod;
+	private int controllerPeriod;
 
 	@Test
 	public void equisaturation() throws Exception {
-		dutyCyclePeriod = 3;
-		final int stepsBeforeJunctionWithLights = 3;
+		controllerPeriod = 3;
 		final Simulation sim = simulationBuilder( equisaturationController())
 				.withFlowGroup(flowGroupBuilderProvider.get()
-					.withTemporalPattern(new ConstantTemporalPattern(1))
+					.withTemporalPattern(new MaskedBinaryTemporalPattern(timeKeeper, asList(1,1,1,0,0)))
 					.withFlow(flowBuilderProvider.get()
-						.withItinerary(new ItineraryImpl(link0)))
+						.withItinerary(new ItineraryImpl(link0))))
+				.withFlowGroup(flowGroupBuilderProvider.get()
+					.withTemporalPattern(new MaskedBinaryTemporalPattern(timeKeeper, asList(1,0,0,0,0)))
 					.withFlow(flowBuilderProvider.get()
 						.withItinerary(new ItineraryImpl(link1))))
 				.make();
-
-		sim.step(stepsBeforeJunctionWithLights+3*dutyCyclePeriod+1);
-		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction0, dutyCyclePeriod));
+		sim.step(10);
+		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction0, 3));
+		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction2, 2));
 	}
 
 	@Test
 	public void periodicDutyCycleSuccessfullyCyclesGreenLight() throws Exception {
-		dutyCyclePeriod = 3;
+		controllerPeriod = 3;
 		final int stepsBeforeJunctionWithLights = 3;
 
 		final Simulation sim = simulationBuilder( periodicDutyCycleController() )
@@ -82,8 +85,8 @@ public class TestJunctionControllerBehaviour {
 					.withFlow(flowBuilderProvider.get()
 						.withItinerary(new ItineraryImpl(link0))))
 				.make();
-		sim.step(stepsBeforeJunctionWithLights+3*dutyCyclePeriod+1);
-		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction0, dutyCyclePeriod));
+		sim.step(stepsBeforeJunctionWithLights+3*controllerPeriod+1);
+		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction0, controllerPeriod));
 	}
 
 	private SimulationBuilder simulationBuilder(final JunctionController junctionController) {
@@ -131,7 +134,7 @@ public class TestJunctionControllerBehaviour {
 			.make();
 	}
 
-	private JunctionController equisaturationController() { return new JunctionControllerImpl(timeKeeper, new EquisaturationStrategy(), time(dutyCyclePeriod)); }
-	private	JunctionController periodicDutyCycleController() { return new JunctionControllerImpl(timeKeeper, new PeriodicDutyCycleStrategy(), time(dutyCyclePeriod)); }
+	private JunctionController equisaturationController() { return new JunctionControllerImpl(timeKeeper, new EquisaturationStrategy(), time(controllerPeriod)); }
+	private	JunctionController periodicDutyCycleController() { return new JunctionControllerImpl(timeKeeper, new PeriodicDutyCycleStrategy(), time(controllerPeriod)); }
 
 }
