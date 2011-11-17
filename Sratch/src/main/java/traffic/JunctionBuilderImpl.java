@@ -7,21 +7,19 @@ public class JunctionBuilderImpl implements JunctionBuilder {
 
 
 	private String name;
-	private JunctionControllerStrategyBuilder junctionControllerStrategyBuilder;
 	private final JunctionFactory junctionFactory;
+	private JunctionController junctionController;
 
 	@Inject public JunctionBuilderImpl(
 			final JunctionFactory junctionFactory,
-			@Named("defaultJunctionControllerStrategyBuilder") final JunctionControllerStrategyBuilder nullJunctionControllerStrategyBuilder) {
+			@Named("defaultJunctionController") final JunctionController nullJunctionController) {
 		this.junctionFactory = junctionFactory;
-		junctionControllerStrategyBuilder = nullJunctionControllerStrategyBuilder;
+		junctionController = nullJunctionController;
 	}
 
 	@Override
-	public JunctionBuilder withJunctionControllerStrategy(
-			final JunctionControllerStrategyBuilder junctionControllerStrategyBuilder) {
-		this.junctionControllerStrategyBuilder = junctionControllerStrategyBuilder;
-		return this;
+	public Junction make() {
+		return junctionFactory.createJunction(name, junctionController);
 	}
 
 	@Override
@@ -31,7 +29,8 @@ public class JunctionBuilderImpl implements JunctionBuilder {
 	}
 
 	@Override
-	public Junction make() {
-		return junctionFactory.createJunction(name, junctionControllerStrategyBuilder);
+	public JunctionBuilder withController(final JunctionController junctionController) {
+		this.junctionController = junctionController;
+		return this;
 	}
 }

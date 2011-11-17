@@ -25,26 +25,19 @@ public class TestJunctionImpl {
 	private final Occupancy occupancy = context.mock(Occupancy.class);
 	private final OccupancyFactory occupancyFactory = context.mock(OccupancyFactory.class);
 	private final MyEventBus eventBus = context.mock(MyEventBus.class);
-	private final JunctionControllerStrategyBuilder junctionControllerStrategyBuilder = context.mock(JunctionControllerStrategyBuilder.class);
-	private final JunctionControllerStrategy junctionController = context.mock(JunctionControllerStrategy.class);
+	private final JunctionController junctionController = context.mock(JunctionController.class);
 	private final LightsManager lightsManager = context.mock(LightsManager.class);
 
 	private final Junction junction = junction();
 
 	private JunctionImpl junction() {
-		context.checking(new Expectations() {
-			{
-				oneOf(junctionControllerStrategyBuilder).make(with(NetworkMatchers.junctionNamed("myJunction"))); will(returnValue(junctionController));
-			}
-		});
-		return new JunctionImpl(eventBus, junctionOccupancyFactory, occupancyFactory, lightsManager, "myJunction", junctionControllerStrategyBuilder);
+		return new JunctionImpl(eventBus, junctionOccupancyFactory, occupancyFactory, lightsManager, "myJunction", junctionController);
 	}
 
 	private void addIncomingLinkAndSetupExpectations(final Link link) {
 		context.checking(new Expectations() {
 			{
 				oneOf(lightsManager).addIncomingLink(link);
-				oneOf(junctionController).addIncomingLink(link);
 			}
 		});
 		junction.addIncomingLink(link);

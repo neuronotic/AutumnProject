@@ -1,5 +1,7 @@
 package traffic;
 
+import java.util.List;
+
 public interface LightsManager {
 
 	void addIncomingLink(Link link);
@@ -10,5 +12,7 @@ public interface LightsManager {
 	void setGreen(Link link);
 
 	void setAllRed();
+
+	List<Link> linksInOrderAdded();
 
 }

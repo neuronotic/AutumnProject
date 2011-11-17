@@ -1,6 +1,9 @@
 package traffic;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.inject.Inject;
@@ -9,6 +12,7 @@ import com.google.inject.Inject;
 public class LightsManagerImpl implements LightsManager {
 
 	Map<Link, Lights> linkLights = new HashMap<Link, Lights>();
+	List<Link> links = new ArrayList<Link>();
 	private final LightsFactory lightsFactory;
 
 	@Inject LightsManagerImpl(final LightsFactory lightsFactory) {
@@ -18,6 +22,7 @@ public class LightsManagerImpl implements LightsManager {
 	@Override
 	public void addIncomingLink(final Link link) {
 		linkLights.put(link, lightsFactory.create());
+		links.add(link);
 	}
 
 	@Override
@@ -40,6 +45,11 @@ public class LightsManagerImpl implements LightsManager {
 		for (final Link link : linkLights.keySet()) {
 			setRed(link);
 		}
+	}
+
+	@Override
+	public List<Link> linksInOrderAdded() {
+		return Collections.unmodifiableList(links);
 	}
 
 }

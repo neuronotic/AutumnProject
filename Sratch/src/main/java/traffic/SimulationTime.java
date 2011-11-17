@@ -43,4 +43,8 @@ public class SimulationTime {
 	public SimulationTime differenceBetween(final SimulationTime other) {
 		return time(time - other.time);
 	}
+
+	public boolean isHarmonicOf(final SimulationTime period) {
+		return time % period.value() == 0;
+	}
 }

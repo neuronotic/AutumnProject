@@ -7,17 +7,19 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import traffic.ConstantTemporalPattern;
+import traffic.EquisaturationStrategy;
 import traffic.FlowBuilder;
 import traffic.FlowGroupBuilder;
 import traffic.ItineraryImpl;
 import traffic.Junction;
 import traffic.JunctionBuilder;
-import traffic.JunctionControllerStrategyBuilder;
-import traffic.JunctionFactory;
+import traffic.JunctionController;
+import traffic.JunctionControllerImpl;
 import traffic.Link;
 import traffic.LinkBuilder;
 import traffic.Network;
 import traffic.NetworkBuilder;
+import traffic.PeriodicDutyCycleStrategy;
 import traffic.Simulation;
 import traffic.SimulationBuilder;
 import traffic.SimulationMatchers;
@@ -28,7 +30,6 @@ import com.google.guiceberry.GuiceBerryModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.name.Named;
 
 public class TestJunctionControllerBehaviour {
 	public static class TrafficTestModule extends AbstractModule {
@@ -40,9 +41,6 @@ public class TestJunctionControllerBehaviour {
 	};
 	@Rule public MyGuiceBerryRule guiceBerry = new MyGuiceBerryRule();
 
-	@Inject private JunctionFactory junctionFactory;
-	@Inject @Named("PeriodicDutyCycleBuilder") private Provider<JunctionControllerStrategyBuilder> periodicDutyCycleBuilderProvider;
-	@Inject @Named("EquisaturationBuilder") private Provider<JunctionControllerStrategyBuilder> equisaturationBuilderProvider;
 
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 	@Inject private Provider<FlowGroupBuilder> flowGroupBuilderProvider;
@@ -57,10 +55,10 @@ public class TestJunctionControllerBehaviour {
 	private int dutyCyclePeriod;
 
 	@Test
-	public void equiSaturation() throws Exception {
+	public void equisaturation() throws Exception {
 		dutyCyclePeriod = 3;
 		final int stepsBeforeJunctionWithLights = 3;
-		final Simulation sim = simulationBuilder( equisaturationBuilderProvider.get().withPeriod(time(dutyCyclePeriod)))
+		final Simulation sim = simulationBuilder( equisaturationController())
 				.withFlowGroup(flowGroupBuilderProvider.get()
 					.withTemporalPattern(new ConstantTemporalPattern(1))
 					.withFlow(flowBuilderProvider.get()
@@ -78,7 +76,7 @@ public class TestJunctionControllerBehaviour {
 		dutyCyclePeriod = 3;
 		final int stepsBeforeJunctionWithLights = 3;
 
-		final Simulation sim = simulationBuilder( periodicDutyCycleBuilderProvider.get().withPeriod(time(dutyCyclePeriod)) )
+		final Simulation sim = simulationBuilder( periodicDutyCycleController() )
 				.withFlowGroup(flowGroupBuilderProvider.get()
 					.withTemporalPattern(new ConstantTemporalPattern(1))
 					.withFlow(flowBuilderProvider.get()
@@ -88,13 +86,13 @@ public class TestJunctionControllerBehaviour {
 		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction0, dutyCyclePeriod));
 	}
 
-	private SimulationBuilder simulationBuilder(final JunctionControllerStrategyBuilder controllerStrategy) {
+	private SimulationBuilder simulationBuilder(final JunctionController junctionController) {
 		return simulationBuilderProvider.get()
-				.withNetwork(createNetwork(controllerStrategy));
+				.withNetwork(createNetwork(junctionController));
 	}
 
-	private Network createNetwork(final JunctionControllerStrategyBuilder controllerStrategy) {
-		createJunctions(controllerStrategy);
+	private Network createNetwork(final JunctionController junctionController) {
+		createJunctions(junctionController);
 		createLinks();
 		return networkBuilderProvider.get()
 			.withLink(link0)
@@ -120,7 +118,7 @@ public class TestJunctionControllerBehaviour {
 		return linkBuilderProvider.get();
 	}
 
-	private void createJunctions(final JunctionControllerStrategyBuilder controllerStrategy) {
+	private void createJunctions(final JunctionController junctionController) {
 		junction0 = junctionBuilderProvider.get()
 			.withName("junction0")
 			.make();
@@ -129,7 +127,11 @@ public class TestJunctionControllerBehaviour {
 			.make();
 		junction1 = junctionBuilderProvider.get()
 			.withName("junction1")
-			.withJunctionControllerStrategy( controllerStrategy)
+			.withController( junctionController)
 			.make();
 	}
+
+	private JunctionController equisaturationController() { return new JunctionControllerImpl(timeKeeper, new EquisaturationStrategy(), time(dutyCyclePeriod)); }
+	private	JunctionController periodicDutyCycleController() { return new JunctionControllerImpl(timeKeeper, new PeriodicDutyCycleStrategy(), time(dutyCyclePeriod)); }
+
 }

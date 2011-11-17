@@ -35,8 +35,7 @@ public class TrafficModule extends AbstractModule {
 		bind(JunctionOccupancyBuilder.class).to(JunctionOccupancyBuilderImpl.class);
 		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
 		bind(Flow.class).annotatedWith(Names.named("null")).to(NullFlow.class);
-		bind(JunctionControllerStrategyBuilder.class).annotatedWith(Names.named("defaultJunctionControllerStrategyBuilder")).to(NullJunctionControllerStrategyBuilder.class);
-		bind(JunctionControllerStrategy.class).annotatedWith(Names.named("nullJunctionControllerStrategy")).to(NullJunctionControllerStrategy.class);
+		bind(JunctionController.class).annotatedWith(Names.named("defaultJunctionController")).to(NullJunctionController.class);
 		bind(Traffic.class).to(TrafficImpl.class);
 		bind(MyRandom.class).to(MyRandomImpl.class);
 		//bind(Itinerary.class).to(ItineraryImpl.class);
@@ -55,22 +54,11 @@ public class TrafficModule extends AbstractModule {
 		bind(DefaultNetworks.class).to(DefaultNetworksImpl.class);
 		bind(NetworkFluxBuilder.class).to(NetworkFluxBuilderImpl.class);
 		bind(NetworkOccupancyTimeSeries.class).to(NetworkOccupancyTimeSeriesImpl.class);
-		bind(JunctionControllerStrategyBuilder.class).annotatedWith(Names.named("PeriodicDutyCycleBuilder")).to(PeriodicDutyCycleBuilder.class);
-		bind(JunctionControllerStrategyBuilder.class).annotatedWith(Names.named("EquisaturationBuilder")).to(EquisaturationBuilder.class);
 		bind(LightsManager.class).to(LightsManagerImpl.class);
 
 		install(new FactoryModuleBuilder()
 			.implement(Lights.class, LightsImpl.class)
 			.build(LightsFactory.class));
-
-		install(new FactoryModuleBuilder()
-			.implement(JunctionControllerStrategy.class, PeriodicDutyCycle.class)
-			.build(PeriodicDutyCycleFactory.class));
-
-		install(new FactoryModuleBuilder()
-			.implement(JunctionControllerStrategy.class, Equisaturation.class)
-			.build(EquisaturationFactory.class));
-
 
 		install(new FactoryModuleBuilder()
 			.implement(NetworkFluxBuilder.class, NetworkFluxBuilderImpl.class)

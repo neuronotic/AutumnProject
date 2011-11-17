@@ -21,7 +21,7 @@ class JunctionImpl implements Junction {
 	private final List<Link> outgoingLinks = new ArrayList<Link>();
 
 	private final JunctionOccupancyFactory junctionOccupancyFactory;
-	private final JunctionControllerStrategy junctionController;
+	private final JunctionController junctionController;
 	private final OccupancyFactory occupancyFactory;
 	private final LightsManager lightsManager;
 	private final MyEventBus eventBus;
@@ -34,12 +34,12 @@ class JunctionImpl implements Junction {
 			final OccupancyFactory occupancyFactory,
 			final LightsManager lightsManager,
 			@Assisted final String name,
-			@Assisted final JunctionControllerStrategyBuilder junctionControllerStrategyBuilder) {
+			@Assisted final JunctionController junctionController) {
 		this.eventBus = eventBus;
 		this.junctionOccupancyFactory = junctionOccupancyFactory;
 		this.occupancyFactory = occupancyFactory;
 		this.name = name;
-		junctionController = junctionControllerStrategyBuilder.make(this);
+		this.junctionController = junctionController;
 		this.lightsManager = lightsManager;
 	}
 
@@ -108,7 +108,7 @@ class JunctionImpl implements Junction {
 	public void addIncomingLink(final Link link) {
 		incomingLinks.add(link);
 		lightsManager.addIncomingLink(link);
-		junctionController.addIncomingLink(link);
+		//junctionController.addIncomingLink(link);
 	}
 
 	@Override
