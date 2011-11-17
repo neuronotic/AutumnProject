@@ -18,25 +18,25 @@ public class TestVehicleManagerImpl {
 
 
 	@Test
-	public void vehiclesSuppliedByMultipleJourneyStartedMessagesAreStepped() throws Exception {
-		setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle0();
-		setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle1();
-		setExpectationForStepForVehicle(vehicle0);
-		setExpectationForStepForVehicle(vehicle1);
+	public void stepDelegatesCallToVehiclesForWhichJourneyStartedMessagesReceived() throws Exception {
+		receiveJourneyStartedMessageFor(vehicle0);
+		receiveJourneyStartedMessageFor(vehicle1);
+		defineExpectationsForSteping(vehicle0);
+		defineExpectationsForSteping(vehicle1);
 		vehicleManager.step();
 	}
 
 	@Test
 	public void managerCanBeSteppedMultipleTimes() throws Exception {
-		setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle0();
-		setExpectationForStepForVehicle(vehicle0);
-		setExpectationForStepForVehicle(vehicle0);
+		receiveJourneyStartedMessageFor(vehicle0);
+		defineExpectationsForSteping(vehicle0);
+		defineExpectationsForSteping(vehicle0);
 		vehicleManager.step(2);
 	}
 
 	@Test
-	public void journeyEndedResultsInVehicleNoLongerBeingStepped() throws Exception {
-		setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle0();
+	public void vehicleIsNoLongerSteppedWhenJourneyEndedMessageReceivedAboutIt() throws Exception {
+		receiveJourneyStartedMessageFor(vehicle0);
 		context.checking(new Expectations() {
 			{
 				oneOf(journeyEndedMessage).vehicle(); will(returnValue(vehicle0));
@@ -52,25 +52,16 @@ public class TestVehicleManagerImpl {
 		vehicleManager.step();
 	}
 
-	private void setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle1() {
+	private void receiveJourneyStartedMessageFor(final Vehicle vehicle) {
 		context.checking(new Expectations() {
 			{
-				oneOf(journeyStartedMessage).vehicle(); will(returnValue(vehicle1));
+				oneOf(journeyStartedMessage).vehicle(); will(returnValue(vehicle));
 			}
 		});
 		vehicleManager.journeyStarted(journeyStartedMessage);
 	}
 
-	private void setExpectationsForAndReceiveJourneyStartedNotificationAboutVehicle0() {
-		context.checking(new Expectations() {
-			{
-				oneOf(journeyStartedMessage).vehicle(); will(returnValue(vehicle0));
-			}
-		});
-		vehicleManager.journeyStarted(journeyStartedMessage);
-	}
-
-	private void setExpectationForStepForVehicle(final Vehicle vehicle) {
+	private void defineExpectationsForSteping(final Vehicle vehicle) {
 		context.checking(new Expectations() {
 			{
 				oneOf(vehicle).step();
