@@ -8,7 +8,6 @@ public interface VehicleManager {
 
 	void step();
 
-	void step(int i);
 	void journeyEnded(JourneyEndedMessage journeyEndedMessage);
 	void journeyStarted(JourneyStartedMessage journeyStartedMessage);
 }

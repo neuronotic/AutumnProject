@@ -12,22 +12,22 @@ class VehicleManagerImpl implements VehicleManager {
 
 	private final List<Vehicle> vehicles = new ArrayList<Vehicle>();
 
+	private final VehicleUpdateOrdering vehicleUpdateOrder;
+
 	@Inject
-	public VehicleManagerImpl() {
+	public VehicleManagerImpl(final VehicleUpdateOrdering vehicleUpdateOrder) {
+		this.vehicleUpdateOrder = vehicleUpdateOrder;
 	}
 
 	@Override
 	public void step() {
-		//logger.info(String.format(" VEHICLEMANAGER: %s", vehicles));
-		for (final Vehicle vehicle : new ArrayList<Vehicle>(vehicles)) {
+		for (final Vehicle vehicle : vehicleUpdateOrder.vehicleSequence(vehicles)) {
 			vehicle.step();
 		}
-	}
-
-	public void step(final int steps) {
-		for (int j = 0; j < steps; j++) {
-			step();
-		}
+		//logger.info(String.format(" VEHICLEMANAGER: %s", vehicles));
+		//for (final Vehicle vehicle : new ArrayList<Vehicle>(vehicles)) {
+		//	vehicle.step();
+		//}
 	}
 
 	@Override

@@ -30,7 +30,7 @@ public class TrafficModule extends AbstractModule {
 			            return true;
 			         }
 			      }, new EventBusTypeListener(eventBus));
-
+		bind(VehicleUpdateOrdering.class).to(VehicleUpdateOrderingUnmodified.class);  //how to split this, so one for tests, other for real maccoy?
 		bind(NetworkOccupancyBuilder.class).to(NetworkOccupancyBuilderImpl.class);
 		bind(JunctionOccupancyBuilder.class).to(JunctionOccupancyBuilderImpl.class);
 		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
