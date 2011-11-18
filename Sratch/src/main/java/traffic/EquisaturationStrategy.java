@@ -22,7 +22,7 @@ public class EquisaturationStrategy implements JunctionControllerStrategy {
 		lightsManager.setAllRed();
 		lightsManager.setGreen(linkWithHighestCongestion);
 
-		//logger.info(String.format("Equisaturation, lightsManager state: %s  , link with highest congestion: %s with cong: %s", lightsManager, linkWithHighestCongestion.name(), linkWithHighestCongestion.congestion()));
+		logger.info(String.format("Equisaturation, lightsManager state: %s  , link with highest congestion: %s with cong: %s", lightsManager, linkWithHighestCongestion.name(), linkWithHighestCongestion.congestion()));
 
 
 	}

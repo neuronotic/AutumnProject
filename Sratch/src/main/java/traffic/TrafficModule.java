@@ -11,9 +11,7 @@ public class TrafficModule extends AbstractModule {
 		install(new TrafficModuleProduction());
 	}
 
-
 	public static void main(final String args[]) {
 		Guice.createInjector(new TrafficModule()).getInstance(Traffic.class).start(args);
 	}
-
 }

@@ -62,7 +62,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 	}
 
 	private void leaveCurrentLocationAndUpdateTo(final Vehicle vehicle, final Cell cell) {
-		logger.info(String.format("---changeLocation SUCCESS of %s to %s", vehicle, cell));
+		//logger.info(String.format("---changeLocation SUCCESS of %s to %s", vehicle, cell));
 		leaveCurrentLocation();
 		currentLocation = cell;
 	}
@@ -77,7 +77,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 
 	@Override
 	public void journeyEnded(final Vehicle vehicle) {
-		logger.info(String.format("__JOURNEY ENDED__ for %s", vehicle));
+		//logger.info(String.format("__JOURNEY ENDED__ for %s", vehicle));
 		leaveCurrentLocation();
 		journeyHistoryBuilder.noteEndTime();
 		eventBus.post(journeyEndedMessageFactory.create(vehicle, journeyHistoryBuilder.make(vehicle)));

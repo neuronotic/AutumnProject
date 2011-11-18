@@ -1,7 +1,6 @@
-package traffic;
+package traffic.graphing;
 
 import java.awt.Color;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,7 +9,6 @@ import java.util.Map;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
@@ -22,11 +20,20 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
+import traffic.JourneyHistory;
+import traffic.Junction;
+import traffic.JunctionOccupancy;
+import traffic.Link;
+import traffic.LinkOccupancy;
+import traffic.Network;
+import traffic.NetworkOccupancy;
+import traffic.NetworkOccupancyTimeSeries;
+
 public class MyGraphing extends ApplicationFrame {
 	String historyLocation = "/home/daz/output/history.jpg";
 	String congestionLocation = "/home/daz/output/congestion.jpg";
 
-	MyGraphing(final String title, final Network network, final NetworkOccupancyTimeSeries networkOccupancyTimeSeries) {
+	public MyGraphing(final String title, final Network network, final NetworkOccupancyTimeSeries networkOccupancyTimeSeries) {
 		super(title);
 		final XYSeriesCollection dataset = createLinkCongestionDataSeries(network.links(), networkOccupancyTimeSeries);
 		final JFreeChart chart = createChartWithRange1("Congestion on links", "time", "congestion", dataset);
@@ -37,28 +44,36 @@ public class MyGraphing extends ApplicationFrame {
 	    pack();
 		RefineryUtilities.positionFrameRandomly(this);
         setVisible(true);
-        try {
-        	ChartUtilities.saveChartAsJPEG(new File(congestionLocation), chart, 1024, 768);
-        } catch (final Exception e) {
-        	System.out.println("error making chart");
-        }
+//        try {
+//        	ChartUtilities.saveChartAsJPEG(new File(congestionLocation), chart, 1024, 768);
+//        } catch (final Exception e) {
+//        	System.out.println("error making chart");
+//        }
 	}
 
 	public MyGraphing(final String title, final List<JourneyHistory> journeyHistories) {
 		super(title);
 		final XYSeriesCollection dataset = createJourneyTimeDataSeries(journeyHistories);
-		final JFreeChart chart = createChart("Journey durations", "end time", "duration", dataset);
+		final JFreeChart chart = createChart("Journey durations at time points where a journey ended on each flow", "Simulation time at which journey ended", "duration", dataset);
+
+		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        renderer.setSeriesLinesVisible(0, false);
+        renderer.setSeriesShapesVisible(0, true);
+        renderer.setSeriesLinesVisible(1, false);
+        renderer.setSeriesShapesVisible(1, true);
+		chart.getXYPlot().setRenderer(renderer);
+
 	    final ChartPanel chartPanel = new ChartPanel(chart);
 	    chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
 	    setContentPane(chartPanel);
 	    pack();
-		RefineryUtilities.centerFrameOnScreen(this);
-        setVisible(true);
-        try {
-        	ChartUtilities.saveChartAsJPEG(new File(historyLocation), chart, 1024, 768);
-        } catch (final Exception e) {
-        	System.out.println("error making chart");
-        }
+		RefineryUtilities.positionFrameRandomly(this);
+	    setVisible(true);
+//        try {
+//        	ChartUtilities.saveChartAsJPEG(new File(historyLocation), chart, 1024, 768);
+//        } catch (final Exception e) {
+//        	System.out.println("error making chart");
+//        }
 	}
 
 	private XYSeriesCollection createJourneyTimeDataSeries(
@@ -114,8 +129,6 @@ public class MyGraphing extends ApplicationFrame {
 		return dataset;
 	}
 
-
-
 	private List<Double> linkCongestionTimeSeries(final Link link,
 			final NetworkOccupancyTimeSeries networkOccupancyTimeSeries) {
 		final List<Double> congestions = new ArrayList<Double>();
@@ -135,8 +148,6 @@ public class MyGraphing extends ApplicationFrame {
 		}
 		return congestions;
 	}
-
-
 
 	private JFreeChart createChartWithRange1(final String title, final String xAxisLabel, final String yAxisLabel, final XYDataset dataset) {
 		final JFreeChart chart = createChart(title, xAxisLabel, yAxisLabel, dataset);
@@ -168,15 +179,16 @@ public class MyGraphing extends ApplicationFrame {
         plot.setRangeGridlinePaint(Color.white);
 
         final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesLinesVisible(0, false);
-        renderer.setSeriesShapesVisible(1, false);
+        //renderer.setSeriesLinesVisible(0, false);
+        //renderer.setSeriesShapesVisible(1, false);
 //        renderer.setSeriesShapesVisible(2, false);
 //        renderer.setSeriesShapesVisible(3, false);
-        plot.setRenderer(renderer);
+      //  plot.setRenderer(renderer);
 
         // change the auto tick unit selection to integer units only...
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
         // OPTIONAL CUSTOMISATION COMPLETED.
 
         return chart;

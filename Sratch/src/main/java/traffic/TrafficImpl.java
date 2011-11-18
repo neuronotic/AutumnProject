@@ -1,5 +1,7 @@
 package traffic;
 
+import traffic.graphing.MyGraphing;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -28,17 +30,16 @@ public class TrafficImpl implements Traffic {
 				.withTemporalPattern(new ConstantTemporalPattern(1))
 				.withFlow(flowBuilderProvider.get()
 						.withItinerary(new ItineraryImpl(network.linkNamed("link0"), network.linkNamed("link1")))
-						.withProbability(0.80))
+						.withProbability(0.30))
 				.withFlow(flowBuilderProvider.get()
 						.withItinerary(new ItineraryImpl(network.linkNamed("link2"), network.linkNamed("link1")))
-						.withProbability(0.05)) )
+						.withProbability(0.2)) )
 			.make();
 
 		sim.step(200);
 
 		new MyGraphing("congestion", network, sim.statistics().networkOccupancy());
 		new MyGraphing("jounrey times", sim.statistics().getEndedJourneyHistories());
-
 	}
 
 }

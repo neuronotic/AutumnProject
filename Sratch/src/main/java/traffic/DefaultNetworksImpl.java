@@ -7,30 +7,31 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 	private final JunctionBuilder junctionBuilder;
 	private final NetworkBuilderFactory networkBuilderFactory;
 	private final LinkBuilderFactory linkBuilderFactory;
+	private final TimeKeeper timeKeeper;
 
-	@Inject DefaultNetworksImpl(final JunctionBuilder junctionBuilder, final LinkBuilderFactory linkBuilderFactory, final NetworkBuilderFactory networkBuilderFactory) {
+	@Inject DefaultNetworksImpl(final TimeKeeper timeKeeper, final JunctionBuilder junctionBuilder, final LinkBuilderFactory linkBuilderFactory, final NetworkBuilderFactory networkBuilderFactory) {
+		this.timeKeeper = timeKeeper;
 		this.junctionBuilder = junctionBuilder;
 		this.linkBuilderFactory = linkBuilderFactory;
 		this.networkBuilderFactory = networkBuilderFactory;
 	}
 
 	@Override
-	public Network reverseE() {
-		// TODO Auto-generated method stub
-		return null;
-
-	}
-
-	@Override
 	public Network xNetwork4Link() {
 		Junction junction0, junction1, junction2, junction3, junction4;
 		junction0 = junctionBuilder.withName("junction0").make();
-		junction1 = junctionBuilder.withName("junction1").make();
 		junction2 = junctionBuilder.withName("junction2").make();
 		junction3 = junctionBuilder.withName("junction3").make();
 		junction4 = junctionBuilder.withName("junction4").make();
 
-		final int linkLength = 5;
+		junction1 = junctionBuilder
+				.withController(new JunctionControllerImpl(timeKeeper, new PeriodicDutyCycleStrategy(), SimulationTime.time(5)))
+				//.withController(new JunctionControllerImpl(timeKeeper, new EquisaturationStrategy(), SimulationTime.time(5)))
+				.withName("junction1")
+				.make();
+
+
+		final int linkLength = 10;
 
 		return networkBuilder()
 			.withLink( link()
