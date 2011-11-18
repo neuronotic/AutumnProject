@@ -20,7 +20,6 @@ public class TrafficImpl implements Traffic {
 	@Override
 	public void start(final String[] args) {
 
-
 		final Network network = defaultNetworks.xNetwork4Link();
 
 		final Simulation sim = simulationBuilder

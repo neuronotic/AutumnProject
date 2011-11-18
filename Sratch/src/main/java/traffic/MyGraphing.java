@@ -168,8 +168,8 @@ public class MyGraphing extends ApplicationFrame {
         plot.setRangeGridlinePaint(Color.white);
 
         final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-      //  renderer.setSeriesLinesVisible(0, false);
-       // renderer.setSeriesShapesVisible(1, false);
+        renderer.setSeriesLinesVisible(0, false);
+        renderer.setSeriesShapesVisible(1, false);
 //        renderer.setSeriesShapesVisible(2, false);
 //        renderer.setSeriesShapesVisible(3, false);
         plot.setRenderer(renderer);

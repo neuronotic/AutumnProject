@@ -25,30 +25,16 @@ import traffic.NetworkBuilder;
 import traffic.NullCell;
 import traffic.Simulation;
 import traffic.SimulationBuilder;
-import traffic.TrafficModule;
 import traffic.Vehicle;
 import traffic.VehicleBuilder;
 
-import com.google.guiceberry.GuiceBerryModule;
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 public class TestVehicleJourneys {
 	@Inject Logger logger = Logger.getAnonymousLogger();
-
-	public static class TrafficTestModule extends AbstractModule {
-		@Override
-		protected void configure() {
-			install(new GuiceBerryModule());
-			install(new TrafficModule());
-		}
-	};
-
-	//@Rule public GuiceBerryRule guiceBerry = new GuiceBerryRule(TrafficTestModule.class);
 	@Rule public MyGuiceBerryRule guiceBerry = new MyGuiceBerryRule();
 
-	ConstantTemporalPattern constantTemporalPattern = new ConstantTemporalPattern(1);
 	@Inject private Provider<VehicleBuilder> vehicleBuilderProvider;
 	@Inject private Provider<LinkBuilder> linkBuilderProvider;
 	@Inject private Provider<JunctionBuilder> junctionBuilderProvider;
@@ -71,7 +57,7 @@ public class TestVehicleJourneys {
 		createNetwork();
 		final Simulation sim = simulationBuilder()
 				.withFlowGroup(flowGroupBuilderProvider.get()
-						.withTemporalPattern(constantTemporalPattern)
+						.withTemporalPattern(new ConstantTemporalPattern(1))
 						.withFlow(flowBuilderProvider.get()
 								.withItinerary(new ItineraryImpl(link0, link2))
 								.withProbability(1.0)))

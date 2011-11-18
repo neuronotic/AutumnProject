@@ -26,23 +26,12 @@ import traffic.Simulation;
 import traffic.SimulationBuilder;
 import traffic.SimulationMatchers;
 import traffic.TimeKeeper;
-import traffic.TrafficModule;
 
-import com.google.guiceberry.GuiceBerryModule;
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 public class TestJunctionControllerBehaviour {
-	public static class TrafficTestModule extends AbstractModule {
-		@Override
-		protected void configure() {
-			install(new GuiceBerryModule());
-			install(new TrafficModule());
-		}
-	};
 	@Rule public MyGuiceBerryRule guiceBerry = new MyGuiceBerryRule();
-
 
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 	@Inject private Provider<FlowGroupBuilder> flowGroupBuilderProvider;

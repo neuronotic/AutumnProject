@@ -4,7 +4,7 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
-import traffic.TrafficModule;
+import traffic.TrafficModuleCommon;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -19,7 +19,7 @@ public class MyGuiceBerryRule implements MethodRule
          @Override
          public void evaluate() throws Throwable
          {
-            final Injector injector = Guice.createInjector(new TrafficModule());
+            final Injector injector = Guice.createInjector(new TrafficModuleCommon(), new TrafficModuleTestSpecific());
 
             injector.injectMembers(target);
 

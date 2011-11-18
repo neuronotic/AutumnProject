@@ -24,10 +24,6 @@ class VehicleManagerImpl implements VehicleManager {
 		for (final Vehicle vehicle : vehicleUpdateOrder.vehicleSequence(vehicles)) {
 			vehicle.step();
 		}
-		//logger.info(String.format(" VEHICLEMANAGER: %s", vehicles));
-		//for (final Vehicle vehicle : new ArrayList<Vehicle>(vehicles)) {
-		//	vehicle.step();
-		//}
 	}
 
 	@Override

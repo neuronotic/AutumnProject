@@ -27,22 +27,11 @@ import traffic.Occupancy;
 import traffic.OccupancyFactory;
 import traffic.Simulation;
 import traffic.SimulationBuilder;
-import traffic.TrafficModule;
 
-import com.google.guiceberry.GuiceBerryModule;
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 public class TestNetworkMeasures {
-
-	public static class TrafficTestModule extends AbstractModule {
-		@Override
-		protected void configure() {
-			install(new GuiceBerryModule());
-			install(new TrafficModule());
-		}
-	};
 	@Rule public MyGuiceBerryRule guiceBerry = new MyGuiceBerryRule();
 
 	@Inject private LinkOccupancyFactory linkOccupancyFactory;
