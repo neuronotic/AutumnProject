@@ -21,8 +21,6 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 import traffic.JourneyHistory;
-import traffic.Junction;
-import traffic.JunctionOccupancy;
 import traffic.Link;
 import traffic.LinkOccupancy;
 import traffic.Network;
@@ -30,6 +28,7 @@ import traffic.NetworkOccupancy;
 import traffic.NetworkOccupancyTimeSeries;
 
 public class MyGraphing extends ApplicationFrame {
+	private static final long serialVersionUID = 1L;
 	String historyLocation = "/home/daz/output/history.jpg";
 	String congestionLocation = "/home/daz/output/congestion.jpg";
 
@@ -113,38 +112,12 @@ public class MyGraphing extends ApplicationFrame {
 		return dataset;
 	}
 
-	private XYSeriesCollection createJunctionCongestionDataSeries(final Collection<Junction> junctions,
-			final NetworkOccupancyTimeSeries occupancyTimeSeries) {
-		final XYSeriesCollection dataset = new XYSeriesCollection();
-		XYSeries series;
-		int time = 0;
-		for (final Junction junction : junctions) {
-			series = new XYSeries(junction.name());
-			time = 0;
-			for (final Double junctionCongestionValue : junctionCongestionTimeSeries(junction, occupancyTimeSeries)) {
-				series.add(time++, junctionCongestionValue);
-			}
-			dataset.addSeries(series);
-		}
-		return dataset;
-	}
-
 	private List<Double> linkCongestionTimeSeries(final Link link,
 			final NetworkOccupancyTimeSeries networkOccupancyTimeSeries) {
 		final List<Double> congestions = new ArrayList<Double>();
 		for (final NetworkOccupancy networkOccupancy : networkOccupancyTimeSeries.networkOccupancies()) {
 			final LinkOccupancy linkOccupancy = networkOccupancy.occupancyFor(link);
 			congestions.add(Double.valueOf((double) linkOccupancy.occupancy()/ (double) linkOccupancy.capacity()));
-		}
-		return congestions;
-	}
-
-	private List<Double> junctionCongestionTimeSeries(final Junction junction,
-			final NetworkOccupancyTimeSeries networkOccupancyTimeSeries) {
-		final List<Double> congestions = new ArrayList<Double>();
-		for (final NetworkOccupancy networkOccupancy : networkOccupancyTimeSeries.networkOccupancies()) {
-			final JunctionOccupancy junctionOccupancy = networkOccupancy.occupancyFor(junction);
-			congestions.add(Double.valueOf((double) junctionOccupancy.totalOccupancy()/ (double) junctionOccupancy.totalCapacity()));
 		}
 		return congestions;
 	}
@@ -177,13 +150,6 @@ public class MyGraphing extends ApplicationFrame {
         //plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
         plot.setDomainGridlinePaint(Color.white);
         plot.setRangeGridlinePaint(Color.white);
-
-        final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        //renderer.setSeriesLinesVisible(0, false);
-        //renderer.setSeriesShapesVisible(1, false);
-//        renderer.setSeriesShapesVisible(2, false);
-//        renderer.setSeriesShapesVisible(3, false);
-      //  plot.setRenderer(renderer);
 
         // change the auto tick unit selection to integer units only...
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();

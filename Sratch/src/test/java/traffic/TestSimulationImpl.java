@@ -19,7 +19,6 @@ public class TestSimulationImpl {
 	private final FlowGroup flowGroup1 = context.mock(FlowGroup.class, "flowGroup1");
 	private final VehicleManager vehicleManager = context.mock(VehicleManager.class);
 	private final VehicleCreatorFactory vehicleCreationManagerFactory = context.mock(VehicleCreatorFactory.class);
-	private final JourneyHistory journeyHistory0 = context.mock(JourneyHistory.class, "journeyHistory0");
 	private final VehicleCreator vehicleCreator = context.mock(VehicleCreator.class);
 	private final StatisticsManagerFactory statisticsManagerFactory = context.mock(StatisticsManagerFactory.class);
 	private final StatisticsManager statisticsManager = context.mock(StatisticsManager.class);

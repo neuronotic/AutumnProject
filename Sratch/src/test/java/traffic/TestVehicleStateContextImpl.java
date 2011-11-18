@@ -18,8 +18,6 @@ public class TestVehicleStateContextImpl {
 	private final JourneyHistoryBuilder journeyHistoryBuilder = context.mock(JourneyHistoryBuilder.class);
 	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
 	private final Vehicle vehicle = context.mock(Vehicle.class);
-	private final JourneyStartedMessageFactory journeyStartedMessageFactory = context.mock(JourneyStartedMessageFactory.class);
-	private final JourneyStartedMessage journeyStartedMessage = context.mock(JourneyStartedMessage.class);
 	private final JourneyEndedMessageFactory journeyEndedMessageFactory = context.mock(JourneyEndedMessageFactory.class);
 	private final JourneyEndedMessage journeyEndedMessage = context.mock(JourneyEndedMessage.class);
 	private final VehicleStateContext stateContext =

@@ -24,14 +24,13 @@ public class TestJunctionImpl {
 	private final JunctionOccupancy junctionOccupancy = context.mock(JunctionOccupancy.class);
 	private final Occupancy occupancy = context.mock(Occupancy.class);
 	private final OccupancyFactory occupancyFactory = context.mock(OccupancyFactory.class);
-	private final MyEventBus eventBus = context.mock(MyEventBus.class);
 	private final JunctionController junctionController = context.mock(JunctionController.class);
 	private final LightsManager lightsManager = context.mock(LightsManager.class);
 
 	private final Junction junction = junction();
 
 	private JunctionImpl junction() {
-		return new JunctionImpl(eventBus, junctionOccupancyFactory, occupancyFactory, lightsManager, "myJunction", junctionController);
+		return new JunctionImpl(junctionOccupancyFactory, occupancyFactory, lightsManager, "myJunction", junctionController);
 	}
 
 	private void addIncomingLinkAndSetupExpectations(final Link link) {

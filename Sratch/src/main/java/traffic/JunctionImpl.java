@@ -24,18 +24,15 @@ class JunctionImpl implements Junction {
 	private final JunctionController junctionController;
 	private final OccupancyFactory occupancyFactory;
 	private final LightsManager lightsManager;
-	private final MyEventBus eventBus;
 
 
 	@Inject
 	JunctionImpl(
-			final MyEventBus eventBus,
 			final JunctionOccupancyFactory junctionOccupancyFactory,
 			final OccupancyFactory occupancyFactory,
 			final LightsManager lightsManager,
 			@Assisted final String name,
 			@Assisted final JunctionController junctionController) {
-		this.eventBus = eventBus;
 		this.junctionOccupancyFactory = junctionOccupancyFactory;
 		this.occupancyFactory = occupancyFactory;
 		this.name = name;

@@ -9,10 +9,9 @@ public class TrafficImpl implements Traffic {
 	private final SimulationBuilder simulationBuilder;
 	private final DefaultNetworks defaultNetworks;
 
+	@Inject TimeKeeper timeKeeper;
 	@Inject private Provider<FlowGroupBuilder> flowGroupBuilderProvider;
 	@Inject private Provider<FlowBuilder> flowBuilderProvider;
-
-	private final ConstantTemporalPattern constantTemporalPattern = new ConstantTemporalPattern(1.0);
 
 	@Inject public TrafficImpl(final SimulationBuilder simulationBuilder, final DefaultNetworks defaultNetworks) {
 		this.simulationBuilder = simulationBuilder;
@@ -22,7 +21,7 @@ public class TrafficImpl implements Traffic {
 	@Override
 	public void start(final String[] args) {
 
-		final Network network = defaultNetworks.xNetwork4Link();
+		final Network network = defaultNetworks.xNetwork4Link(new JunctionControllerImpl(timeKeeper, new PeriodicDutyCycleStrategy(), SimulationTime.time(5)));
 
 		final Simulation sim = simulationBuilder
 			.withNetwork(network)
