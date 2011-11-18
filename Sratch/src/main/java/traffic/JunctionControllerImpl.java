@@ -1,5 +1,6 @@
 package traffic;
 
+
 public class JunctionControllerImpl implements JunctionController {
 
 	private final TimeKeeper timeKeeper;

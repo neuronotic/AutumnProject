@@ -12,10 +12,9 @@ public class TestEquisaturationStrategy {
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
 	private final LightsManager lightsManager = context.mock(LightsManager.class);
-	private final Link link0 = context.mock(Link.class, "link0");
-	private final Link link1 = context.mock(Link.class, "link1");
-	private final Link link2 = context.mock(Link.class, "link2");
-
+	private final Link link0 = link("link0");
+	private final Link link1 = link("link1");
+	private final Link link2 = link("link2");
 	private final Sequence lightsChanging = context.sequence("lightsChanging");
 
 	private final JunctionControllerStrategy equisaturationStrategy = new EquisaturationStrategy();
@@ -56,5 +55,15 @@ public class TestEquisaturationStrategy {
 				oneOf(lightsManager).setGreen(link); inSequence(lightsChanging);
 			}
 		});
+	}
+
+	private Link link(final String mockName) {
+		final Link link = context.mock(Link.class, mockName);
+		context.checking(new Expectations() {
+			{
+				allowing(link).name();
+			}
+		});
+		return link;
 	}
 }
