@@ -10,6 +10,7 @@ public class EquisaturationStrategy implements JunctionControllerStrategy {
 
 	@Override
 	public void step(final LightsManager lightsManager) {
+		//logger.info(String.format("Equisaturation controller TOBE stepped"));
 		Link linkWithHighestCongestion = null;
 		double highestCongestion = Double.NEGATIVE_INFINITY;
 
@@ -21,9 +22,7 @@ public class EquisaturationStrategy implements JunctionControllerStrategy {
 		}
 		lightsManager.setAllRed();
 		lightsManager.setGreen(linkWithHighestCongestion);
-
-		logger.info(String.format("Equisaturation, lightsManager state: %s  , link with highest congestion: %s with cong: %s", lightsManager, linkWithHighestCongestion.name(), linkWithHighestCongestion.congestion()));
-
-
+		//logger.info(String.format("Equisaturation controller stepped"));
+		//logger.info(String.format("Equisaturation, lightsManager state: %s  , link with highest congestion: %s with cong: %s", lightsManager, linkWithHighestCongestion.name(), linkWithHighestCongestion.congestion()));
 	}
 }

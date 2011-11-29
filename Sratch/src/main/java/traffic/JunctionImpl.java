@@ -98,7 +98,10 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public void step() {
-		junctionController.step(lightsManager);
+//		logger.info(String.format("%s stepped", name()));
+		if (!incomingLinks.isEmpty()) {
+			junctionController.step(lightsManager);
+		}
 	}
 
 	@Override
@@ -128,6 +131,5 @@ class JunctionImpl implements Junction {
 		}
 		return junctionOccupancyFactory.create(this, occupancy, linkOccupancies);
 	}
-
 
 }

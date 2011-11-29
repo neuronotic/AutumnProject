@@ -8,5 +8,8 @@ public class NullJunctionController implements
 	public void step(final LightsManager lightsManager) {
 	}
 
-
+	@Override
+	public String toString() {
+		return "firstComeFirstServedStrategy";
+	}
 }

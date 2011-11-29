@@ -35,4 +35,5 @@ http://code.google.com/p/google-guice/wiki/BindingResolution
 - different types of flow? eg not just probabilistic, but constant, periodic, - actually this could be achieved by temporal pattern. So add temporal patterns other than constant: masked (with aperiod the length of mask?) + sinusoidal (with period, phase).
 - introduce something like a calculator for measures such as congestion? How to do this for different things - like LinkCongestionCalculator, JunctionCongestionCalculator?
 - in TestLinkImpl, tests for getting measures is convoluted. probably because smelly impl.
+- change NullJunctionController to a strategy and change name to "firstComeFirstServe"?
 

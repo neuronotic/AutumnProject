@@ -23,4 +23,9 @@ public class JunctionControllerImpl implements JunctionController {
 	}
 
 
+	@Override
+	public String toString() {
+		return junctionControllerStrategy.getClass().getSimpleName();
+	}
+
 }

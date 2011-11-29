@@ -4,8 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 public class JunctionBuilderImpl implements JunctionBuilder {
-
-
 	private String name;
 	private final JunctionFactory junctionFactory;
 	private JunctionController junctionController;

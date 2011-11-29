@@ -61,6 +61,7 @@ public class TestJunctionControllerBehaviour {
 		sim.step(10);
 		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction0, 3));
 		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction2, 2));
+
 	}
 
 	@Test
@@ -88,6 +89,7 @@ public class TestJunctionControllerBehaviour {
 		createLinks();
 		return networkBuilderProvider.get()
 			.withLink(link0)
+			.withLink(link1)
 			.make();
 	}
 
@@ -113,9 +115,11 @@ public class TestJunctionControllerBehaviour {
 	private void createJunctions(final JunctionController junctionController) {
 		junction0 = junctionBuilderProvider.get()
 			.withName("junction0")
+			.withController(equisaturationController())
 			.make();
 		junction2 = junctionBuilderProvider.get()
 			.withName("junction2")
+			.withController(equisaturationController())
 			.make();
 		junction1 = junctionBuilderProvider.get()
 			.withName("junction1")

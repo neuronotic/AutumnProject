@@ -5,11 +5,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.google.inject.Inject;
 
 
 public class LightsManagerImpl implements LightsManager {
+	@Inject Logger logger = Logger.getAnonymousLogger();
+	@Inject TimeKeeper timeKeeper;
+
 
 	Map<Link, Lights> linkLights = new HashMap<Link, Lights>();
 	List<Link> links = new ArrayList<Link>();
@@ -37,6 +41,7 @@ public class LightsManagerImpl implements LightsManager {
 
 	@Override
 	public void setGreen(final Link link) {
+		//logger.info(String.format("link %s went green at time %d!", link.name(), timeKeeper.currentTime().value()));
 		linkLights.get(link).setGreen();
 	}
 

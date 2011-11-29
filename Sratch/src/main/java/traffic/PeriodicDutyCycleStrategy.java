@@ -18,7 +18,7 @@ public class PeriodicDutyCycleStrategy implements JunctionControllerStrategy {
 		lightsManager.setAllRed();
 		lightsManager.setGreen(links.get(currentGreenIndex));
 		currentGreenIndex++;
-		logger.info(String.format("PeriodicDutyCycle, lightsManager state: %s", lightsManager));
+		//logger.info(String.format("PeriodicDutyCycle, lightsManager state: %s", lightsManager));
 	}
 
 }

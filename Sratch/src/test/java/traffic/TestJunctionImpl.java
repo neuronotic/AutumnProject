@@ -33,13 +33,16 @@ public class TestJunctionImpl {
 		return new JunctionImpl(junctionOccupancyFactory, occupancyFactory, lightsManager, "myJunction", junctionController);
 	}
 
-	private void addIncomingLinkAndSetupExpectations(final Link link) {
+	@Test
+	public void stepOnlyDelegatedToControllerWhenThereAreIncomingLinks() throws Exception {
+		junction.step();
+		addIncomingLinkAndSetupExpectations(link1);
 		context.checking(new Expectations() {
 			{
-				oneOf(lightsManager).addIncomingLink(link);
+				oneOf(junctionController).step(lightsManager);
 			}
 		});
-		junction.addIncomingLink(link);
+		junction.step();
 	}
 
 	@Test
@@ -95,13 +98,12 @@ public class TestJunctionImpl {
 		assertThat(junction, isJunctionCalled("myJunction"));
 	}
 
-	@Test
-	public void stepDelegatesToController() throws Exception {
+	private void addIncomingLinkAndSetupExpectations(final Link link) {
 		context.checking(new Expectations() {
 			{
-				oneOf(junctionController).step(lightsManager);
+				oneOf(lightsManager).addIncomingLink(link);
 			}
 		});
-		junction.step();
+		junction.addIncomingLink(link);
 	}
 }

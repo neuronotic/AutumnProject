@@ -20,25 +20,33 @@ public class TrafficImpl implements Traffic {
 
 	@Override
 	public void start(final String[] args) {
+		final double flow1probability = 0.40;
+		final double flow2probability = 0.15;
 
-		final Network network = defaultNetworks.xNetwork4Link(new JunctionControllerImpl(timeKeeper, new PeriodicDutyCycleStrategy(), SimulationTime.time(5)));
+		final JunctionController junctionController = new NullJunctionController();
+		//final JunctionController junctionController = new JunctionControllerImpl(timeKeeper, new PeriodicDutyCycleStrategy(), SimulationTime.time(5));
+		//final JunctionController junctionController = new JunctionControllerImpl(timeKeeper, new EquisaturationStrategy(), SimulationTime.time(5));
+
+		//final Network network = defaultNetworks.yNetwork3Link(junctionController);
+		final Network network = defaultNetworks.vNetwork2Link(junctionController);
 
 		final Simulation sim = simulationBuilder
 			.withNetwork(network)
 			.withFlowGroup(flowGroupBuilderProvider.get()
 				.withTemporalPattern(new ConstantTemporalPattern(1))
 				.withFlow(flowBuilderProvider.get()
-						.withItinerary(new ItineraryImpl(network.linkNamed("link0"), network.linkNamed("link1")))
-						.withProbability(0.30))
+						.withItinerary(new ItineraryImpl(network.linkNamed("link0")))//, network.linkNamed("link1")))
+						.withProbability(flow1probability))
 				.withFlow(flowBuilderProvider.get()
-						.withItinerary(new ItineraryImpl(network.linkNamed("link2"), network.linkNamed("link1")))
-						.withProbability(0.2)) )
+						.withItinerary(new ItineraryImpl(network.linkNamed("link1")))//, network.linkNamed("link3")))
+						.withProbability(flow2probability)) )
+
 			.make();
 
-		sim.step(200);
+		sim.step(1500);
 
-		new MyGraphing("congestion", network, sim.statistics().networkOccupancy());
-		new MyGraphing("jounrey times", sim.statistics().getEndedJourneyHistories());
+		new MyGraphing("congestion", network, sim.statistics().networkOccupancy(), junctionController, flow1probability, flow2probability);
+		new MyGraphing("jounrey times", sim.statistics().getEndedJourneyHistories(), junctionController, flow1probability, flow2probability);
 	}
 
 }

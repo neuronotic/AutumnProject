@@ -56,7 +56,7 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 			leaveCurrentLocationAndUpdateTo(vehicle, cell);
 			journeyHistoryBuilder.cellEntered(cell);
 		} else {
-			logger.info(String.format("----change location FAILED for %s to %s", vehicle, cell));
+			//logger.info(String.format("----change location FAILED for %s to %s", vehicle, cell));
 			remainingItinerary.previous();
 		}
 	}

@@ -40,7 +40,7 @@ public class ItineraryImpl implements Itinerary {
 
 	@Override
 	public Junction originJunction() {
-		assert links.size()>0;
+		assert !links.isEmpty();
 		return links.get(0).inJunction();
 	}
 
