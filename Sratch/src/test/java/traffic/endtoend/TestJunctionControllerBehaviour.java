@@ -7,7 +7,6 @@ import static traffic.SimulationTime.*;
 import org.junit.Rule;
 import org.junit.Test;
 
-import traffic.ConstantTemporalPattern;
 import traffic.EquisaturationStrategy;
 import traffic.FlowBuilder;
 import traffic.FlowGroupBuilder;
@@ -19,7 +18,6 @@ import traffic.JunctionControllerImpl;
 import traffic.Link;
 import traffic.LinkBuilder;
 import traffic.MaskedBinaryTemporalPattern;
-import traffic.Network;
 import traffic.NetworkBuilder;
 import traffic.PeriodicDutyCycleStrategy;
 import traffic.Simulation;
@@ -48,7 +46,37 @@ public class TestJunctionControllerBehaviour {
 	@Test
 	public void equisaturation() throws Exception {
 		controllerPeriod = 3;
-		final Simulation sim = simulationBuilder( equisaturationController())
+		junction0 = junction()
+			.withName("junction0")
+			.withController(equisaturationController())
+			.make();
+		junction2 = junction()
+			.withName("junction2")
+			.withController(equisaturationController())
+			.make();
+		junction1 = junction()
+			.withName("junction1")
+			.withController(equisaturationController())
+			.make();
+
+		link0 = link()
+				.withName("link0")
+				.withInJunction(junction0)
+				.withOutJunction(junction1)
+				.withLength(2)
+				.make();
+		link1 = link()
+				.withName("link1")
+				.withInJunction(junction2)
+				.withOutJunction(junction1)
+				.withLength(2)
+				.make();
+
+		final Simulation sim = simulation()
+				.withNetwork( network()
+					.withLink( link0 )
+					.withLink( link1 )
+					.make() )
 				.withFlowGroup(flowGroupBuilderProvider.get()
 					.withTemporalPattern(new MaskedBinaryTemporalPattern(timeKeeper, asList(1,1,1,0,0)))
 					.withFlow(flowBuilderProvider.get()
@@ -64,67 +92,20 @@ public class TestJunctionControllerBehaviour {
 
 	}
 
-	@Test
-	public void periodicDutyCycleSuccessfullyCyclesGreenLight() throws Exception {
-		controllerPeriod = 3;
-		final int stepsBeforeJunctionWithLights = 3;
-
-		final Simulation sim = simulationBuilder( periodicDutyCycleController() )
-				.withFlowGroup(flowGroupBuilderProvider.get()
-					.withTemporalPattern(new ConstantTemporalPattern(1))
-					.withFlow(flowBuilderProvider.get()
-						.withItinerary(new ItineraryImpl(link0))))
-				.make();
-		sim.step(stepsBeforeJunctionWithLights+3*controllerPeriod+1);
-		assertThat(sim, SimulationMatchers.hasJourneyHistoryOriginatingAtJunctionCount(junction0, controllerPeriod));
+	private SimulationBuilder simulation() {
+		return simulationBuilderProvider.get();
 	}
 
-	private SimulationBuilder simulationBuilder(final JunctionController junctionController) {
-		return simulationBuilderProvider.get()
-				.withNetwork(createNetwork(junctionController));
-	}
-
-	private Network createNetwork(final JunctionController junctionController) {
-		createJunctions(junctionController);
-		createLinks();
-		return networkBuilderProvider.get()
-			.withLink(link0)
-			.withLink(link1)
-			.make();
-	}
-
-	private void createLinks() {
-		link0 = link()
-			.withName("link0")
-			.withInJunction(junction0)
-			.withOutJunction(junction1)
-			.withLength(2)
-			.make();
-		link1 = link()
-			.withName("link1")
-			.withInJunction(junction2)
-			.withOutJunction(junction1)
-			.withLength(2)
-			.make();
+	private NetworkBuilder network() {
+		return networkBuilderProvider.get();
 	}
 
 	private LinkBuilder link() {
 		return linkBuilderProvider.get();
 	}
 
-	private void createJunctions(final JunctionController junctionController) {
-		junction0 = junctionBuilderProvider.get()
-			.withName("junction0")
-			.withController(equisaturationController())
-			.make();
-		junction2 = junctionBuilderProvider.get()
-			.withName("junction2")
-			.withController(equisaturationController())
-			.make();
-		junction1 = junctionBuilderProvider.get()
-			.withName("junction1")
-			.withController( junctionController)
-			.make();
+	private JunctionBuilder junction() {
+		return junctionBuilderProvider.get();
 	}
 
 	private JunctionController equisaturationController() { return new JunctionControllerImpl(timeKeeper, new EquisaturationStrategy(), time(controllerPeriod)); }
