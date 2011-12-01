@@ -13,6 +13,7 @@ public class TestJunctionBuilderImpl {
 
 	private final JunctionController junctionController = context.mock(JunctionController.class);
 	private final JunctionController defaultJunctionController = context.mock(JunctionController.class, "defaultJunctionController");
+	private final JunctionControllerBuilder controllerBuilder = context.mock(JunctionControllerBuilder.class);
 	private final JunctionFactory junctionFactory = context.mock(JunctionFactory.class);
 	private final Junction junction = context.mock(Junction.class);
 	private final String junctionName = "myJunction";
@@ -20,7 +21,7 @@ public class TestJunctionBuilderImpl {
 	private final JunctionBuilder junctionBuilder = new JunctionBuilderImpl(junctionFactory, defaultJunctionController);
 
 	@Test
-	public void junctionCreatedWithDefaultJunctionControllerIfWithControllerNotSpecified() throws Exception {
+	public void junctionCreatedWithDefaultJunctionControllerIfControllerBuilderNotSpecified() throws Exception {
 		context.checking(new Expectations() {
 			{
 				oneOf(junctionFactory).createJunction(junctionName, defaultJunctionController); will(returnValue(junction));
@@ -34,10 +35,10 @@ public class TestJunctionBuilderImpl {
 	public void junctionCreatedWithSuppliedDependencies() throws Exception {
 		context.checking(new Expectations() {
 			{
+				oneOf(controllerBuilder).make(); will(returnValue(junctionController));
 				oneOf(junctionFactory).createJunction(junctionName, junctionController); will(returnValue(junction));
 			}
 		});
-		junctionBuilder.withName(junctionName).withController(junctionController);
-		assertThat(junctionBuilder.make(), is(junction));
+		assertThat(junctionBuilder.withName(junctionName).withControllerBuilder(controllerBuilder).make(), is(junction));
 	}
 }

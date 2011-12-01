@@ -1,13 +1,14 @@
 package traffic;
 
 import static java.util.Arrays.*;
+import static traffic.SimulationTime.*;
 
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class TestEquisaturationStrategy {
+public class TestEquisaturationController {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -16,13 +17,26 @@ public class TestEquisaturationStrategy {
 	private final Link link1 = link("link1");
 	private final Link link2 = link("link2");
 	private final Sequence lightsChanging = context.sequence("lightsChanging");
+	private final TimeKeeper timeKeeper = context.mock(TimeKeeper.class);
+	private final SimulationTime period = time(5);
 
-	private final JunctionControllerStrategy equisaturationStrategy = new EquisaturationStrategy();
+	private final JunctionController equisaturationStrategy = new EquisaturationController(timeKeeper, period);
 
 	@Test
-	public void stepChangesLightsToLink2WhenItHasHighestCongestion() throws Exception {
+	public void stepDoesNotChangeLightsIfTimeIsNotHarmonicOfPeriod() throws Exception {
 		context.checking(new Expectations() {
 			{
+				oneOf(timeKeeper).currentTime(); will(returnValue(time(6)));
+			}
+		});
+		equisaturationStrategy.step(lightsManager);
+	}
+
+	@Test
+	public void stepChangesLightsToLink2WhenItHasHighestCongestionIfTimeIsHarmonicOfPeriod() throws Exception {
+		context.checking(new Expectations() {
+			{
+				oneOf(timeKeeper).currentTime(); will(returnValue(time(0)));
 				allowing(lightsManager).linksInOrderAdded(); will(returnValue(asList(link0, link1, link2)));
 				allowing(link0).congestion(); will(returnValue(0.3));
 				allowing(link1).congestion(); will(returnValue(0.1));
@@ -34,9 +48,10 @@ public class TestEquisaturationStrategy {
 	}
 
 	@Test
-	public void stepChangesLightsToLink1WhenItHasHighestCongestion() throws Exception {
+	public void stepChangesLightsToLink1WhenItHasHighestCongestionIfTimeIsHarmonicOfPeriod() throws Exception {
 		context.checking(new Expectations() {
 			{
+				oneOf(timeKeeper).currentTime(); will(returnValue(time(5)));
 				allowing(lightsManager).linksInOrderAdded(); will(returnValue(asList(link0, link1, link2)));
 				allowing(link0).congestion(); will(returnValue(0.3));
 				allowing(link1).congestion(); will(returnValue(0.7));

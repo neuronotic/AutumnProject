@@ -7,7 +7,7 @@ import org.jmock.Sequence;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class TestPeriodicDutyCycleStrategy {
+public class TestDutyCycleController {
 	@Rule
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -18,7 +18,7 @@ public class TestPeriodicDutyCycleStrategy {
 
 	private final Sequence lightsChanging = context.sequence("lightsChanging");
 
-	private final JunctionControllerStrategy periodicDutyCycleStrategy = new PeriodicDutyCycleStrategy();
+	private final JunctionController dutyCycleStrategy = new DutyCycleController();
 
 	@Test
 	public void stepCyclesGreenOverLinks() throws Exception {
@@ -29,16 +29,16 @@ public class TestPeriodicDutyCycleStrategy {
 		});
 
 		specifyExpectationsForLightsGoingGreenFor(link0);
-		periodicDutyCycleStrategy.step(lightsManager);
+		dutyCycleStrategy.step(lightsManager);
 
 		specifyExpectationsForLightsGoingGreenFor(link1);
-		periodicDutyCycleStrategy.step(lightsManager);
+		dutyCycleStrategy.step(lightsManager);
 
 		specifyExpectationsForLightsGoingGreenFor(link2);
-		periodicDutyCycleStrategy.step(lightsManager);
+		dutyCycleStrategy.step(lightsManager);
 
 		specifyExpectationsForLightsGoingGreenFor(link0);
-		periodicDutyCycleStrategy.step(lightsManager);
+		dutyCycleStrategy.step(lightsManager);
 	}
 
 	private void specifyExpectationsForLightsGoingGreenFor(final Link link) {

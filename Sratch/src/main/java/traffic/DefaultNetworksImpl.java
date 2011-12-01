@@ -1,7 +1,5 @@
 package traffic;
 
-import static traffic.SimulationTime.*;
-
 import com.google.inject.Inject;
 
 public class DefaultNetworksImpl implements DefaultNetworks {
@@ -10,7 +8,7 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 	private final NetworkBuilderFactory networkBuilderFactory;
 	private final LinkBuilderFactory linkBuilderFactory;
 	@Inject TimeKeeper timeKeeper;
-	
+
 	@Inject DefaultNetworksImpl(
 			final JunctionBuilder junctionBuilder,
 			final LinkBuilderFactory linkBuilderFactory,
@@ -21,16 +19,18 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 	}
 
 	@Override
-	public Network vNetwork2Link(final JunctionController junctionController) {
+	public Network vNetwork2Link(final JunctionControllerBuilder junctionControllerBuilder) {
 		final Junction junction0, junction1, junction2;
 		junction0 = junctionBuilder
+				.withControllerBuilder(junctionControllerBuilder)
 				.withName("junction0")
 				.make();
 		junction2 = junctionBuilder
+				.withControllerBuilder(junctionControllerBuilder)
 				.withName("junction2")
 				.make();
 		junction1 = junctionBuilder
-				.withController(junctionController)
+				.withControllerBuilder(junctionControllerBuilder)
 				.withName("junction1")
 				.make();
 
@@ -55,7 +55,7 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 	}
 
 	@Override
-	public Network xNetwork4Link(final JunctionController junctionController) {
+	public Network xNetwork4Link(final JunctionControllerBuilder junctionControllerBuilder) {
 		final Junction junction0, junction1, junction2, junction3, junction4;
 		junction0 = junctionBuilder.withName("junction0").make();
 		junction2 = junctionBuilder.withName("junction2").make();
@@ -63,7 +63,7 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 		junction4 = junctionBuilder.withName("junction4").make();
 
 		junction1 = junctionBuilder
-				.withController(junctionController)
+				.withControllerBuilder(junctionControllerBuilder)
 				.withName("junction1")
 				.make();
 
@@ -101,7 +101,7 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 
 
 	@Override
-	public Network yNetwork3Link(final JunctionController junctionController) {
+	public Network yNetwork3Link(final JunctionControllerBuilder junctionControllerBuilder) {
 		final Junction junction0, junction1, junction2, junction3;
 		junction0 = junctionBuilder.withName("junction0").make();
 		junction2 = junctionBuilder.withName("junction2").make();
@@ -109,7 +109,7 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 		//junction4 = junctionBuilder.withName("junction4").make();
 
 		junction1 = junctionBuilder
-				.withController(junctionController)
+				.withControllerBuilder(junctionControllerBuilder)
 				.withName("junction1")
 				.make();
 
@@ -145,5 +145,4 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 	private LinkBuilder link() {
 		return linkBuilderFactory.create();
 	}
-	private	JunctionController periodicDutyCycleController() { return new JunctionControllerImpl(timeKeeper, new PeriodicDutyCycleStrategy(), time(5)); }
 }

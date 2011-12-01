@@ -7,6 +7,7 @@ public class JunctionBuilderImpl implements JunctionBuilder {
 	private String name;
 	private final JunctionFactory junctionFactory;
 	private JunctionController junctionController;
+	private JunctionControllerBuilder controllerBuilder;
 
 	@Inject public JunctionBuilderImpl(
 			final JunctionFactory junctionFactory,
@@ -17,6 +18,9 @@ public class JunctionBuilderImpl implements JunctionBuilder {
 
 	@Override
 	public Junction make() {
+		if (controllerBuilder != null) {
+			junctionController = controllerBuilder.make();
+		}
 		return junctionFactory.createJunction(name, junctionController);
 	}
 
@@ -26,9 +30,16 @@ public class JunctionBuilderImpl implements JunctionBuilder {
 		return this;
 	}
 
+//	@Override
+//	public JunctionBuilder withController(final JunctionController junctionController) {
+//		this.junctionController = junctionController;
+//		return this;
+//	}
+
 	@Override
-	public JunctionBuilder withController(final JunctionController junctionController) {
-		this.junctionController = junctionController;
+	public JunctionBuilder withControllerBuilder(
+			final JunctionControllerBuilder controllerBuilder) {
+		this.controllerBuilder = controllerBuilder;
 		return this;
 	}
 }

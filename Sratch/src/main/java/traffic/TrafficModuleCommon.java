@@ -33,6 +33,9 @@ public class TrafficModuleCommon extends AbstractModule {
 		  //how to split this, so one for tests, other for real maccoy?
 		//bind(VehicleUpdateOrdering.class).to(VehicleUpdateOrderingUnmodified.class);
 
+		bind(EquisaturationBuilder.class).to(EquisaturationBuilderImpl.class);
+		bind(DutyCycleBuilder.class).to(DutyCycleBuilderImpl.class);
+
 		bind(NetworkOccupancyBuilder.class).to(NetworkOccupancyBuilderImpl.class);
 		bind(JunctionOccupancyBuilder.class).to(JunctionOccupancyBuilderImpl.class);
 		bind(Cell.class).annotatedWith(Names.named("NullCell")).to(NullCell.class);
@@ -57,6 +60,14 @@ public class TrafficModuleCommon extends AbstractModule {
 		bind(NetworkFluxBuilder.class).to(NetworkFluxBuilderImpl.class);
 		bind(NetworkOccupancyTimeSeries.class).to(NetworkOccupancyTimeSeriesImpl.class);
 		bind(LightsManager.class).to(LightsManagerImpl.class);
+
+		install(new FactoryModuleBuilder()
+			.implement(JunctionController.class, DutyCycleController.class)
+			.build(DutyCycleFactory.class));
+
+		install(new FactoryModuleBuilder()
+			.implement(JunctionController.class, EquisaturationController.class)
+			.build(EquisaturationFactory.class));
 
 		install(new FactoryModuleBuilder()
 			.implement(Lights.class, LightsImpl.class)

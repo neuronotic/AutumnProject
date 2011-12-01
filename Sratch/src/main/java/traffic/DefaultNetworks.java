@@ -2,10 +2,10 @@ package traffic;
 
 public interface DefaultNetworks {
 
-	public Network yNetwork3Link(JunctionController junctionController);
+	public Network yNetwork3Link(JunctionControllerBuilder junctionControllerBuilder);
 
-	public Network xNetwork4Link(JunctionController junctionController);
+	public Network xNetwork4Link(JunctionControllerBuilder junctionControllerBuilder);
 
-	Network vNetwork2Link(JunctionController junctionController);
+	public Network vNetwork2Link(JunctionControllerBuilder junctionControllerBuilder);
 
 }

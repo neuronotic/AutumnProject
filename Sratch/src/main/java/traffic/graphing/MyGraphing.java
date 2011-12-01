@@ -25,7 +25,6 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 import traffic.JourneyHistory;
-import traffic.JunctionController;
 import traffic.Link;
 import traffic.LinkOccupancy;
 import traffic.Network;
@@ -42,13 +41,13 @@ public class MyGraphing extends ApplicationFrame {
 	String location = "/home/daz/output/";
 	String congestionLocation = "/home/daz/output/congestion.jpg";
 
-	public MyGraphing(final String title, final Network network, final NetworkOccupancyTimeSeries networkOccupancyTimeSeries, final JunctionController junctionController, final double flow1probability, final double flow2probability) {
+	public MyGraphing(final String title, final Network network, final NetworkOccupancyTimeSeries networkOccupancyTimeSeries, final String controllerName, final double flow1probability, final double flow2probability) {
 		super(title);
 		final XYSeriesCollection dataset = createLinkCongestionDataSeries(network.links(), networkOccupancyTimeSeries);
-		final String chartTitle = String.format("Congestion on links - %s - (%s, %s)", junctionController, flow1probability, flow2probability);
+		final String chartTitle = String.format("Congestion on links - %s - (%s, %s)", controllerName, flow1probability, flow2probability);
 		final JFreeChart chart = createChartWithRange1(chartTitle, "time", "congestion", dataset);
 
-		saveGraphToFile(junctionController,
+		saveGraphToFile(controllerName,
 				flow1probability, flow2probability,
 				chart, "congestion");
 
@@ -56,10 +55,10 @@ public class MyGraphing extends ApplicationFrame {
 
 	}
 
-	public MyGraphing(final String title, final List<JourneyHistory> journeyHistories, final JunctionController junctionController, final double flow1probability, final double flow2probability) {
+	public MyGraphing(final String title, final List<JourneyHistory> journeyHistories, final String controllerName, final double flow1probability, final double flow2probability) {
 		super(title);
 		final XYSeriesCollection dataset = createJourneyTimeDataSeries(journeyHistories);
-		final String chartTitle = String.format("Journey durations - %s - (%s, %s)", junctionController, flow1probability, flow2probability);
+		final String chartTitle = String.format("Journey durations - %s - (%s, %s)", controllerName, flow1probability, flow2probability);
 		final JFreeChart chart = createChart(chartTitle, "Simulation time at which journey ended", "duration", dataset);
 
 		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
@@ -71,7 +70,7 @@ public class MyGraphing extends ApplicationFrame {
         renderer.setSeriesShapesVisible(2, false);
 		chart.getXYPlot().setRenderer(renderer);
 
-		saveGraphToFile(junctionController,
+		saveGraphToFile(controllerName,
 				flow1probability, flow2probability,
 				chart, "Journey_Durations");
 
@@ -79,13 +78,13 @@ public class MyGraphing extends ApplicationFrame {
 
 	}
 
-	private void saveGraphToFile(final JunctionController junctionController,
+	private void saveGraphToFile(final String controllerName,
 			final double flow1probability, final double flow2probability,
 			final JFreeChart chart, final String fileDifferentiator) {
 
 		final Calendar calendar = Calendar.getInstance();
         final String fileLocation = new StringBuffer(location)
-        	.append(junctionController.toString())
+        	.append(controllerName)
         	//.append(String.format("(%s, %s)", myFormatter.format(flow1probability), myFormatter.format(flow2probability)))
         	.append("-")
         	.append(fileDifferentiator)

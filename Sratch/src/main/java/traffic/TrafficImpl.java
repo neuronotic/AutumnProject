@@ -1,5 +1,6 @@
 package traffic;
 
+import static traffic.SimulationTime.*;
 import traffic.graphing.MyGraphing;
 
 import com.google.inject.Inject;
@@ -12,6 +13,8 @@ public class TrafficImpl implements Traffic {
 	@Inject TimeKeeper timeKeeper;
 	@Inject private Provider<FlowGroupBuilder> flowGroupBuilderProvider;
 	@Inject private Provider<FlowBuilder> flowBuilderProvider;
+	@Inject private Provider<EquisaturationBuilder> equisaturationBuilderProvider;
+	@Inject private Provider<DutyCycleBuilder> periodicDutyCycleBuilderProvider;
 
 	@Inject public TrafficImpl(final SimulationBuilder simulationBuilder, final DefaultNetworks defaultNetworks) {
 		this.simulationBuilder = simulationBuilder;
@@ -23,12 +26,12 @@ public class TrafficImpl implements Traffic {
 		final double flow1probability = 0.40;
 		final double flow2probability = 0.15;
 
-		final JunctionController junctionController = new NullJunctionController();
-		//final JunctionController junctionController = new JunctionControllerImpl(timeKeeper, new PeriodicDutyCycleStrategy(), SimulationTime.time(5));
-		//final JunctionController junctionController = new JunctionControllerImpl(timeKeeper, new EquisaturationStrategy(), SimulationTime.time(5));
+		JunctionControllerBuilder controllerBuilder = null;
+		//controllerBuilder = equisaturationBuilderProvider.get().withPeriod(time(5));
+		controllerBuilder = periodicDutyCycleBuilderProvider.get().withPeriod(time(5));
 
 		//final Network network = defaultNetworks.yNetwork3Link(junctionController);
-		final Network network = defaultNetworks.vNetwork2Link(junctionController);
+		final Network network = defaultNetworks.vNetwork2Link(controllerBuilder);
 
 		final Simulation sim = simulationBuilder
 			.withNetwork(network)
@@ -45,8 +48,8 @@ public class TrafficImpl implements Traffic {
 
 		sim.step(1500);
 
-		new MyGraphing("congestion", network, sim.statistics().networkOccupancy(), junctionController, flow1probability, flow2probability);
-		new MyGraphing("jounrey times", sim.statistics().getEndedJourneyHistories(), junctionController, flow1probability, flow2probability);
+		new MyGraphing("congestion", network, sim.statistics().networkOccupancy(), controllerBuilder.name(), flow1probability, flow2probability);
+		new MyGraphing("jounrey times", sim.statistics().getEndedJourneyHistories(), controllerBuilder.name(), flow1probability, flow2probability);
 	}
 
 }

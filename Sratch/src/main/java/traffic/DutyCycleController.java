@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import com.google.inject.Inject;
 
 
-public class PeriodicDutyCycleStrategy implements JunctionControllerStrategy {
+public class DutyCycleController implements JunctionController {
 	@Inject Logger logger = Logger.getAnonymousLogger();
 
 	int currentGreenIndex = 0;
