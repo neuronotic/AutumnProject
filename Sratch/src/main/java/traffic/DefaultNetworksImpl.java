@@ -34,7 +34,6 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 				.withName("junction1")
 				.make();
 
-
 		final int linkLength = 20;
 
 		return networkBuilder()
@@ -50,7 +49,6 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 				.withOutJunction(junction1)
 				.withLength(linkLength)
 				.make())
-
 			.make();
 	}
 
@@ -66,7 +64,6 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 				.withControllerBuilder(junctionControllerBuilder)
 				.withName("junction1")
 				.make();
-
 
 		final int linkLength = 20;
 
@@ -106,13 +103,11 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 		junction0 = junctionBuilder.withName("junction0").make();
 		junction2 = junctionBuilder.withName("junction2").make();
 		junction3 = junctionBuilder.withName("junction3").make();
-		//junction4 = junctionBuilder.withName("junction4").make();
 
 		junction1 = junctionBuilder
 				.withControllerBuilder(junctionControllerBuilder)
 				.withName("junction1")
 				.make();
-
 
 		final int linkLength = 20;
 

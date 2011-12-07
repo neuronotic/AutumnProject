@@ -15,7 +15,7 @@ class JunctionImpl implements Junction {
 	@Inject Logger logger = Logger.getAnonymousLogger();
 
 	private final String name;
-	private boolean occupied = false;
+	private boolean isOccupied = false;
 	private final LinkedList<Vehicle> vehiclesWaiting = new LinkedList<Vehicle>();
 	private final List<Link> incomingLinks = new ArrayList<Link>();
 	private final List<Link> outgoingLinks = new ArrayList<Link>();
@@ -24,7 +24,6 @@ class JunctionImpl implements Junction {
 	private final JunctionController junctionController;
 	private final OccupancyFactory occupancyFactory;
 	private final LightsManager lightsManager;
-
 
 	@Inject
 	JunctionImpl(
@@ -42,17 +41,22 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public boolean enter(final Vehicle vehicle) {
-		if (!occupied && lightsGreenForVehicle(vehicle)) {
-			if (vehiclesWaiting.isEmpty() || !inQueue(vehicle)) {
-				occupied = true;
-				return true;
-			}
-			if (inQueue(vehicle) && isFirstInQueue(vehicle)) {
-				occupied = true;
+		if (isOccupied) {
+			return false;
+		}
+		if (inNewlyCreatedQueue(vehicle)) {
+			if (isFirstInQueue(vehicle)) {
+				isOccupied = true;
 				vehiclesWaiting.pop();
 				return true;
 			}
-		} return false;
+			return false;
+		}
+		if (lightsGreenForVehicle(vehicle)) {
+			isOccupied = true;
+			return true;
+		}
+		return false;
 	}
 
 	private boolean lightsGreenForVehicle(final Vehicle vehicle) {
@@ -67,7 +71,7 @@ class JunctionImpl implements Junction {
 		return vehicle.equals(vehiclesWaiting.getFirst());
 	}
 
-	private boolean inQueue(final Vehicle vehicle) {
+	private boolean inNewlyCreatedQueue(final Vehicle vehicle) {
 		return vehiclesWaiting.contains(vehicle);
 	}
 
@@ -83,12 +87,12 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public boolean isOccupied() {
-		return occupied;
+		return isOccupied;
 	}
 
 	@Override
 	public void leave() {
-		occupied = false;
+		isOccupied = false;
 	}
 
 	@Override
