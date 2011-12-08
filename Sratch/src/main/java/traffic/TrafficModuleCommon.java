@@ -63,6 +63,11 @@ public class TrafficModuleCommon extends AbstractModule {
 		bind(LightsManager.class).to(LightsManagerImpl.class);
 
 		install(new FactoryModuleBuilder()
+			.implement(CellOccupantDepartedMessage.class, CellOccupantDepartedMessageImpl.class)
+			.build(CellOccupantDepartedMessageFactory.class));
+
+
+		install(new FactoryModuleBuilder()
 			.implement(JunctionController.class, DutyCycleController.class)
 			.build(DutyCycleFactory.class));
 

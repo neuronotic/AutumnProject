@@ -14,7 +14,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -66,7 +65,7 @@ public class MyGraphing extends ApplicationFrame {
 		}
 		final double meanJourneyTime = cumulativeJourneyTime / (double)journeyHistories.size();
 
-		final String chartTitle = String.format("Journey durations - %s - (%s, %s) - %.2f", controllerName, flow1probability, flow2probability, meanJourneyTime);
+		final String chartTitle = String.format("Journey durations - %s - (%s, %s) - %d / %.2f", controllerName, flow1probability, flow2probability, journeyHistories.size(), meanJourneyTime);
 		final JFreeChart chart = createChart(chartTitle, "Simulation time at which journey ended", "duration", dataset);
 
 		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
@@ -220,8 +219,8 @@ public class MyGraphing extends ApplicationFrame {
         plot.setRangeGridlinePaint(Color.white);
 
         // change the auto tick unit selection to integer units only...
-        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        //final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        //rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
         // OPTIONAL CUSTOMISATION COMPLETED.
 

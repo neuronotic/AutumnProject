@@ -30,10 +30,10 @@ public class TrafficImpl implements Traffic {
 		TemporalPattern temporalPattern;
 		temporalPattern = new ConstantTemporalPattern(1);
 
-		temporalPattern = new SinusoidalTemporalPattern(timeKeeper, time(500));
+		//temporalPattern = new SinusoidalTemporalPattern(timeKeeper, time(500));
 
-		final double flow1probability = 0.50;
-		final double flow2probability = 0.2;
+		final double flow1probability = 0.75;
+		final double flow2probability = 0.0;
 
 
 		JunctionControllerBuilder controllerBuilder;
@@ -57,7 +57,7 @@ public class TrafficImpl implements Traffic {
 
 			.make();
 
-		sim.step(30000);
+		sim.step(1000);
 
 //		int cumulativeJourneyTime = 0;
 //		final List<JourneyHistory> journeyHistories = sim.statistics().getEndedJourneyHistories();

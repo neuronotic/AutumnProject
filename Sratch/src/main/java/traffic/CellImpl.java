@@ -8,11 +8,17 @@ class CellImpl implements Cell {
 	private final String name;
 	private boolean occupied = false;
 	private final Link link;
+	private final CellOccupantDepartedMessageFactory messageFactory;
+	private final MyEventBus eventBus;
 
 	@Inject CellImpl(
 			@Assisted final Link link,
-			@Assisted final int index) {
+			@Assisted final int index,
+			final MyEventBus eventBus,
+			final CellOccupantDepartedMessageFactory messageFactory) {
 		this.link = link;
+		this.eventBus = eventBus;
+		this.messageFactory = messageFactory;
 		name = String.format("%s[%s]", link.name(), index);
 	}
 
@@ -47,6 +53,7 @@ class CellImpl implements Cell {
 	@Override
 	public void leave() {
 		occupied = false;
+		eventBus.post(messageFactory.create(this));
 	}
 
 }

@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.*;
 import static traffic.NetworkMatchers.*;
 
 import org.jmock.Expectations;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -16,17 +15,24 @@ public class TestCellImpl {
 	private final Vehicle vehicle0 = context.mock(Vehicle.class, "vehicle0");
 	private final Vehicle vehicle1 = context.mock(Vehicle.class, "vehicle1");
 
-	private final Link link = context.mock(Link.class);
-	private Cell cell;
+	private final CellOccupantDepartedMessage message = context.mock(CellOccupantDepartedMessage.class);
+	private final CellOccupantDepartedMessageFactory messageFactory = context.mock(CellOccupantDepartedMessageFactory.class);
 
-	@Before
-	public void setUp() throws Exception {
+	private final MyEventBus eventBus = context.mock(MyEventBus.class);
+	private final Link link = context.mock(Link.class);
+
+	private final Cell cell = cell();
+
+	@Test
+	public void messagePostedOnBusWhenOccupantLeavesCell() throws Exception {
+		cell.enter(vehicle0);
 		context.checking(new Expectations() {
 			{
-				oneOf(link).name(); will(returnValue("myLink"));
+				oneOf(messageFactory).create(cell); will(returnValue(message));
+				oneOf(eventBus).post(message);
 			}
 		});
-		cell = new CellImpl(link, 0);
+		cell.leave();
 	}
 
 	@Test
@@ -46,6 +52,12 @@ public class TestCellImpl {
 	public void leaveUnoccupiesCell() throws Exception {
 		cell.enter(vehicle0);
 		assertThat(cell.isOccupied(), is(true));
+		context.checking(new Expectations() {
+			{
+				ignoring(messageFactory);
+				ignoring(eventBus);
+			}
+		});
 		cell.leave();
 		assertThat(cell.isOccupied(), is(false));
 	}
@@ -53,5 +65,14 @@ public class TestCellImpl {
 	@Test
 	public void cellNameIsNameOfLinkAndCellIndex() throws Exception {
 		assertThat(cell, cellNamed("myLink[0]"));
+	}
+
+	private Cell cell() {
+		context.checking(new Expectations() {
+			{
+				oneOf(link).name(); will(returnValue("myLink"));
+			}
+		});
+		return new CellImpl(link, 0, eventBus, messageFactory);
 	}
 }

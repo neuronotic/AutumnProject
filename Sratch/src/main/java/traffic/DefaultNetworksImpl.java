@@ -33,7 +33,7 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 				.withName("junction1")
 				.make();
 
-		final int linkLength = 50;
+		final int linkLength = 500;
 
 		return networkBuilder()
 			.withLink( link()
