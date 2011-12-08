@@ -44,6 +44,7 @@ public class MyGraphing extends ApplicationFrame {
 	public MyGraphing(final String title, final Network network, final NetworkOccupancyTimeSeries networkOccupancyTimeSeries, final String controllerName, final double flow1probability, final double flow2probability) {
 		super(title);
 		final XYSeriesCollection dataset = createLinkCongestionDataSeries(network.links(), networkOccupancyTimeSeries);
+
 		final String chartTitle = String.format("Congestion on links - %s - (%s, %s)", controllerName, flow1probability, flow2probability);
 		final JFreeChart chart = createChartWithRange1(chartTitle, "time", "congestion", dataset);
 
@@ -58,7 +59,14 @@ public class MyGraphing extends ApplicationFrame {
 	public MyGraphing(final String title, final List<JourneyHistory> journeyHistories, final String controllerName, final double flow1probability, final double flow2probability) {
 		super(title);
 		final XYSeriesCollection dataset = createJourneyTimeDataSeries(journeyHistories);
-		final String chartTitle = String.format("Journey durations - %s - (%s, %s)", controllerName, flow1probability, flow2probability);
+
+		int cumulativeJourneyTime = 0;
+		for (final JourneyHistory journeyHistory : journeyHistories) {
+			cumulativeJourneyTime += journeyHistory.journeyDuration().value();
+		}
+		final double meanJourneyTime = cumulativeJourneyTime / (double)journeyHistories.size();
+
+		final String chartTitle = String.format("Journey durations - %s - (%s, %s) - %.2f", controllerName, flow1probability, flow2probability, meanJourneyTime);
 		final JFreeChart chart = createChart(chartTitle, "Simulation time at which journey ended", "duration", dataset);
 
 		final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();

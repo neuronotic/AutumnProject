@@ -74,4 +74,9 @@ public class JourneyHistoryImpl implements JourneyHistory {
 	public Vehicle vehicle() {
 		return vehicle;
 	}
+
+	@Override
+	public SimulationTime startTime() {
+		return startTime;
+	}
 }

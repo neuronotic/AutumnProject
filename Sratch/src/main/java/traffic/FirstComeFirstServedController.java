@@ -1,7 +1,7 @@
 package traffic;
 
 
-public class NullJunctionController implements
+public class FirstComeFirstServedController implements
 		JunctionController {
 
 	@Override

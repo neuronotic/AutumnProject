@@ -12,7 +12,6 @@ import com.google.inject.Inject;
 
 public class LightsManagerImpl implements LightsManager {
 	@Inject Logger logger = Logger.getAnonymousLogger();
-	@Inject TimeKeeper timeKeeper;
 
 
 	Map<Link, Lights> linkLights = new HashMap<Link, Lights>();

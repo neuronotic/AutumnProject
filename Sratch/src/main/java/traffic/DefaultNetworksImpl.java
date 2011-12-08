@@ -7,7 +7,6 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 	private final JunctionBuilder junctionBuilder;
 	private final NetworkBuilderFactory networkBuilderFactory;
 	private final LinkBuilderFactory linkBuilderFactory;
-	@Inject TimeKeeper timeKeeper;
 
 	@Inject DefaultNetworksImpl(
 			final JunctionBuilder junctionBuilder,
@@ -34,7 +33,7 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 				.withName("junction1")
 				.make();
 
-		final int linkLength = 20;
+		final int linkLength = 50;
 
 		return networkBuilder()
 			.withLink( link()

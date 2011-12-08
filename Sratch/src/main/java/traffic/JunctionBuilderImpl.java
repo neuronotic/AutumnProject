@@ -30,12 +30,6 @@ public class JunctionBuilderImpl implements JunctionBuilder {
 		return this;
 	}
 
-//	@Override
-//	public JunctionBuilder withController(final JunctionController junctionController) {
-//		this.junctionController = junctionController;
-//		return this;
-//	}
-
 	@Override
 	public JunctionBuilder withControllerBuilder(
 			final JunctionControllerBuilder controllerBuilder) {

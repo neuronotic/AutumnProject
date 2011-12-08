@@ -7,6 +7,7 @@ public interface JourneyHistory {
 	Flow flow();
 
 	SimulationTime endTime();
+	SimulationTime startTime();
 
 	Vehicle vehicle();
 }
