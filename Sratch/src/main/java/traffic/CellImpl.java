@@ -1,5 +1,7 @@
 package traffic;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
@@ -54,6 +56,13 @@ class CellImpl implements Cell {
 	public void leave() {
 		occupied = false;
 		eventBus.post(messageFactory.create(this));
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+			.append(name)
+			.toHashCode();
 	}
 
 }

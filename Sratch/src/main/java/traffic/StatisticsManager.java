@@ -9,4 +9,7 @@ public interface StatisticsManager {
 	NetworkOccupancyTimeSeries networkOccupancy();
 	List<JourneyHistory> getEndedJourneyHistories();
 	void receiveJourneyHistoryForEndedJourney(JourneyEndedMessage journeyEndedMessage);
+	void receveCellOccupantDepartedMessage(
+			CellOccupantDepartedMessage departureMessage);
+	List<SimulationTime> getCellDepartureTimes(Cell cell);
 }
