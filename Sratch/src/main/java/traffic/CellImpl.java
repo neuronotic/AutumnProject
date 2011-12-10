@@ -12,6 +12,7 @@ class CellImpl implements Cell {
 	private final Link link;
 	private final CellOccupantDepartedMessageFactory messageFactory;
 	private final MyEventBus eventBus;
+	private boolean recordFlux = false;
 
 	@Inject CellImpl(
 			@Assisted final Link link,
@@ -55,7 +56,9 @@ class CellImpl implements Cell {
 	@Override
 	public void leave() {
 		occupied = false;
-		eventBus.post(messageFactory.create(this));
+		if (recordFlux) {
+			eventBus.post(messageFactory.create(this));
+		}
 	}
 
 	@Override
@@ -63,6 +66,11 @@ class CellImpl implements Cell {
 		return new HashCodeBuilder()
 			.append(name)
 			.toHashCode();
+	}
+
+	@Override
+	public void recordFlux() {
+		recordFlux = true;
 	}
 
 }

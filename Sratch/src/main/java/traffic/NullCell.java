@@ -50,4 +50,10 @@ public class NullCell implements Cell {
 			.toHashCode();
 	}
 
+	@Override
+	public void recordFlux() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

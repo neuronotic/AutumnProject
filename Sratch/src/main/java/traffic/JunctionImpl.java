@@ -136,4 +136,10 @@ class JunctionImpl implements Junction {
 		return junctionOccupancyFactory.create(this, occupancy, linkOccupancies);
 	}
 
+	@Override
+	public void recordFlux() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

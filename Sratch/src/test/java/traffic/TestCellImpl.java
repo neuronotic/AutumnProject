@@ -24,8 +24,11 @@ public class TestCellImpl {
 	private final Cell cell = cell();
 
 	@Test
-	public void messagePostedOnBusWhenOccupantLeavesCell() throws Exception {
+	public void messagePostedOnBusWhenOccupantLeavesCellOnlyIfRecordFluxFlagSet() throws Exception {
 		cell.enter(vehicle0);
+		cell.leave();
+		cell.recordFlux();
+		cell.enter(vehicle1);
 		context.checking(new Expectations() {
 			{
 				oneOf(messageFactory).create(cell); will(returnValue(message));
