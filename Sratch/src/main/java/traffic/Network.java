@@ -12,7 +12,5 @@ public interface Network {
 
 	NetworkOccupancy occupancy();
 
-	NetworkFlux flux();
-
-	Link linkNamed(String string);
+	Link linkNamed(String linkName);
 }

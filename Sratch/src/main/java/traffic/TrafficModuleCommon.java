@@ -58,7 +58,6 @@ public class TrafficModuleCommon extends AbstractModule {
 		bind(JourneyHistoryBuilder.class).to(JourneyHistoryBuilderImpl.class);
 		bind(TimeKeeper.class).to(TimeKeeperImpl.class);
 		bind(DefaultNetworks.class).to(DefaultNetworksImpl.class);
-		bind(NetworkFluxBuilder.class).to(NetworkFluxBuilderImpl.class);
 		bind(NetworkOccupancyTimeSeries.class).to(NetworkOccupancyTimeSeriesImpl.class);
 		bind(LightsManager.class).to(LightsManagerImpl.class);
 
@@ -82,23 +81,6 @@ public class TrafficModuleCommon extends AbstractModule {
 		install(new FactoryModuleBuilder()
 			.implement(Lights.class, LightsImpl.class)
 			.build(LightsFactory.class));
-
-		install(new FactoryModuleBuilder()
-			.implement(NetworkFluxBuilder.class, NetworkFluxBuilderImpl.class)
-			.build(NetworkFluxBuilderFactory.class));
-
-		install(new FactoryModuleBuilder()
-			.implement(FluxReceiver.class, FluxReceiverImpl.class)
-			.build(FluxReceiverFactory.class));
-
-		install(new FactoryModuleBuilder()
-			.implement(NetworkFlux.class, NetworkFluxImpl.class)
-			.build(NetworkFluxFactory.class));
-
-		install(new FactoryModuleBuilder()
-			.implement(LinkFlux.class, LinkFluxImpl.class)
-			.build(LinkFluxFactory.class));
-
 
 		install(new FactoryModuleBuilder()
 			.implement(StatisticsManager.class, StatisticsManagerImpl.class)

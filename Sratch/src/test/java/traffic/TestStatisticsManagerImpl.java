@@ -15,9 +15,6 @@ public class TestStatisticsManagerImpl {
 
 	private final Network network = context.mock(Network.class);
 	private final NetworkOccupancy networkOccupancy = context.mock(NetworkOccupancy.class);
-	private final NetworkFlux networkFlux = context.mock(NetworkFlux.class);
-	private final FluxReceiverFactory fluxReceiverFactory = context.mock(FluxReceiverFactory.class);
-	private final FluxReceiver fluxReceiver = context.mock(FluxReceiver.class);
 	private final NetworkOccupancyTimeSeries networkOccupancyTimeSeries = context.mock(NetworkOccupancyTimeSeries.class);
 
 	private final CellOccupantDepartedMessage departureMessage0 = context.mock(CellOccupantDepartedMessage.class, "departedMessage0");
@@ -36,7 +33,7 @@ public class TestStatisticsManagerImpl {
 			}
 		});
 		statisticsManager.receveCellOccupantDepartedMessage(departureMessage0);
-		assertThat(statisticsManager.getCellDepartureTimes(cell), is(asList(time(5))));
+		assertThat(statisticsManager.fluxTimes(cell), is(asList(time(5))));
 
 		context.checking(new Expectations() {
 			{
@@ -46,17 +43,7 @@ public class TestStatisticsManagerImpl {
 		});
 		statisticsManager.receveCellOccupantDepartedMessage(departureMessage1);
 
-		assertThat(statisticsManager.getCellDepartureTimes(cell), is(asList(time(5), time(7))));
-	}
-
-	@Test
-	public void currentNetworkFluxDelegatesToFluxReceiver() throws Exception {
-		context.checking(new Expectations() {
-			{
-				oneOf(fluxReceiver).currentNetworkFlux(); will(returnValue(networkFlux));
-			}
-		});
-		assertThat(statisticsManager.currentNetworkFlux(), is(networkFlux));
+		assertThat(statisticsManager.fluxTimes(cell), is(asList(time(5), time(7))));
 	}
 
 	@Test
@@ -70,11 +57,6 @@ public class TestStatisticsManagerImpl {
 	}
 
 	private StatisticsManager statisticsManager() {
-		context.checking(new Expectations() {
-			{
-				oneOf(fluxReceiverFactory).create(network); will(returnValue(fluxReceiver));
-			}
-		});
-		return new StatisticsManagerImpl(network, networkOccupancyTimeSeries, fluxReceiverFactory);
+		return new StatisticsManagerImpl(network, networkOccupancyTimeSeries);
 	}
 }

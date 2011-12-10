@@ -4,12 +4,12 @@ import java.util.List;
 
 public interface StatisticsManager {
 	NetworkOccupancy currentNetworkOccupancy();
-	NetworkFlux currentNetworkFlux();
 	void step();
 	NetworkOccupancyTimeSeries networkOccupancy();
 	List<JourneyHistory> getEndedJourneyHistories();
 	void receiveJourneyHistoryForEndedJourney(JourneyEndedMessage journeyEndedMessage);
 	void receveCellOccupantDepartedMessage(
 			CellOccupantDepartedMessage departureMessage);
-	List<SimulationTime> getCellDepartureTimes(Cell cell);
+	List<SimulationTime> fluxTimes(Cell cell);
+	List<SimulationTime> fluxTimesForLinkHeadCell(String linkName);
 }

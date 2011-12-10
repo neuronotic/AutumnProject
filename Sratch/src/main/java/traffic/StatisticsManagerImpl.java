@@ -17,17 +17,15 @@ public class StatisticsManagerImpl implements StatisticsManager {
 	private final NetworkOccupancyTimeSeries networkOccupancyTimeSeries;
 	private final List<JourneyHistory> endedJourneyHistories = new ArrayList<JourneyHistory>();
 
-	private final FluxReceiver fluxReceiver;
 
 	private final Map<Cell, List<SimulationTime>> fluxTimes = new HashMap<Cell, List<SimulationTime>>();
 
 	@Inject StatisticsManagerImpl(
 			@Assisted final Network network,
-			final NetworkOccupancyTimeSeries networkOccupancyTimeSeries,
-			final FluxReceiverFactory fluxReceiverFactory) {
+			final NetworkOccupancyTimeSeries networkOccupancyTimeSeries
+			) {
 		this.network = network;
 		this.networkOccupancyTimeSeries = networkOccupancyTimeSeries;
-		fluxReceiver = fluxReceiverFactory.create(network);
 	}
 
 	@Override
@@ -36,13 +34,7 @@ public class StatisticsManagerImpl implements StatisticsManager {
 	}
 
 	@Override
-	public NetworkFlux currentNetworkFlux() {
-		return fluxReceiver.currentNetworkFlux();
-	}
-
-	@Override
 	public void step() {
-		fluxReceiver.step();
 		networkOccupancyTimeSeries.addStepData(currentNetworkOccupancy());
 	}
 
@@ -72,7 +64,7 @@ public class StatisticsManagerImpl implements StatisticsManager {
 	}
 
 	@Override
-	public List<SimulationTime> getCellDepartureTimes(final Cell cell) {
+	public List<SimulationTime> fluxTimes(final Cell cell) {
 		return fluxTimes.get(cell);
 	}
 
@@ -86,6 +78,12 @@ public class StatisticsManagerImpl implements StatisticsManager {
 		if (!fluxTimes.containsKey(cell)) {
 			fluxTimes.put(cell, new ArrayList<SimulationTime>());
 		}
+	}
+
+	@Override
+	public List<SimulationTime> fluxTimesForLinkHeadCell(final String linkName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

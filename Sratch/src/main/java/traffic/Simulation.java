@@ -7,4 +7,5 @@ public interface Simulation {
 	void step();
 	StatisticsManager statistics();
 	SimulationTime time();
+	Cell headCellForLink(String linkName);
 }

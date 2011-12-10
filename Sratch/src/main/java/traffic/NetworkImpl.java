@@ -71,11 +71,4 @@ public class NetworkImpl implements Network {
 		return networkOccupancyFactory.create(junctionOccupancies);
 	}
 
-	@Override
-	public NetworkFlux flux() {
-		// TODO Auto-generated method stub
-		return null;
-
-	}
-
 }

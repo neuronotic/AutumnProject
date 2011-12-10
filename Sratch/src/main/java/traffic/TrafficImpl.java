@@ -59,12 +59,6 @@ public class TrafficImpl implements Traffic {
 
 		sim.step(1000);
 
-//		int cumulativeJourneyTime = 0;
-//		final List<JourneyHistory> journeyHistories = sim.statistics().getEndedJourneyHistories();
-//		for (final JourneyHistory journeyHistory : journeyHistories) {
-//			cumulativeJourneyTime += journeyHistory.journeyDuration().value();
-//		}
-//		final double meanJourneyTime = cumulativeJourneyTime / (double)journeyHistories.size();
 
 		new MyGraphing("congestion", network, sim.statistics().networkOccupancy(), controllerBuilder.name(), flow1probability, flow2probability);
 		new MyGraphing("jounrey times", sim.statistics().getEndedJourneyHistories(), controllerBuilder.name(), flow1probability, flow2probability);

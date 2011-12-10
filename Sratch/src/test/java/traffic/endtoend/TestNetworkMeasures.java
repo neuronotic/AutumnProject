@@ -1,11 +1,14 @@
 package traffic.endtoend;
 
+import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static traffic.SimulationTime.*;
 
 import org.junit.Rule;
 import org.junit.Test;
 
+import traffic.Cell;
 import traffic.ConstantTemporalPattern;
 import traffic.FlowBuilder;
 import traffic.FlowGroupBuilder;
@@ -15,12 +18,10 @@ import traffic.JunctionBuilder;
 import traffic.JunctionOccupancyBuilder;
 import traffic.Link;
 import traffic.LinkBuilder;
-import traffic.LinkFluxFactory;
 import traffic.LinkOccupancy;
 import traffic.LinkOccupancyFactory;
 import traffic.Network;
 import traffic.NetworkBuilder;
-import traffic.NetworkFluxBuilder;
 import traffic.NetworkOccupancy;
 import traffic.NetworkOccupancyBuilder;
 import traffic.Occupancy;
@@ -36,9 +37,7 @@ public class TestNetworkMeasures {
 
 	@Inject private LinkOccupancyFactory linkOccupancyFactory;
 	@Inject private OccupancyFactory occupancyFactory;
-	@Inject private LinkFluxFactory linkFluxFactory;
 	@Inject private Provider<JunctionBuilder> junctionBuilderProvider;
-	@Inject private Provider<NetworkFluxBuilder> networkFluxBuilderProvider;
 	@Inject private Provider<SimulationBuilder> simulationBuilderProvider;
 	@Inject private Provider<LinkBuilder> linkBuilderProvider;
 	@Inject private Provider<NetworkBuilder> networkBuilderProvider;
@@ -67,6 +66,15 @@ public class TestNetworkMeasures {
 			.withLinkFlux(linkFluxFactory.create(link0, 0))
 			.make();
 	}*/
+
+	@Test
+	public void fluxTimesForLinkAreSixToTen() throws Exception {
+		final Simulation sim = simulationWithFlowGroup();
+		final Cell cellToRecord = sim.headCellForLink("link0");
+		cellToRecord.recordFlux();
+		sim.step(7);
+		assertThat(sim.statistics().fluxTimes(cellToRecord), is(asList(time(4), time(5), time(6))));
+	}
 
 	@Test
 	public void OccupancyOnNetworkWithFlowsDoesNotRemainZero() throws Exception {

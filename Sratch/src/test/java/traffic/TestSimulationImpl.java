@@ -1,6 +1,8 @@
 package traffic;
 
 import static java.util.Arrays.*;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 import org.jmock.Expectations;
 import org.jmock.Sequence;
@@ -25,6 +27,20 @@ public class TestSimulationImpl {
 	//private final JourneyHistory journeyHistory1 = context.mock(JourneyHistory.class, "journeyHistory1");
 
 	private final Simulation simulation = simulation();
+
+	@Test
+	public void headCellForLinkReturnsHeadCellOfNamedLink() throws Exception {
+		final Link link = context.mock(Link.class);
+		final Cell cell = context.mock(Cell.class);
+		context.checking(new Expectations() {
+			{
+				oneOf(network).linkNamed("a link"); will(returnValue(link));
+				oneOf(link).headCell(); will(returnValue(cell));
+			}
+		});
+		assertThat(simulation.headCellForLink("a link"), is(cell));
+
+	}
 
 	@Test
 	public void vehicleManagerNetworkAndStatisticsAreSteppedInOrderWithEachSimulationStep() throws Exception {
