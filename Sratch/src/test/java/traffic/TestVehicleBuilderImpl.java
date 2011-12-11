@@ -1,6 +1,5 @@
 package traffic;
 
-import static java.util.Arrays.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
@@ -37,8 +36,7 @@ public class TestVehicleBuilderImpl {
 			{
 				oneOf(journeyStartedMessageFactory).create(vehicle); will(returnValue(journeyStartedMessage));
 				oneOf(eventBus).post(journeyStartedMessage);
-				oneOf(itinerary).cells(); will(returnValue(asList(cell0)));
-				oneOf(vehicleStateContextFactory).createStateContext(asList(cell0)); will(returnValue(vehicleStateContext));
+				oneOf(vehicleStateContextFactory).createStateContext(itinerary); will(returnValue(vehicleStateContext));
 				oneOf(vehicleStateFactory).duringJourneyState(); will(returnValue(initialState));
 				//oneOf(vehicleStateFactory).preJourneyState(); will(returnValue(initialState));
 				oneOf(vehicleFactory).createVehicle(vehicleName, flow, vehicleStateContext, initialState); will(returnValue(vehicle));

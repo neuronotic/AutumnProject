@@ -14,14 +14,14 @@ public class TestVehicleStateContextImpl {
 	public final JUnitRuleMockery context = new JUnitRuleMockery();
 
 	private final MyEventBus eventBus = context.mock(MyEventBus.class);
+	private final Itinerary itinerary = context.mock(Itinerary.class);
 	private final Cell cell0 = context.mock(Cell.class, "cell0");
 	private final JourneyHistoryBuilder journeyHistoryBuilder = context.mock(JourneyHistoryBuilder.class);
 	private final JourneyHistory journeyHistory = context.mock(JourneyHistory.class);
 	private final Vehicle vehicle = context.mock(Vehicle.class);
 	private final JourneyEndedMessageFactory journeyEndedMessageFactory = context.mock(JourneyEndedMessageFactory.class);
 	private final JourneyEndedMessage journeyEndedMessage = context.mock(JourneyEndedMessage.class);
-	private final VehicleStateContext stateContext =
-			new VehicleStateContextImpl(eventBus, journeyEndedMessageFactory, journeyHistoryBuilder, new NullCell(), asList(cell0));;
+	private final VehicleStateContext stateContext = stateContext();
 
 	@Test
 	public void currentLocationRemainsUnchangedIfMoveUnsuccessfullyCallsEnter() throws Exception {
@@ -73,5 +73,14 @@ public class TestVehicleStateContextImpl {
 			oneOf(journeyHistoryBuilder).journeyTime(); will(returnValue(time(42)));
 		}});
 		assertThat(stateContext.journeyTime(), equalTo(time(42)));
+	}
+
+	private VehicleStateContext stateContext() {
+		context.checking(new Expectations() {
+			{
+				oneOf(itinerary).cells(); will(returnValue(asList(cell0)));
+			}
+		});
+		return new VehicleStateContextImpl(eventBus, journeyEndedMessageFactory, journeyHistoryBuilder, new NullCell(), itinerary);
 	}
 }

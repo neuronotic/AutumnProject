@@ -1,6 +1,5 @@
 package traffic;
 
-import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Logger;
 
@@ -24,10 +23,10 @@ public class VehicleStateContextImpl implements VehicleStateContext {
 			final JourneyEndedMessageFactory journeyEndedMessageFactory,
 			final JourneyHistoryBuilder journeyHistoryBuilder,
 			@Named("NullCell") final Cell nullCell,
-			@Assisted final List<Cell> cellsInItinerary) {
+			@Assisted final Itinerary itinerary) {
 		this.eventBus = eventBus;
 		this.journeyEndedMessageFactory = journeyEndedMessageFactory;
-		remainingItinerary = cellsInItinerary.listIterator();
+		remainingItinerary = itinerary.cells().listIterator();
 		this.journeyHistoryBuilder = journeyHistoryBuilder;
 		currentLocation = nullCell;
 

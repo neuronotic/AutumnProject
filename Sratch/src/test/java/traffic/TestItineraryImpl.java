@@ -25,12 +25,16 @@ public class TestItineraryImpl {
 	private final Cell linkCell2 = context.mock(Cell.class, "linkCell2");
 
 	@Test
+	public void testName() throws Exception {
+
+	}
+
+	@Test
 	public void routeReturnsListOfLinksItineraryWasCreatedWith() throws Exception {
 		final Itinerary itinerary = new ItineraryImpl(link0, link1);
 		assertThat(itinerary, itineraryRouteIs(link0, link1));
 		assertThat(itinerary.route(), contains(link0, link1));
 	}
-
 
 	@Test
 	public void itineraryContainsCellsFromRouteJunctionsAndLinksInOrderForMultipleLinks() throws Exception {

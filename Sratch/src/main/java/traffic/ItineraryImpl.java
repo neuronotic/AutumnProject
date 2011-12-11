@@ -3,6 +3,7 @@ package traffic;
 import static java.util.Arrays.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -10,6 +11,7 @@ import com.google.inject.assistedinject.Assisted;
 
 public class ItineraryImpl implements Itinerary {
 	private final List<Link> links;
+	private final Iterator<Link> linkIterator;
 
 	public ItineraryImpl(final Link...links) {
 		this(asList(links));
@@ -17,11 +19,16 @@ public class ItineraryImpl implements Itinerary {
 
 	@Inject public ItineraryImpl(@Assisted final List<Link> links) {
 		this.links = links;
+		linkIterator = links.iterator();
 	}
 
 	@Override
 	public List<Link> route() {
 		return links;
+	}
+
+	public List<Cell> getNextLinkCells() {
+		return linkIterator.next().cells();
 	}
 
 	@Override

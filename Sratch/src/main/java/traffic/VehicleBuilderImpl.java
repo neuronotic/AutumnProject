@@ -34,7 +34,7 @@ public class VehicleBuilderImpl implements VehicleBuilder {
 		final Vehicle vehicle = vehicleFactory.createVehicle(
 				vehicleName,
 				flow,
-				vehicleStateContextFactory.createStateContext(itinerary.cells()),
+				vehicleStateContextFactory.createStateContext(itinerary),
 				vehicleStateFactory.duringJourneyState());//.preJourneyState());
 		eventBus.post(journeyStartedMessageFactory.create(vehicle));
 		return vehicle;
