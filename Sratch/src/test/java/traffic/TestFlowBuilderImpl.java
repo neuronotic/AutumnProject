@@ -14,9 +14,12 @@ public class TestFlowBuilderImpl {
 	private final Flow flow = context.mock(Flow.class);
 	private final Itinerary itinerary = context.mock(Itinerary.class);
 	private final FlowFactory flowFactory = context.mock(FlowFactory.class);
+	private final ItineraryFactory itineraryFactory = context.mock(ItineraryFactory.class);
 
 	private final double probability = 0.2;
 	private final FlowBuilder flowBuilder = new FlowBuilderImpl(flowFactory);
+
+
 
 	@Test
 	public void makeCreatesFlowWithItineraryAndProbability() throws Exception {

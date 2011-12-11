@@ -58,6 +58,11 @@ public class TestSimulationImpl {
 		simulation.step();
 	}
 
+	@Test
+	public void networkReturnsNetworkConstructedWith() throws Exception {
+		assertThat(simulation.network(), is(network));
+	}
+
 	private Simulation simulation() {
 		context.checking(new Expectations() {
 			{

@@ -49,24 +49,6 @@ public class TestNetworkMeasures {
 	private Junction junction0, junction1;
 	private Link link0;
 
-	//messages are sent. each step an empty builder is (copied?)used. then the messages just modify it.
-	//have builder take another builder as constructor?
-
-/*	@Test
-	public void fluxOnEmptyNetworkRemains0() throws Exception {
-		final Simulation sim = simulationWithFlowGroup();
-		assertThat(sim.statistics().currentNetworkFlux(), notNullValue());
-		assertThat(sim.statistics().currentNetworkFlux(), equalTo(networkWithZeroFlux()));
-		sim.step(10);
-		assertThat(sim.statistics().currentNetworkFlux(), equalTo(networkWithZeroFlux()));
-	}
-
-	private NetworkFlux networkWithZeroFlux() {
-		return networkFluxBuilderProvider.get()
-			.withLinkFlux(linkFluxFactory.create(link0, 0))
-			.make();
-	}*/
-
 	@Test
 	public void fluxTimesForLinkAreSixToTen() throws Exception {
 		final Simulation sim = simulationWithFlowGroup();

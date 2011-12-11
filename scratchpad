@@ -1,30 +1,14 @@
 
 
 ---------------
+[questions]
+- rather than run multiple simulations, can i just run a simulation for longer? This will also harmonise out any transients?
 
-still have to randomise order of vehicles update
+- 
+
+
 
 -------------
-
-- Still not confident where to use '@assisted'
-- difference between 'bind' and 'install' in Guice Module...
-- what about matchers / errors?
-- my builder for RoadNetwork mixes taking builders and objects...(eg withVehicle(Vehicle vehicle) and withSegment(SegmentBuilder segmentBuilder)
-
-- RoadNetwork, VehicleManager, etc are @Singletons - how to do nested modules with Guice?
-Tim: so you can have a top level module that you use to set up the road network
-http://google-guice.googlecode.com/svn/trunk/javadoc/com/google/inject/Injector.html#createChildInjector%28java.lang.Iterable%3C?%20extends%20com.google.inject.Module%3E%29
-
-http://code.google.com/p/google-guice/wiki/BindingResolution
-
-- is my current impl of RouteFinder recreating roadnetwork each time or is it calling ...?
-- ShortestPathRouteFinder needs some work to test it + refactoring.
-- when adding vehicles to VehicleManager, the listener adding is causing testing woes/complications...
-
-- refactor out Listener as per Tim's suggestion so that VehicleManager doesn't directly impl. listener.
-
-- TestVehicleImpl.stepMovesVehicleAlongItinerary: doesn't work with isLocatedAt  assertion....why? 
-- TestVehicleBuilderImpl etc seems overly complicated?
 
 
 [REFACTORING/Hackage to fix:]
@@ -37,3 +21,23 @@ http://code.google.com/p/google-guice/wiki/BindingResolution
 - in TestLinkImpl, tests for getting measures is convoluted. probably because smelly impl.
 - change NullJunctionController to a strategy and change name to "firstComeFirstServe"?
 
+
+------------
+This has applications beyond traffic routing, in such domains as economics, where our systems of laws can be seen as a kind of control mechanism, and where the coupled behaviour of actors within the financial system evolves to satisfy particular agent constraints in a situated context due to partial information, often leading to major disruptive events such as bubbles and periodic crisis.
+
+------
+1) 
+- introduce QueueLink (change LinkImpl->RoadLink)
+- change link to not have inJ (at least not put in result of cells())
+
+2) modify vehicle (stateContext) to take itinerary, and iterate through links:
+- get cells link at a time, when current link cells done, until no more links.
+- thus can determine current link of vehicle.
+
+3) introduce flag in cells to determine if to send message or not when departure happens.
+- flag set by default on head cell when constructing link?
+- message contains: Cell, Timestamp.
+
+4) when time series requested, supply link (and get head cell) or cell as key.
+
+5) simulation builder .withFlow.WithItinerary -> change to just take a sequence of link names (then do the stuff behind the scenes)

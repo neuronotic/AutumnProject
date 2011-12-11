@@ -9,8 +9,6 @@ public class TrafficModuleProduction extends AbstractModule {
 	public void configure() {
 		bind(VehicleUpdateOrdering.class).to(VehicleUpdateOrderingShuffle.class);
 		//bind(VehicleUpdateOrdering.class).to(VehicleUpdateOrderingUnmodified.class);
-
-
 	}
 
 }

@@ -8,8 +8,7 @@ public interface StatisticsManager {
 	NetworkOccupancyTimeSeries networkOccupancy();
 	List<JourneyHistory> getEndedJourneyHistories();
 	void receiveJourneyHistoryForEndedJourney(JourneyEndedMessage journeyEndedMessage);
-	void receveCellOccupantDepartedMessage(
+	void receiveCellOccupantDepartedMessage(
 			CellOccupantDepartedMessage departureMessage);
 	List<SimulationTime> fluxTimes(Cell cell);
-	List<SimulationTime> fluxTimesForLinkHeadCell(String linkName);
 }

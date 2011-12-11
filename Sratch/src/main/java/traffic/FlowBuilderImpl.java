@@ -28,4 +28,11 @@ public class FlowBuilderImpl implements FlowBuilder {
 		this.itinerary = itinerary;
 		return this;
 	}
+
+	@Override
+	public FlowBuilder withRoute(final Network network, final String... linkNames) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

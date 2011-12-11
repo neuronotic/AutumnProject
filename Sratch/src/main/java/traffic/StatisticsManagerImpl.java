@@ -57,7 +57,7 @@ public class StatisticsManagerImpl implements StatisticsManager {
 
 	@Subscribe
 	@Override
-	public void receveCellOccupantDepartedMessage(
+	public void receiveCellOccupantDepartedMessage(
 			final CellOccupantDepartedMessage departureMessage) {
 		initialiseFluxTimeSequenceForCell(departureMessage.cell());
 		addValueToFluxTimeSeries(departureMessage);
@@ -80,11 +80,6 @@ public class StatisticsManagerImpl implements StatisticsManager {
 		}
 	}
 
-	@Override
-	public List<SimulationTime> fluxTimesForLinkHeadCell(final String linkName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
 
 

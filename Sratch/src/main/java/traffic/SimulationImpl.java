@@ -34,7 +34,7 @@ public class SimulationImpl implements Simulation {
 
 	@Override
 	public void step() {
-		//logger.info(String.format("\n\nSTART TS %s", timeKeeper.currentTime()));
+		logger.info(String.format("\n\nSTART TS %s", timeKeeper.currentTime()));
 		network.step();
 		vehicleCreator.step();
 		vehicleManager.step();
@@ -62,5 +62,10 @@ public class SimulationImpl implements Simulation {
 	@Override
 	public Cell headCellForLink(final String linkName) {
 		return network.linkNamed(linkName).headCell();
+	}
+
+	@Override
+	public Network network() {
+		return network;
 	}
 }

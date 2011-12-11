@@ -8,4 +8,5 @@ public interface Simulation {
 	StatisticsManager statistics();
 	SimulationTime time();
 	Cell headCellForLink(String linkName);
+	Network network();
 }

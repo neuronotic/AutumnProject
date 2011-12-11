@@ -27,7 +27,6 @@ public class NetworkOccupancyImpl implements NetworkOccupancy {
 				linkOccupanciesMap.put(linkOccupancy.link(), linkOccupancy);
 			}
 		}
-
 	}
 
 	@Override

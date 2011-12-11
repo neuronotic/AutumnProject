@@ -32,7 +32,7 @@ public class TestStatisticsManagerImpl {
 				allowing(departureMessage0).time(); will(returnValue(time(5)));
 			}
 		});
-		statisticsManager.receveCellOccupantDepartedMessage(departureMessage0);
+		statisticsManager.receiveCellOccupantDepartedMessage(departureMessage0);
 		assertThat(statisticsManager.fluxTimes(cell), is(asList(time(5))));
 
 		context.checking(new Expectations() {
@@ -41,7 +41,7 @@ public class TestStatisticsManagerImpl {
 				allowing(departureMessage1).time(); will(returnValue(time(7)));
 			}
 		});
-		statisticsManager.receveCellOccupantDepartedMessage(departureMessage1);
+		statisticsManager.receiveCellOccupantDepartedMessage(departureMessage1);
 
 		assertThat(statisticsManager.fluxTimes(cell), is(asList(time(5), time(7))));
 	}
