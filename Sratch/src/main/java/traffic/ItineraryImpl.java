@@ -5,6 +5,9 @@ import static java.util.Arrays.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 public class ItineraryImpl implements Itinerary {
 	private final List<Link> links;
 
@@ -12,7 +15,7 @@ public class ItineraryImpl implements Itinerary {
 		this(asList(links));
 	}
 
-	public ItineraryImpl(final List<Link> links) {
+	@Inject public ItineraryImpl(@Assisted final List<Link> links) {
 		this.links = links;
 	}
 

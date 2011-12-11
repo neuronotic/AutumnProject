@@ -59,7 +59,7 @@ public class TestVehicleJourneys {
 				.withFlowGroup(flowGroupBuilderProvider.get()
 						.withTemporalPattern(new ConstantTemporalPattern(1))
 						.withFlow(flowBuilderProvider.get()
-								.withItinerary(new ItineraryImpl(link0, link2))
+								.withRouteSpecifiedByLinkNames(network, "link0", "link2")
 								.withProbability(1.0)))
 				.make();
 		sim.step(10);

@@ -33,6 +33,7 @@ public class TrafficModuleCommon extends AbstractModule {
 		  //how to split this, so one for tests, other for real maccoy?
 		//bind(VehicleUpdateOrdering.class).to(VehicleUpdateOrderingUnmodified.class);
 
+
 		bind(FirstComeFirstServedBuilder.class).to(FirstComeFirstServedBuilderImpl.class);
 		bind(EquisaturationBuilder.class).to(EquisaturationBuilderImpl.class);
 		bind(DutyCycleBuilder.class).to(DutyCycleBuilderImpl.class);
@@ -62,9 +63,12 @@ public class TrafficModuleCommon extends AbstractModule {
 		bind(LightsManager.class).to(LightsManagerImpl.class);
 
 		install(new FactoryModuleBuilder()
+			.implement(Itinerary.class, ItineraryImpl.class)
+			.build(ItineraryFactory.class));
+
+		install(new FactoryModuleBuilder()
 			.implement(CellOccupantDepartedMessage.class, CellOccupantDepartedMessageImpl.class)
 			.build(CellOccupantDepartedMessageFactory.class));
-
 
 		install(new FactoryModuleBuilder()
 			.implement(JunctionController.class, DutyCycleController.class)

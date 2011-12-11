@@ -63,11 +63,11 @@ public class TrafficImpl implements Traffic {
 			.withFlowGroup(flowGroupBuilderProvider.get()
 				.withTemporalPattern(temporalPattern)
 				.withFlow(flowBuilderProvider.get()
-						.withRoute(network, "link0", "link1")
-						.withItinerary(new ItineraryImpl(network.linkNamed("link0")))//, network.linkNamed("link1")))
+						.withRouteSpecifiedByLinkNames(network, "link0", "link1")
+						//.withItinerary(new ItineraryImpl(network.linkNamed("link0")))//, network.linkNamed("link1")))
 						.withProbability(flow1probability))
 				.withFlow(flowBuilderProvider.get()
-						.withItinerary(new ItineraryImpl(network.linkNamed("link1")))//, network.linkNamed("link3")))
+						//.withItinerary(new ItineraryImpl(network.linkNamed("link1")))//, network.linkNamed("link3")))
 						.withProbability(flow2probability)) )
 			.make();
 

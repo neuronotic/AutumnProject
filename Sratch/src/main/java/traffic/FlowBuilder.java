@@ -7,6 +7,8 @@ public interface FlowBuilder {
 
 	FlowBuilder withItinerary(Itinerary itinerary);
 
-	FlowBuilder withRoute(Network network, String...linkNames);
+	FlowBuilder withRouteSpecifiedByLinkNames(Network network, String...linkNames);
+
+	Itinerary itinerary();
 
 }

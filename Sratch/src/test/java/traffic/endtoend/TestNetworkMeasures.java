@@ -12,7 +12,6 @@ import traffic.Cell;
 import traffic.ConstantTemporalPattern;
 import traffic.FlowBuilder;
 import traffic.FlowGroupBuilder;
-import traffic.ItineraryImpl;
 import traffic.Junction;
 import traffic.JunctionBuilder;
 import traffic.JunctionOccupancyBuilder;
@@ -70,6 +69,7 @@ public class TestNetworkMeasures {
 	@Test
 	public void OccupancyOnEmptyNetworkRemainsZero() throws Exception {
 		final Simulation sim = simulationBuilder()
+			.withNetwork(createNetwork())
 			.make();
 		assertThat(sim.statistics().currentNetworkOccupancy(), equalTo(networkOccupancyWithZeroOccupancy()));
 		sim.step(1);
@@ -77,11 +77,13 @@ public class TestNetworkMeasures {
 	}
 
 	private Simulation simulationWithFlowGroup() {
+		final Network network = createNetwork();
 		final Simulation sim = simulationBuilder()
+			.withNetwork(network)
 			.withFlowGroup(flowGroupBuilderProvider.get()
 				.withTemporalPattern(new ConstantTemporalPattern(1))
 				.withFlow(flowBuilderProvider.get()
-					.withItinerary(new ItineraryImpl(link0))
+					.withRouteSpecifiedByLinkNames(network, "link0")
 					.withProbability(1.0))
 					)
 			.make();
@@ -113,24 +115,19 @@ public class TestNetworkMeasures {
 	}
 
 	private SimulationBuilder simulationBuilder() {
-		return simulationBuilderProvider.get()
-				.withNetwork(createNetwork());
+		return simulationBuilderProvider.get();
 	}
 
 	private Network createNetwork() {
 		createJunctions();
-		createLinks();
+		link0 = link()
+				.withName("link0")
+				.withInJunction(junction0)
+				.withOutJunction(junction1)
+				.withLength(3)
+				.make();
 		return networkBuilderProvider.get()
 			.withLink(link0)
-			.make();
-	}
-
-	private void createLinks() {
-		link0 = link()
-			.withName("link0")
-			.withInJunction(junction0)
-			.withOutJunction(junction1)
-			.withLength(3)
 			.make();
 	}
 
