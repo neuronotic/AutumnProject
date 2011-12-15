@@ -1,6 +1,5 @@
 package traffic;
 
-import static java.util.Arrays.*;
 import static traffic.SimulationTime.*;
 
 import java.util.ArrayList;
@@ -36,71 +35,169 @@ public class TrafficImpl implements Traffic {
 		this.timeKeeper = timeKeeper;
 	}
 
+
 	@Override
 	public void start(final String[] args) {
 
 		TemporalPattern temporalPattern;
 		temporalPattern = new ConstantTemporalPattern(1);
-		temporalPattern = new MaskedBinaryTemporalPattern(timeKeeper, asList(1,1,0,0,0));
-		//temporalPattern = new SinusoidalTemporalPattern(timeKeeper, time(500));
+		//temporalPattern = new MaskedBinaryTemporalPattern(timeKeeper, asList(1,1,1,1,0));
+		//temporalPattern = new SinusoidalTemporalPattern(timeKeeper, time(1500));
 
-		final double flow1probability = 1;
-		final double flow2probability = 0.0;
-		final int fluxWindowSize = 10;
-		final int linkLength = 5;
 
 		JunctionControllerBuilder controllerBuilder;
 		controllerBuilder = firstComeBuilderProvider.get();
-		//controllerBuilder = equisaturationBuilderProvider.get().withPeriod(time(5));
-		controllerBuilder = periodicDutyCycleBuilderProvider.get().withPeriod(time(5));
+		controllerBuilder = equisaturationBuilderProvider.get().withPeriod(time(25)).withSwitchingDelay(time(5));
+		//controllerBuilder = periodicDutyCycleBuilderProvider.get().withPeriod(time(25)).withSwitchingDelay(time(5));
 
+
+		final XYSeries series = new XYSeries("something");
+		final XYSeriesCollection dataset = new XYSeriesCollection(series);
+		for (double p=0.0; p<1; p+= 0.05) {
+			final double averageJourneyTime = simulate(temporalPattern, p, controllerBuilder, 50, 5000);
+			series.add(p, averageJourneyTime);
+		}
+		new GraphBuilderImpl()
+		.withWindowTitle("Journey Times")
+		.withGraphTitle("Journey time as a function of p")
+		.withXAxisLabel("p")
+		.withYAxisLabel("journey duration")
+		//.withRenderer(journeyTimeRenderer())
+		.withDataset(dataset)
+		.make()
+		.makeVisible();
+
+		//simRangeOfParameters(temporalPattern, controllerBuilder);
+
+	}
+
+	private double simulate(final TemporalPattern temporalPattern,
+		final double flowProbability,
+		final JunctionControllerBuilder controllerBuilder,
+		final int linkLength,
+		final int simDuration) {
 		//final Network network = defaultNetworks.yNetwork3Link(junctionController);
 		//final Network network = defaultNetworks.vNetwork2Link(controllerBuilder, linkLength);
 		final Network network = defaultNetworks.crossedDiamond(controllerBuilder, linkLength);
+		//final Network network = defaultNetworks.singleLink(controllerBuilder, linkLength);
 
 		final Simulation sim = simulationBuilder
 			.withNetwork(network)
 			.withFlowGroup(flowGroupBuilderProvider.get()
 				.withTemporalPattern(temporalPattern)
 				.withFlow(flowBuilderProvider.get()
-						.withRouteSpecifiedByLinkNames(network, "link0", "link1")
-						//.withItinerary(new ItineraryImpl(network.linkNamed("link0")))//, network.linkNamed("link1")))
-						.withProbability(flow1probability))
+						.withRouteSpecifiedByLinkNames(network, "link0", "link2")
+						.withProbability(1 * flowProbability))
 				.withFlow(flowBuilderProvider.get()
-						//.withItinerary(new ItineraryImpl(network.linkNamed("link1")))//, network.linkNamed("link3")))
-						.withProbability(flow2probability)) )
+						.withRouteSpecifiedByLinkNames(network, "link1", "link4")
+						.withProbability(1 * flowProbability))
+				.withFlow(flowBuilderProvider.get()
+						.withRouteSpecifiedByLinkNames(network, "link1", "link3", "link2")
+						.withProbability(1 * flowProbability)) )
+//				.withFlow(flowBuilderProvider.get()
+//						.withRouteSpecifiedByLinkNames(network, "link0")
+//						.withProbability(flowProbability))
+//				.withFlow(flowBuilderProvider.get()
+//						.withRouteSpecifiedByLinkNames(network, "link1")
+//						.withProbability(0.3 * flowProbability)) )
 			.make();
 
 		for (final Link link : network.links()) {
 			link.headCell().recordFlux();
 		}
 
-		sim.step(20);
+		sim.step(simDuration);
+		return averageJourneyTime(sim);
+//		final String title = new StringBuffer()
+//			.append(String.format("(%.2f)", flowProbability))
+//			.append(String.format("(jt=%.1fts)", averageJourneyTime(sim)))
+//			.append(String.format("(l=%d)", linkLength))
+//			.append(controllerBuilder.name())
+//			.toString();
+		//congestionGraph(title, sim);
+		//journeyTimeGraph(title, sim);
 
-		congestionGraph(flow1probability, flow2probability, controllerBuilder.name(), sim);
-		journeyTimeGraph(flow1probability, flow2probability, controllerBuilder.name(), sim);
-
-		fluxGraph(flow1probability, flow2probability, controllerBuilder.name(), sim, fluxWindowSize);
-
+		//fluxGraph(title, sim, fluxWindowSize);
 	}
 
-	private void fluxGraph(final double flow1probability,
-			final double flow2probability,
-			final String controllerName,
+
+	private void simRangeOfParameters(final TemporalPattern temporalPattern,
+			JunctionControllerBuilder controllerBuilder, final int simDuration) {
+		for (int linkLength=10;linkLength<100; linkLength+=10) {
+			simulate(temporalPattern, 0.2, controllerBuilder, linkLength, simDuration);
+			for (int i=3; i<8; i++) {
+				final double flowProbability = i * 0.05 ;
+				//simulate(temporalPattern, flowProbability, controllerBuilder, linkLength);
+			}
+		}
+
+		controllerBuilder = equisaturationBuilderProvider.get().withPeriod(time(25));
+		for (int linkLength=10;linkLength<100; linkLength+=10) {
+			for (int i=3; i<8; i++) {
+				final double flowProbability = i * 0.05 ;
+				simulate(temporalPattern, flowProbability, controllerBuilder, linkLength, simDuration);
+			}
+		}
+
+		controllerBuilder = periodicDutyCycleBuilderProvider.get().withPeriod(time(25));
+		for (int linkLength=10;linkLength<100; linkLength+=10) {
+			for (int i=3; i<8; i++) {
+				final double flowProbability = i * 0.05 ;
+				simulate(temporalPattern, flowProbability, controllerBuilder, linkLength, simDuration);
+			}
+		}
+	}
+
+
+
+	private void fluxGraph(final String title,
 			final Simulation sim,
 			final int fluxWindowSize) {
 		new GraphBuilderImpl()
 		.withWindowTitle("Flux")
-		.withGraphTitle(String.format("Flux on links with %s controller (%s, %s)", controllerName, flow1probability, flow2probability))
+		.withGraphTitle(String.format("Flux on links - %s", title))
 		.withXAxisLabel("time")
 		.withYAxisLabel("flux")
 		.withYRange0to1()
 		.withDataset(createFluxDataset(sim, fluxWindowSize))
 		.withRenderer(lineRenderer())
 		.make()
-		.makeVisible()
-		.saveToFile(String.format("flux-%s", controllerName));
+		//.makeVisible()
+		.saveToFile(String.format("flux-%s", title));
 	}
+
+	private void congestionGraph(
+			final String title,
+			final Simulation sim) {
+		new GraphBuilderImpl()
+			.withWindowTitle("Congestion")
+			.withGraphTitle(String.format("Congestion on links - %s", title))
+			.withXAxisLabel("time")
+			.withYAxisLabel("congestion")
+			.withYRange0to1()
+			.withDataset(createLinkCongestionDataSeries(sim))
+			.withRenderer(lineRenderer())
+
+			.make()
+			.makeVisible();
+			//.saveToFile(String.format("congestion-%s", title));
+	}
+
+	private void journeyTimeGraph(
+			final String title,
+			final Simulation sim) {
+		new GraphBuilderImpl()
+			.withWindowTitle("Journey Times")
+			.withGraphTitle(String.format("Journey times along routes - %s", title))
+			.withXAxisLabel("Simulation time at which journey ended")
+			.withYAxisLabel("journey duration")
+			.withRenderer(journeyTimeRenderer())
+			.withDataset(createJourneyTimeDataSeries(sim))
+			.make()
+			.makeVisible();
+			//.saveToFile(String.format("journeytime-%s", title));
+	}
+
 
 	private XYDataset createFluxDataset(final Simulation sim, final int window) {
 		final XYSeriesCollection dataset = new XYSeriesCollection();
@@ -136,40 +233,6 @@ public class TrafficImpl implements Traffic {
 		return series;
 	}
 
-	private void congestionGraph(final double flow1probability,
-			final double flow2probability,
-			final String controllerName,
-			final Simulation sim) {
-		new GraphBuilderImpl()
-			.withWindowTitle("Congestion")
-			.withGraphTitle(String.format("Congestion on links with %s controller (%s, %s)", controllerName, flow1probability, flow2probability))
-			.withXAxisLabel("time")
-			.withYAxisLabel("congestion")
-			.withYRange0to1()
-			.withDataset(createLinkCongestionDataSeries(sim))
-			.withRenderer(lineRenderer())
-
-			.make()
-			.makeVisible();
-			//.saveToFile(String.format("congestion-%s", controllerName));
-	}
-
-	private void journeyTimeGraph(final double flow1probability,
-			final double flow2probability,
-			final String controllerName,
-			final Simulation sim) {
-		new GraphBuilderImpl()
-			.withWindowTitle("Journey Times")
-			.withGraphTitle(String.format("Journey times along routes, with %s controller (%s, %s)", controllerName, flow1probability, flow2probability))
-			.withXAxisLabel("Simulation time at which journey ended")
-			.withYAxisLabel("journey duration")
-			.withRenderer(journeyTimeRenderer())
-			.withDataset(createJourneyTimeDataSeries(sim))
-			.make()
-			.makeVisible();
-			//.saveToFile(String.format("journeytime-%s", controllerName));
-	}
-
 	private double averageJourneyTime(final Simulation sim) {
 		final Collection<JourneyHistory> journeyHistories = sim.statistics().getEndedJourneyHistories();
 		int cumulativeJourneyTime = 0;
@@ -185,6 +248,13 @@ public class TrafficImpl implements Traffic {
         renderer.setSeriesShapesVisible(0, false);
         renderer.setSeriesLinesVisible(1, true);
         renderer.setSeriesShapesVisible(1, false);
+
+        renderer.setSeriesLinesVisible(2, true);
+        renderer.setSeriesShapesVisible(2, false);
+        renderer.setSeriesLinesVisible(3, true);
+        renderer.setSeriesShapesVisible(3, false);
+        renderer.setSeriesLinesVisible(4, true);
+        renderer.setSeriesShapesVisible(4, false);
         return renderer;
 	}
 
@@ -194,8 +264,12 @@ public class TrafficImpl implements Traffic {
         renderer.setSeriesShapesVisible(0, true);
         renderer.setSeriesLinesVisible(1, false);
         renderer.setSeriesShapesVisible(1, true);
-        renderer.setSeriesLinesVisible(2, true);
-        renderer.setSeriesShapesVisible(2, false);
+        renderer.setSeriesLinesVisible(2, false);
+        renderer.setSeriesShapesVisible(2, true);
+        renderer.setSeriesLinesVisible(3, true);
+        renderer.setSeriesShapesVisible(3, false);
+//      renderer.setSeriesLinesVisible(2, true);
+//      renderer.setSeriesShapesVisible(2, false);
         return renderer;
 	}
 

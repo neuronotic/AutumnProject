@@ -15,7 +15,6 @@ class JunctionImpl implements Junction {
 	@Inject Logger logger = Logger.getAnonymousLogger();
 
 	private final String name;
-	private boolean isOccupied = false;
 	private final LinkedList<Vehicle> vehiclesWaiting = new LinkedList<Vehicle>();
 	private final List<Link> incomingLinks = new ArrayList<Link>();
 	private final List<Link> outgoingLinks = new ArrayList<Link>();
@@ -24,6 +23,8 @@ class JunctionImpl implements Junction {
 	private final JunctionController junctionController;
 	private final OccupancyFactory occupancyFactory;
 	private final LightsManager lightsManager;
+
+	private Vehicle occupant;
 
 	@Inject
 	JunctionImpl(
@@ -41,19 +42,18 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public boolean enter(final Vehicle vehicle) {
-		if (isOccupied) {
+		if (isOccupied()) {
 			return false;
 		}
 		if (inNewlyCreatedQueue(vehicle)) {
 			if (isFirstInQueue(vehicle)) {
-				isOccupied = true;
-				vehiclesWaiting.pop();
+				occupant = vehiclesWaiting.pop();
 				return true;
 			}
 			return false;
 		}
 		if (lightsGreenForVehicle(vehicle)) {
-			isOccupied = true;
+			occupant = vehicle;
 			return true;
 		}
 		return false;
@@ -87,12 +87,13 @@ class JunctionImpl implements Junction {
 
 	@Override
 	public boolean isOccupied() {
-		return isOccupied;
+		return occupant != null;
+		//return isOccupied;
 	}
 
 	@Override
 	public void leave() {
-		isOccupied = false;
+		occupant = null;
 	}
 
 	@Override
@@ -140,6 +141,11 @@ class JunctionImpl implements Junction {
 	public void recordFlux() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public Vehicle occupant() {
+		return occupant;
 	}
 
 }

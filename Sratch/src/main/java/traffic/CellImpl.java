@@ -8,11 +8,11 @@ import com.google.inject.assistedinject.Assisted;
 class CellImpl implements Cell {
 
 	private final String name;
-	private boolean occupied = false;
 	private final Link link;
 	private final CellOccupantDepartedMessageFactory messageFactory;
 	private final MyEventBus eventBus;
 	private boolean recordFlux = false;
+	private Vehicle occupant;
 
 	@Inject CellImpl(
 			@Assisted final Link link,
@@ -27,10 +27,10 @@ class CellImpl implements Cell {
 
 	@Override
 	public boolean enter(final Vehicle vehicle) {
-		if (occupied) {
+		if (isOccupied()) {
 			return false;
 		}
-		occupied = true;
+		occupant = vehicle;
 		return true;
 	}
 
@@ -50,12 +50,12 @@ class CellImpl implements Cell {
 
 	@Override
 	public boolean isOccupied() {
-		return occupied;
+		return occupant!=null;
 	}
 
 	@Override
 	public void leave() {
-		occupied = false;
+		occupant = null;
 		if (recordFlux) {
 			eventBus.post(messageFactory.create(this));
 		}
@@ -71,6 +71,11 @@ class CellImpl implements Cell {
 	@Override
 	public void recordFlux() {
 		recordFlux = true;
+	}
+
+	@Override
+	public Vehicle occupant() {
+		return occupant;
 	}
 
 }

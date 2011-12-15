@@ -1,15 +1,21 @@
-
-
+[narrative]
+- static vs dynamic
+- equi vs open-loop/duty cycle in scenario of equivilant loads, high ratioed loads
+- get graphs for ave JT , with x being start time - produce 2 plots and compare + ask eddie if that's what he meant?
+- graph of level (by flow? - req implementing hashcode for flowImpl?)?
+- implement "adaptive feedback control" / reference controller: 
+- impl. pwm
+- for JT graph, plot moving average of each flow? cleaner than the blocks? so compare current with that and also with the idea of placing on the x axis by starting time rather than end time
+- for dynamic load, ensemble run
 ---------------
 [questions]
 - rather than run multiple simulations, can i just run a simulation for longer? This will also harmonise out any transients?
 
-- 
+- Occupancy on a link is solidly at half. Is this artifact of shuffle update on a link being supplied at a rate, rather than 'injected'?
 
-
+- average journey time: 
 
 -------------
-
 
 [REFACTORING/Hackage to fix:]
 - Junction requires knowledge of the link that a vehicle is coming from. Made complicated by some vehicles entering the junction from the 'carpark' queue. Current method a complicated tangle.

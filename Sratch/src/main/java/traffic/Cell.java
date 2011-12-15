@@ -6,5 +6,6 @@ public interface Cell {
 	boolean enter(Vehicle vehicle);
 	void leave();
 	boolean isOccupied();
+	Vehicle occupant();
 	void recordFlux();
 }

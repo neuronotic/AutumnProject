@@ -9,4 +9,6 @@ public interface DefaultNetworks {
 	public Network vNetwork2Link(JunctionControllerBuilder junctionControllerBuilder, int linkLength);
 
 	public Network crossedDiamond(JunctionControllerBuilder junctionControllerBuilder, int linkLength);
+
+	public Network singleLink(JunctionControllerBuilder junctionControllerBuilder, int linkLength);
 }

@@ -18,4 +18,5 @@ public interface Link {
 
 	LinkOccupancy occupancy();
 	double congestion();
+	String linkOccupantsAsString();
 }

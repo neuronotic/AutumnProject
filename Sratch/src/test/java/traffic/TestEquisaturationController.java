@@ -20,7 +20,7 @@ public class TestEquisaturationController {
 	private final TimeKeeper timeKeeper = context.mock(TimeKeeper.class);
 	private final SimulationTime period = time(5);
 
-	private final JunctionController equisaturationStrategy = new EquisaturationController(timeKeeper, period);
+	private final JunctionController equisaturationStrategy = new EquisaturationController(timeKeeper, period, time(0));
 
 	@Test
 	public void stepDoesNotChangeLightsIfTimeIsNotHarmonicOfPeriod() throws Exception {

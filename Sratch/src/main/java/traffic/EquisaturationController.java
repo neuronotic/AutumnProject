@@ -7,19 +7,27 @@ public class EquisaturationController implements JunctionController {
 
 	private final TimeKeeper timeKeeper;
 	private final SimulationTime period;
-
+	private final SimulationTime switchingDelay;
+	private int switchingDelayTimer = 0;
 	@Inject public EquisaturationController(
 			final TimeKeeper timeKeeper,
-			@Assisted final SimulationTime period) {
-				this.timeKeeper = timeKeeper;
-				this.period = period;
+			@Assisted("period") final SimulationTime period,
+			@Assisted("switchingDelay") final SimulationTime switchingDelay) {
+		this.timeKeeper = timeKeeper;
+		this.period = period;
+		this.switchingDelay = switchingDelay;
 	}
 
 	@Override
 	public void step(final LightsManager lightsManager) {
+		switchingDelayTimer--;
 		if (timeKeeper.currentTime().isHarmonicOf(period)) {
+			switchingDelayTimer = switchingDelay.value();
 			lightsManager.setAllRed();
+		}
+		if (switchingDelayTimer == 0) {
 			lightsManager.setGreen(linkWithHighestCongestion(lightsManager));
+
 		}
 	}
 

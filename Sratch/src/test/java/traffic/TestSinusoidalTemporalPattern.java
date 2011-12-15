@@ -29,14 +29,14 @@ public class TestSinusoidalTemporalPattern {
 				oneOf(timeKeeper).currentTime(); will(returnValue(time(50)));
 			}
 		});
-		assertThat(pattern.modifier(), is(0.5));
+		assertThat(pattern.modifier(), is(0.0));
 
 		context.checking(new Expectations() {
 			{
 				oneOf(timeKeeper).currentTime(); will(returnValue(time(20)));
 			}
 		});
-		assertThat(pattern.modifier(), is(0.5+0.5*Math.sin(Math.PI * 20.0/50)));
+		assertThat(pattern.modifier(), is(Math.sin(Math.PI * 20.0/50)));
 
 
 	}

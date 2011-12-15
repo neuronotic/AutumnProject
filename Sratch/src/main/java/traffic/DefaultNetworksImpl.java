@@ -132,6 +132,26 @@ public class DefaultNetworksImpl implements DefaultNetworks {
 			.make();
 	}
 
+	@Override
+	public Network singleLink(final JunctionControllerBuilder junctionControllerBuilder, final int linkLength) {
+		final Junction junction0, junction1, junction2, junction3;
+		junction0 = junctionBuilder.withName("junction0").make();
+
+		junction1 = junctionBuilder
+				.withControllerBuilder(junctionControllerBuilder)
+				.withName("junction1")
+				.make();
+
+		return networkBuilder()
+			.withLink( link()
+				.withName("link0")
+				.withInJunction(junction0)
+				.withOutJunction(junction1)
+				.withLength(linkLength)
+				.make())
+			.make();
+
+	}
 
 	@Override
 	public Network yNetwork3Link(final JunctionControllerBuilder junctionControllerBuilder, final int linkLength) {

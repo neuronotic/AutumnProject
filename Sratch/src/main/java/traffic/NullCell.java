@@ -56,4 +56,11 @@ public class NullCell implements Cell {
 
 	}
 
+	@Override
+	public Vehicle occupant() {
+		// TODO Auto-generated method stub
+		return null;
+
+	}
+
 }

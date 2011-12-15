@@ -15,16 +15,16 @@ public class TestDutyCycleBuilderImpl {
 	private final DutyCycleFactory dutyCycleFactory = context.mock(DutyCycleFactory.class);
 	private final JunctionController junctionController = context.mock(JunctionController.class);
 	private final SimulationTime period = time(42);
-
+	private final SimulationTime switchingDelay = time(7);
 	private final DutyCycleBuilder dutyCycleBuilder = new DutyCycleBuilderImpl(dutyCycleFactory);
 
 	@Test
-	public void ControllerConstructedWithPeriod() throws Exception {
+	public void ControllerConstructedWithParameters() throws Exception {
 		context.checking(new Expectations() {
 			{
-				oneOf(dutyCycleFactory).create(period); will(returnValue(junctionController));
+				oneOf(dutyCycleFactory).create(period, switchingDelay); will(returnValue(junctionController));
 			}
 		});
-		assertThat(dutyCycleBuilder.withPeriod(period).make(), is(junctionController));
+		assertThat(dutyCycleBuilder.withPeriod(period).withSwitchingDelay(switchingDelay).make(), is(junctionController));
 	}
 }

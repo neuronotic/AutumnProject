@@ -103,4 +103,22 @@ class LinkImpl implements Link {
 	public double congestion() {
 		return occupiedCount() / (double) cellCount();
 	}
+
+	@Override
+	public String linkOccupantsAsString() {
+		final StringBuffer stringBuffer = new StringBuffer();
+		for (final Cell cell : cells()) {
+			if (cell.occupant()!= null){
+				stringBuffer.append(vehicleNameToNumber(cell.occupant().name()));
+			} else {
+				stringBuffer.append(".. ");
+			}
+		}
+
+		return stringBuffer.toString();
+	}
+
+	private Object vehicleNameToNumber(final String name) {
+		return String.format("%02d ",Integer.valueOf(name.substring(7)));
+	}
 }

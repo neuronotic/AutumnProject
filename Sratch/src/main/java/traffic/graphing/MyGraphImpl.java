@@ -17,8 +17,8 @@ import org.jfree.ui.RefineryUtilities;
 public class MyGraphImpl implements MyGraph {
 	private final String FILE_PATH = "/home/daz/output/";
 	private static final long serialVersionUID = 1L;
-	private final int XDIM = 800;
-	private final int YDIM = 250;
+	private final int XDIM = 1280;
+	private final int YDIM = 400;
 
 	private final ApplicationFrame frame;
 	private final JFreeChart chart;

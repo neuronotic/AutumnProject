@@ -22,7 +22,7 @@ public class SinusoidalTemporalPattern implements TemporalPattern {
 		final int time = timeKeeper.currentTime().value();
 		final double timeAngle = Math.PI * (time % period.value()) / period.value();
 
-		return 0.5 + 0.5 * Math.abs(Math.sin(timeAngle));
+		return Math.abs(Math.sin(timeAngle));
 		//return min + (max-min) * 0.5 * (1 + Math.abs(Math.sin(2*Math.PI / period.value() * (time + phase.value()))));
 	}
 

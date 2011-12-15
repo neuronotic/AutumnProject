@@ -1,11 +1,14 @@
 package traffic;
 
+import static traffic.SimulationTime.*;
+
 import com.google.inject.Inject;
 
 public class DutyCycleBuilderImpl implements DutyCycleBuilder {
 
 	private SimulationTime period;
 	private final DutyCycleFactory dutyCycleFactory;
+	private SimulationTime switchingDelay =  time(0);
 
 	@Inject public DutyCycleBuilderImpl(
 			final DutyCycleFactory dutyCycleFactory) {
@@ -14,7 +17,7 @@ public class DutyCycleBuilderImpl implements DutyCycleBuilder {
 
 	@Override
 	public JunctionController make() {
-		return dutyCycleFactory.create(period);
+		return dutyCycleFactory.create(period, switchingDelay);
 	}
 
 	@Override
@@ -26,6 +29,12 @@ public class DutyCycleBuilderImpl implements DutyCycleBuilder {
 	@Override
 	public String name() {
 		return "DutyCycle";
+	}
+
+	@Override
+	public DutyCycleBuilder withSwitchingDelay(final SimulationTime switchingDelay) {
+		this.switchingDelay = switchingDelay;
+		return this;
 	}
 
 }
